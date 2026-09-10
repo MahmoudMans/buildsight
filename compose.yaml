@@ -1,0 +1,53 @@
+name: buildsight
+
+services:
+  postgres:
+    image: postgres:18.6-alpine
+    container_name: buildsight-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-buildsight}
+      POSTGRES_USER: ${POSTGRES_USER:-buildsight}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-buildsight_local_dev}
+    ports:
+      - "${POSTGRES_PORT:-5435}:5432"
+    volumes:
+      - buildsight_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER:-buildsight} -d ${POSTGRES_DB:-buildsight}"
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 15
+    restart: unless-stopped
+
+  seaweedfs:
+    image: chrislusf/seaweedfs:latest
+    container_name: buildsight-seaweedfs
+    command:
+      - server
+      - -s3
+      - -dir=/data
+    ports:
+      - "${SEAWEEDFS_S3_PORT:-8333}:8333"
+      - "${SEAWEEDFS_FILER_PORT:-8888}:8888"
+      - "${SEAWEEDFS_MASTER_PORT:-9333}:9333"
+    volumes:
+      - buildsight_seaweedfs_data:/data
+    restart: unless-stopped
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: buildsight-ollama
+    ports:
+      - "${OLLAMA_PORT:-11434}:11434"
+    volumes:
+      - buildsight_ollama_data:/root/.ollama
+    restart: unless-stopped
+
+volumes:
+  buildsight_postgres_data:
+  buildsight_seaweedfs_data:
+  buildsight_ollama_data:
