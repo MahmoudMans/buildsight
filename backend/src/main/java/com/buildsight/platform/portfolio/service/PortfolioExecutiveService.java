@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.IntStream;
 
+import com.buildsight.platform.commercial.api.CommercialIntelligenceResponse;
+import com.buildsight.platform.commercial.service.CommercialControlService;
 import com.buildsight.platform.common.exception.ResourceNotFoundException;
 import com.buildsight.platform.cost.api.CostIntelligenceResponse;
 import com.buildsight.platform.cost.service.CostControlService;
@@ -67,6 +69,9 @@ public class PortfolioExecutiveService {
     private final SafetyControlService
             safetyControlService;
 
+    private final CommercialControlService
+            commercialControlService;
+
     private final ProjectHealthScoreService
             healthScoreService;
 
@@ -89,6 +94,7 @@ public class PortfolioExecutiveService {
             DocumentControlService documentControlService,
             QualityControlService qualityControlService,
             SafetyControlService safetyControlService,
+            CommercialControlService commercialControlService,
             ProjectHealthScoreService healthScoreService,
             PortfolioExecutiveCalculator calculator,
             PortfolioSupplierAnalyticsService supplierAnalyticsService,
@@ -120,6 +126,9 @@ public class PortfolioExecutiveService {
 
         this.safetyControlService =
                 safetyControlService;
+
+        this.commercialControlService =
+                commercialControlService;
 
         this.healthScoreService =
                 healthScoreService;
@@ -305,6 +314,13 @@ public class PortfolioExecutiveService {
                                 true),
 
                         metric(
+                                "Commercial score",
+                                project.commercialScore(),
+                                benchmark.averageCommercialScore(),
+                                "/100",
+                                true),
+
+                        metric(
                                 "Productivity index",
                                 project.productivityIndex(),
                                 benchmark.averageProductivityIndex(),
@@ -351,6 +367,11 @@ public class PortfolioExecutiveService {
                         .intelligence(
                                 project.getId());
 
+        CommercialIntelligenceResponse commercial =
+                commercialControlService
+                        .intelligence(
+                                project.getId());
+
         ProjectHealthScoreResponse health =
                 healthScoreService
                         .calculate(
@@ -366,7 +387,8 @@ public class PortfolioExecutiveService {
                                 production,
                                 information,
                                 quality,
-                                safety);
+                                safety,
+                                commercial);
 
         int attentionScore =
                 calculator.attentionScore(
@@ -384,7 +406,13 @@ public class PortfolioExecutiveService {
                         safety.openIncidents(),
                         safety.criticalOpenIncidents(),
                         safety.overdueActions(),
-                        safety.expiredPermits());
+                        safety.expiredPermits(),
+                        commercial.pendingChangeOrders(),
+                        commercial.overdueChangeDecisions(),
+                        commercial.openClaims(),
+                        commercial.overdueClaimResponses(),
+                        commercial.overdueCertifications(),
+                        commercial.overduePayments());
 
         return new PortfolioProjectSnapshotResponse(
                 project.getId(),
@@ -426,6 +454,15 @@ public class PortfolioExecutiveService {
                 safety.overdueActions(),
                 safety.expiredPermits(),
                 safety.safetyScore(),
+                commercial.pendingChangeOrders(),
+                commercial.overdueChangeDecisions(),
+                commercial.openClaims(),
+                commercial.overdueClaimResponses(),
+                commercial.overdueCertifications(),
+                commercial.overduePayments(),
+                commercial.outstandingCertifiedAmount(),
+                commercial.forecastCashflowVariance(),
+                commercial.commercialScore(),
                 attentionScore,
                 0);
     }

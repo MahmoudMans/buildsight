@@ -1379,3 +1379,155 @@ export async function updateWorkPermit(
     },
   );
 }
+
+export async function getProjectCommercial(
+  projectId: string,
+): Promise<
+  import("@/types/project").CommercialControl
+> {
+  return request<
+    import("@/types/project").CommercialControl
+  >(
+    `/projects/${projectId}/commercial`,
+  );
+}
+
+export async function createCommercialChangeOrder(
+  projectId: string,
+  input: import("@/types/project").CreateCommercialChangeOrderInput,
+): Promise<
+  import("@/types/project").CommercialChangeOrder
+> {
+  return request<
+    import("@/types/project").CommercialChangeOrder
+  >(
+    `/projects/${projectId}/commercial/change-orders`,
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function updateCommercialChangeOrder(
+  projectId: string,
+  changeOrderId: string,
+  input: Record<string, unknown>,
+): Promise<
+  import("@/types/project").CommercialChangeOrder
+> {
+  return request<
+    import("@/types/project").CommercialChangeOrder
+  >(
+    `/projects/${projectId}/commercial/change-orders/${changeOrderId}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function createCommercialClaim(
+  projectId: string,
+  input: import("@/types/project").CreateCommercialClaimInput,
+): Promise<
+  import("@/types/project").CommercialClaim
+> {
+  return request<
+    import("@/types/project").CommercialClaim
+  >(
+    `/projects/${projectId}/commercial/claims`,
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function updateCommercialClaim(
+  projectId: string,
+  claimId: string,
+  input: Record<string, unknown>,
+): Promise<
+  import("@/types/project").CommercialClaim
+> {
+  return request<
+    import("@/types/project").CommercialClaim
+  >(
+    `/projects/${projectId}/commercial/claims/${claimId}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function createPaymentCertificate(
+  projectId: string,
+  input: import("@/types/project").CreatePaymentCertificateInput,
+): Promise<
+  import("@/types/project").PaymentCertificate
+> {
+  return request<
+    import("@/types/project").PaymentCertificate
+  >(
+    `/projects/${projectId}/commercial/payment-certificates`,
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function updatePaymentCertificate(
+  projectId: string,
+  certificateId: string,
+  input: Record<string, unknown>,
+): Promise<
+  import("@/types/project").PaymentCertificate
+> {
+  return request<
+    import("@/types/project").PaymentCertificate
+  >(
+    `/projects/${projectId}/commercial/payment-certificates/${certificateId}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function createCashflowPeriod(
+  projectId: string,
+  input: import("@/types/project").CreateCashflowPeriodInput,
+): Promise<
+  import("@/types/project").CashflowPeriod
+> {
+  return request<
+    import("@/types/project").CashflowPeriod
+  >(
+    `/projects/${projectId}/commercial/cashflow-periods`,
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function updateCashflowPeriod(
+  projectId: string,
+  periodId: string,
+  input: Record<string, unknown>,
+): Promise<
+  import("@/types/project").CashflowPeriod
+> {
+  return request<
+    import("@/types/project").CashflowPeriod
+  >(
+    `/projects/${projectId}/commercial/cashflow-periods/${periodId}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(input),
+    },
+  );
+}

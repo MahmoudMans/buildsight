@@ -692,6 +692,27 @@ export function PortfolioExecutiveView() {
                 summary.expiredWorkPermits
               }
             />
+
+            <HealthCount
+              label="Overdue payments"
+              value={
+                summary.overduePayments
+              }
+            />
+
+            <HealthCount
+              label="Overdue certifications"
+              value={
+                summary.overdueCertifications
+              }
+            />
+
+            <HealthCount
+              label="Open claims"
+              value={
+                summary.openClaims
+              }
+            />
           </div>
         </section>
 
@@ -1068,6 +1089,13 @@ export function PortfolioExecutiveView() {
               label="Information"
               value={
                 benchmarks.averageInformationScore
+              }
+            />
+
+            <Benchmark
+              label="Commercial"
+              value={
+                benchmarks.averageCommercialScore
               }
             />
           </div>

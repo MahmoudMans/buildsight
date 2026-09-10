@@ -38,6 +38,13 @@ public class PortfolioAiPromptBuilder {
                 Critical safety incidents: %s
                 Overdue HSE actions: %s
                 Expired permits-to-work: %s
+                Pending change orders: %s
+                Overdue change decisions: %s
+                Open commercial claims: %s
+                Overdue claim responses: %s
+                Overdue certifications: %s
+                Overdue payments: %s
+                Outstanding certified amount: %s
                 Executive exceptions: %s
                 """
                 .formatted(
@@ -75,6 +82,20 @@ public class PortfolioAiPromptBuilder {
                                 .overdueSafetyActions(),
                         executive.summary()
                                 .expiredWorkPermits(),
+                        executive.summary()
+                                .pendingChangeOrders(),
+                        executive.summary()
+                                .overdueChangeDecisions(),
+                        executive.summary()
+                                .openClaims(),
+                        executive.summary()
+                                .overdueClaimResponses(),
+                        executive.summary()
+                                .overdueCertifications(),
+                        executive.summary()
+                                .overduePayments(),
+                        executive.summary()
+                                .outstandingCertifiedAmount(),
                         executive.summary()
                                 .totalExceptions());
 
@@ -124,6 +145,15 @@ public class PortfolioAiPromptBuilder {
                     Overdue HSE actions: %s
                     Expired work permits: %s
                     Safety score: %s
+                    Pending change orders: %s
+                    Overdue change decisions: %s
+                    Open commercial claims: %s
+                    Overdue claim responses: %s
+                    Overdue certifications: %s
+                    Overdue payments: %s
+                    Outstanding certified amount: %s
+                    Forecast cashflow variance: %s
+                    Commercial score: %s
                     """
                     .formatted(
                             project.code(),
@@ -153,7 +183,16 @@ public class PortfolioAiPromptBuilder {
                             project.criticalSafetyIncidents(),
                             project.overdueSafetyActions(),
                             project.expiredWorkPermits(),
-                            project.safetyScore());
+                            project.safetyScore(),
+                            project.pendingChangeOrders(),
+                            project.overdueChangeDecisions(),
+                            project.openClaims(),
+                            project.overdueClaimResponses(),
+                            project.overdueCertifications(),
+                            project.overduePayments(),
+                            project.outstandingCertifiedAmount(),
+                            project.forecastCashflowVariance(),
+                            project.commercialScore());
 
             sources.add(
                     new PortfolioAiSourceResponse(

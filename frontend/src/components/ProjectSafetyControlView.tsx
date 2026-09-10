@@ -1013,6 +1013,16 @@ export function ProjectSafetyControlView({
               Work permits
             </span>
           </a>
+
+          <Link
+            href={`/projects/${projectId}/commercial`}
+            className="command-nav-item"
+          >
+            09
+            <span>
+              Commercial
+            </span>
+          </Link>
         </nav>
 
         <div className="command-sidebar-footer">

@@ -5,6 +5,8 @@ import java.util.UUID;
 
 import com.buildsight.platform.common.exception.ResourceNotFoundException;
 import com.buildsight.platform.cost.api.CostIntelligenceResponse;
+import com.buildsight.platform.commercial.api.CommercialIntelligenceResponse;
+import com.buildsight.platform.commercial.service.CommercialControlService;
 import com.buildsight.platform.cost.service.CostControlService;
 import com.buildsight.platform.document.api.DocumentIntelligenceResponse;
 import com.buildsight.platform.document.service.DocumentControlService;
@@ -75,6 +77,9 @@ public class ProjectCommandCenterService {
     private final SafetyControlService
             safetyControlService;
 
+    private final CommercialControlService
+            commercialControlService;
+
     public ProjectCommandCenterService(
             ProjectRepository projectRepository,
             ProjectMilestoneRepository milestoneRepository,
@@ -89,7 +94,8 @@ public class ProjectCommandCenterService {
             ProductionControlService productionControlService,
             DocumentControlService documentControlService,
             QualityControlService qualityControlService,
-            SafetyControlService safetyControlService) {
+            SafetyControlService safetyControlService,
+            CommercialControlService commercialControlService) {
 
         this.projectRepository =
                 projectRepository;
@@ -132,6 +138,9 @@ public class ProjectCommandCenterService {
 
         this.safetyControlService =
                 safetyControlService;
+
+        this.commercialControlService =
+                commercialControlService;
     }
 
     @Transactional(readOnly = true)
@@ -205,6 +214,11 @@ public class ProjectCommandCenterService {
                         .intelligence(
                                 projectId);
 
+        CommercialIntelligenceResponse commercial =
+                commercialControlService
+                        .intelligence(
+                                projectId);
+
         return new ProjectCommandCenterResponse(
                 projectMapper.toResponse(
                         project),
@@ -218,7 +232,8 @@ public class ProjectCommandCenterService {
                         production,
                         information,
                         quality,
-                        safety),
+                        safety,
+                        commercial),
 
                 milestoneResponses,
                 progressUpdates);

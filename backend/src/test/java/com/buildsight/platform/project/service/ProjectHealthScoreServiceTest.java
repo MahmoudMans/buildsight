@@ -11,6 +11,8 @@ import java.time.ZoneOffset;
 import java.util.List;
 import java.util.UUID;
 
+import com.buildsight.platform.commercial.api.CommercialIntelligenceResponse;
+import com.buildsight.platform.commercial.api.CommercialRiskLevel;
 import com.buildsight.platform.cost.api.CostIntelligenceResponse;
 import com.buildsight.platform.cost.api.CostRiskLevel;
 import com.buildsight.platform.document.api.DocumentIntelligenceResponse;
@@ -41,10 +43,11 @@ class ProjectHealthScoreServiceTest {
                     ZoneOffset.UTC);
 
     @Test
-    void healthV7IncludesQualityPerformance() {
+    void healthV9IncludesCommercialPerformance() {
 
         ProjectHealthScoreResponse result =
-                new ProjectHealthScoreService(CLOCK)
+                new ProjectHealthScoreService(
+                        CLOCK)
                         .calculate(
                                 project(),
                                 List.of(),
@@ -54,29 +57,34 @@ class ProjectHealthScoreServiceTest {
                                 production(90),
                                 information(90),
                                 quality(
-                                        35,
-                                        QualityRiskLevel.AT_RISK),
+                                        90,
+                                        QualityRiskLevel.ON_TRACK),
                                 safety(
                                         90,
-                                        SafetyRiskLevel.ON_TRACK));
+                                        SafetyRiskLevel.ON_TRACK),
+                                commercial(
+                                        35,
+                                        CommercialRiskLevel.AT_RISK));
 
         assertEquals(
                 35,
-                result.qualityScore());
+                result.commercialScore());
 
         assertEquals(
-                QualityRiskLevel.AT_RISK,
-                result.qualityRisk());
+                CommercialRiskLevel.AT_RISK,
+                result.commercialRisk());
 
         assertTrue(
-                result.score() < 90);
+                result.score()
+                        < 90);
     }
 
     @Test
-    void healthyNineDimensionProjectRemainsHealthy() {
+    void healthyElevenDimensionProjectRemainsHealthy() {
 
         ProjectHealthScoreResponse result =
-                new ProjectHealthScoreService(CLOCK)
+                new ProjectHealthScoreService(
+                        CLOCK)
                         .calculate(
                                 project(),
                                 List.of(),
@@ -90,21 +98,25 @@ class ProjectHealthScoreServiceTest {
                                         QualityRiskLevel.ON_TRACK),
                                 safety(
                                         95,
-                                        SafetyRiskLevel.ON_TRACK));
+                                        SafetyRiskLevel.ON_TRACK),
+                                commercial(
+                                        95,
+                                        CommercialRiskLevel.ON_TRACK));
 
         assertEquals(
                 ProjectHealthBand.HEALTHY,
                 result.healthBand());
 
         assertTrue(
-                result.score() >= 80);
+                result.score()
+                        >= 80);
     }
 
     private Project project() {
 
         return Project.create(
                 UUID.randomUUID(),
-                "BS-H-V7",
+                "BS-H-V9",
                 "Health Test",
                 "Health",
                 "Client",
@@ -241,6 +253,31 @@ class ProjectHealthScoreServiceTest {
                 "Test");
     }
 
+    private QualityIntelligenceResponse quality(
+            double score,
+            QualityRiskLevel level) {
+
+        return new QualityIntelligenceResponse(
+                3,
+                2,
+                2,
+                0,
+                100,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                3,
+                1,
+                0,
+                33.3,
+                score,
+                level,
+                "Test");
+    }
+
     private SafetyIntelligenceResponse safety(
             double score,
             SafetyRiskLevel level) {
@@ -265,27 +302,36 @@ class ProjectHealthScoreServiceTest {
                 "Test");
     }
 
-
-    private QualityIntelligenceResponse quality(
+    private CommercialIntelligenceResponse commercial(
             double score,
-            QualityRiskLevel level) {
+            CommercialRiskLevel level) {
 
-        return new QualityIntelligenceResponse(
-                3,
-                2,
-                2,
-                0,
-                100,
-                0,
-                0,
-                0,
-                0,
-                0,
-                0,
-                3,
+        return new CommercialIntelligenceResponse(
                 1,
                 0,
-                33.3,
+                0,
+                BigDecimal.ZERO,
+                BigDecimal.ZERO,
+                1,
+                0,
+                0,
+                BigDecimal.ZERO,
+                BigDecimal.ZERO,
+                0,
+                0,
+                1,
+                0,
+                0,
+                BigDecimal.ZERO,
+                BigDecimal.ZERO,
+                BigDecimal.ZERO,
+                BigDecimal.ZERO,
+                0,
+                1,
+                BigDecimal.ZERO,
+                BigDecimal.ZERO,
+                BigDecimal.ZERO,
+                BigDecimal.ZERO,
                 score,
                 level,
                 "Test");

@@ -137,6 +137,7 @@ export interface ProjectHealthScore {
   informationRisk: InformationRiskLevel;
   qualityRisk: QualityRiskLevel;
   safetyRisk: SafetyRiskLevel;
+  commercialRisk: CommercialRiskLevel;
   scheduleVarianceDays: number;
   expectedProgressPercentage: number;
   actualProgressPercentage: number;
@@ -153,6 +154,7 @@ export interface ProjectHealthScore {
   informationScore: number;
   qualityScore: number;
   safetyScore: number;
+  commercialScore: number;
   explanation: string;
 }
 
@@ -1266,7 +1268,8 @@ export type PortfolioExceptionDomain =
   | "RISK"
   | "PRODUCTION"
   | "INFORMATION"
-  | "SAFETY";
+  | "SAFETY"
+  | "COMMERCIAL";
 
 export type SupplierConcentrationRisk =
   | "LOW"
@@ -1307,6 +1310,15 @@ export interface PortfolioProjectSnapshot {
   overdueSafetyActions: number;
   expiredWorkPermits: number;
   safetyScore: number;
+  pendingChangeOrders: number;
+  overdueChangeDecisions: number;
+  openClaims: number;
+  overdueClaimResponses: number;
+  overdueCertifications: number;
+  overduePayments: number;
+  outstandingCertifiedAmount: number;
+  forecastCashflowVariance: number;
+  commercialScore: number;
   attentionScore: number;
   healthRank: number;
 }
@@ -1337,6 +1349,13 @@ export interface PortfolioSummary {
   criticalSafetyIncidents: number;
   overdueSafetyActions: number;
   expiredWorkPermits: number;
+  pendingChangeOrders: number;
+  overdueChangeDecisions: number;
+  openClaims: number;
+  overdueClaimResponses: number;
+  overdueCertifications: number;
+  overduePayments: number;
+  outstandingCertifiedAmount: number;
   totalExceptions: number;
 }
 
@@ -1347,6 +1366,7 @@ export interface PortfolioBenchmarks {
   averageRiskScore: number;
   averageProductionScore: number;
   averageInformationScore: number;
+  averageCommercialScore: number;
   averageProductivityIndex: number;
   bestHealthProjectCode: string | null;
   worstHealthProjectCode: string | null;
@@ -1958,4 +1978,214 @@ export interface CreateWorkPermitInput {
   validFrom: string;
   validUntil: string;
   controls: string;
+}
+
+export type CommercialChangeOrderStatus =
+  | "DRAFT"
+  | "SUBMITTED"
+  | "UNDER_REVIEW"
+  | "APPROVED"
+  | "REJECTED"
+  | "VOID";
+
+export type CommercialClaimType =
+  | "EXTENSION_OF_TIME"
+  | "LOSS_AND_EXPENSE"
+  | "VARIATION"
+  | "DISRUPTION"
+  | "DELAY"
+  | "OTHER";
+
+export type CommercialClaimStatus =
+  | "DRAFT"
+  | "SUBMITTED"
+  | "UNDER_REVIEW"
+  | "PARTIALLY_APPROVED"
+  | "APPROVED"
+  | "REJECTED"
+  | "SETTLED"
+  | "VOID";
+
+export type PaymentCertificateStatus =
+  | "DRAFT"
+  | "SUBMITTED"
+  | "CERTIFIED"
+  | "PARTIALLY_PAID"
+  | "PAID"
+  | "REJECTED"
+  | "VOID";
+
+export type CashflowPeriodStatus =
+  | "OPEN"
+  | "CLOSED";
+
+export type CommercialRiskLevel =
+  | "NO_DATA"
+  | "ON_TRACK"
+  | "WATCH"
+  | "AT_RISK";
+
+export interface CommercialChangeOrder {
+  id: string;
+  projectId: string;
+  reference: string;
+  sourceChangeReference: string | null;
+  title: string;
+  description: string;
+  submittedAmount: number;
+  assessedAmount: number | null;
+  approvedAmount: number | null;
+  submittedDate: string | null;
+  decisionDueDate: string | null;
+  decisionDate: string | null;
+  status: CommercialChangeOrderStatus;
+  overdueDecision: boolean;
+  version: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CommercialClaim {
+  id: string;
+  projectId: string;
+  reference: string;
+  claimType: CommercialClaimType;
+  title: string;
+  basis: string;
+  claimedAmount: number;
+  assessedAmount: number | null;
+  awardedAmount: number | null;
+  claimedDays: number;
+  awardedDays: number;
+  submittedDate: string | null;
+  responseDueDate: string | null;
+  decisionDate: string | null;
+  status: CommercialClaimStatus;
+  overdueResponse: boolean;
+  version: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PaymentCertificate {
+  id: string;
+  projectId: string;
+  reference: string;
+  periodStart: string;
+  periodEnd: string;
+  applicationDate: string;
+  certificationDueDate: string;
+  applicationAmount: number;
+  certifiedAmount: number | null;
+  retentionAmount: number | null;
+  netCertifiedAmount: number;
+  certifiedDate: string | null;
+  paymentDueDate: string | null;
+  amountPaid: number;
+  outstandingAmount: number;
+  lastPaymentDate: string | null;
+  status: PaymentCertificateStatus;
+  overdueCertification: boolean;
+  overduePayment: boolean;
+  version: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CashflowPeriod {
+  id: string;
+  projectId: string;
+  periodStart: string;
+  periodEnd: string;
+  plannedInflow: number;
+  forecastInflow: number;
+  actualInflow: number;
+  plannedOutflow: number;
+  forecastOutflow: number;
+  actualOutflow: number;
+  plannedNetCashflow: number;
+  forecastNetCashflow: number;
+  actualNetCashflow: number;
+  forecastVariance: number;
+  status: CashflowPeriodStatus;
+  version: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CommercialIntelligence {
+  totalChangeOrders: number;
+  pendingChangeOrders: number;
+  overdueChangeDecisions: number;
+  submittedChangeValue: number;
+  approvedChangeValue: number;
+  totalClaims: number;
+  openClaims: number;
+  overdueClaimResponses: number;
+  claimedValue: number;
+  awardedClaimValue: number;
+  claimedDays: number;
+  awardedDays: number;
+  totalPaymentCertificates: number;
+  awaitingCertification: number;
+  overdueCertifications: number;
+  certifiedValue: number;
+  retentionHeld: number;
+  amountPaid: number;
+  outstandingCertifiedAmount: number;
+  overduePayments: number;
+  cashflowPeriods: number;
+  plannedNetCashflow: number;
+  forecastNetCashflow: number;
+  actualNetCashflow: number;
+  forecastCashflowVariance: number;
+  commercialScore: number;
+  commercialRisk: CommercialRiskLevel;
+  explanation: string;
+}
+
+export interface CommercialControl {
+  project: Project;
+  intelligence: CommercialIntelligence;
+  changeOrders: CommercialChangeOrder[];
+  claims: CommercialClaim[];
+  paymentCertificates: PaymentCertificate[];
+  cashflowPeriods: CashflowPeriod[];
+}
+
+export interface CreateCommercialChangeOrderInput {
+  reference: string;
+  sourceChangeReference: string;
+  title: string;
+  description: string;
+  submittedAmount: number;
+}
+
+export interface CreateCommercialClaimInput {
+  reference: string;
+  claimType: CommercialClaimType;
+  title: string;
+  basis: string;
+  claimedAmount: number;
+  claimedDays: number;
+}
+
+export interface CreatePaymentCertificateInput {
+  reference: string;
+  periodStart: string;
+  periodEnd: string;
+  applicationDate: string;
+  certificationDueDate: string;
+  applicationAmount: number;
+}
+
+export interface CreateCashflowPeriodInput {
+  periodStart: string;
+  periodEnd: string;
+  plannedInflow: number;
+  forecastInflow: number;
+  actualInflow: number;
+  plannedOutflow: number;
+  forecastOutflow: number;
+  actualOutflow: number;
 }

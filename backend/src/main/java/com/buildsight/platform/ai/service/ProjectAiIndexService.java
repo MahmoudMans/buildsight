@@ -11,6 +11,8 @@ import java.util.stream.Collectors;
 
 import com.buildsight.platform.ai.api.AiIndexResponse;
 import com.buildsight.platform.ai.domain.AiSourceType;
+import com.buildsight.platform.commercial.api.CommercialIntelligenceResponse;
+import com.buildsight.platform.commercial.service.CommercialControlService;
 import com.buildsight.platform.common.exception.InvalidRequestException;
 import com.buildsight.platform.common.exception.ResourceNotFoundException;
 import com.buildsight.platform.cost.api.CostIntelligenceResponse;
@@ -57,6 +59,9 @@ public class ProjectAiIndexService {
     private final ProjectRfiRepository
             rfiRepository;
 
+    private final CommercialControlService
+            commercialControlService;
+
     private final CostControlService
             costControlService;
 
@@ -98,6 +103,7 @@ public class ProjectAiIndexService {
             ProjectDocumentRepository documentRepository,
             DocumentRevisionRepository revisionRepository,
             ProjectRfiRepository rfiRepository,
+            CommercialControlService commercialControlService,
             CostControlService costControlService,
             ProcurementControlService procurementControlService,
             RiskControlService riskControlService,
@@ -128,6 +134,9 @@ public class ProjectAiIndexService {
 
         this.rfiRepository =
                 rfiRepository;
+
+        this.commercialControlService =
+                commercialControlService;
 
         this.costControlService =
                 costControlService;
@@ -399,6 +408,11 @@ public class ProjectAiIndexService {
     private AiSourceDraft projectFactSource(
             Project project) {
 
+        CommercialIntelligenceResponse commercial =
+                commercialControlService
+                        .intelligence(
+                                project.getId());
+
         CostIntelligenceResponse cost =
                 costControlService
                         .get(
@@ -487,7 +501,28 @@ public class ProjectAiIndexService {
                 Draft Transmittals: %s
                 Information Score: %s
                 Information Risk: %s
-                """
+
+
+                Commercial Intelligence
+                Pending Change Orders: %s
+                Overdue Change Decisions: %s
+                Approved Change Value: %s
+                Open Claims: %s
+                Overdue Claim Responses: %s
+                Claimed Value: %s
+                Awarded Claim Value: %s
+                Awaiting Certification: %s
+                Overdue Certifications: %s
+                Certified Value: %s
+                Retention Held: %s
+                Amount Paid: %s
+                Outstanding Certified Amount: %s
+                Overdue Payments: %s
+                Forecast Net Cashflow: %s
+                Forecast Cashflow Variance: %s
+                Commercial Score: %s
+                Commercial Risk: %s
+"""
                 .formatted(
                         project.getCode(),
                         project.getName(),
@@ -540,7 +575,26 @@ public class ProjectAiIndexService {
                         information.criticalOpenRfis(),
                         information.draftTransmittals(),
                         information.informationScore(),
-                        information.informationRisk());
+                        information.informationRisk(),
+
+                        commercial.pendingChangeOrders(),
+                        commercial.overdueChangeDecisions(),
+                        commercial.approvedChangeValue(),
+                        commercial.openClaims(),
+                        commercial.overdueClaimResponses(),
+                        commercial.claimedValue(),
+                        commercial.awardedClaimValue(),
+                        commercial.awaitingCertification(),
+                        commercial.overdueCertifications(),
+                        commercial.certifiedValue(),
+                        commercial.retentionHeld(),
+                        commercial.amountPaid(),
+                        commercial.outstandingCertifiedAmount(),
+                        commercial.overduePayments(),
+                        commercial.forecastNetCashflow(),
+                        commercial.forecastCashflowVariance(),
+                        commercial.commercialScore(),
+                        commercial.commercialRisk());
 
         return new AiSourceDraft(
                 AiSourceType.PROJECT_FACT,

@@ -2,6 +2,7 @@ package com.buildsight.platform.project.api;
 
 import java.time.LocalDate;
 
+import com.buildsight.platform.commercial.api.CommercialRiskLevel;
 import com.buildsight.platform.cost.api.CostRiskLevel;
 import com.buildsight.platform.document.api.InformationRiskLevel;
 import com.buildsight.platform.procurement.api.ProcurementRiskLevel;
@@ -22,6 +23,7 @@ public record ProjectHealthScoreResponse(
         InformationRiskLevel informationRisk,
         QualityRiskLevel qualityRisk,
         SafetyRiskLevel safetyRisk,
+        CommercialRiskLevel commercialRisk,
         long scheduleVarianceDays,
         double expectedProgressPercentage,
         double actualProgressPercentage,
@@ -38,5 +40,6 @@ public record ProjectHealthScoreResponse(
         double informationScore,
         double qualityScore,
         double safetyScore,
+        double commercialScore,
         String explanation) {
 }

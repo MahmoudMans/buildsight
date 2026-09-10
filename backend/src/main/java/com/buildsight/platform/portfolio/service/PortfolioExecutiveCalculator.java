@@ -37,6 +37,53 @@ public class PortfolioExecutiveCalculator {
             long overdueSafetyActions,
             long expiredWorkPermits) {
 
+        return attentionScore(
+                healthScore,
+                scheduleVarianceDays,
+                varianceAtCompletion,
+                revisedCostPlan,
+                delayedProcurementPackages,
+                highExposureRisks,
+                criticalOpenIssues,
+                forecastDelayDays,
+                blockedPackages,
+                overdueRfis,
+                criticalOpenRfis,
+                openSafetyIncidents,
+                criticalSafetyIncidents,
+                overdueSafetyActions,
+                expiredWorkPermits,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0);
+    }
+
+    public int attentionScore(
+            int healthScore,
+            long scheduleVarianceDays,
+            BigDecimal varianceAtCompletion,
+            BigDecimal revisedCostPlan,
+            long delayedProcurementPackages,
+            long highExposureRisks,
+            long criticalOpenIssues,
+            long forecastDelayDays,
+            long blockedPackages,
+            long overdueRfis,
+            long criticalOpenRfis,
+            long openSafetyIncidents,
+            long criticalSafetyIncidents,
+            long overdueSafetyActions,
+            long expiredWorkPermits,
+            long pendingChangeOrders,
+            long overdueChangeDecisions,
+            long openClaims,
+            long overdueClaimResponses,
+            long overdueCertifications,
+            long overduePayments) {
+
         double score =
                 Math.max(
                         0,
@@ -129,6 +176,42 @@ public class PortfolioExecutiveCalculator {
                         24,
                         expiredWorkPermits
                                 * 12);
+
+        score +=
+                Math.min(
+                        12,
+                        pendingChangeOrders
+                                * 2);
+
+        score +=
+                Math.min(
+                        18,
+                        overdueChangeDecisions
+                                * 6);
+
+        score +=
+                Math.min(
+                        12,
+                        openClaims
+                                * 2);
+
+        score +=
+                Math.min(
+                        20,
+                        overdueClaimResponses
+                                * 6);
+
+        score +=
+                Math.min(
+                        24,
+                        overdueCertifications
+                                * 8);
+
+        score +=
+                Math.min(
+                        30,
+                        overduePayments
+                                * 10);
 
         return (int) Math.round(
                 clamp(
@@ -296,6 +379,44 @@ public class PortfolioExecutiveCalculator {
                                 PortfolioProjectSnapshotResponse::expiredWorkPermits)
                         .sum(),
 
+                projects.stream()
+                        .mapToLong(
+                                PortfolioProjectSnapshotResponse::pendingChangeOrders)
+                        .sum(),
+
+                projects.stream()
+                        .mapToLong(
+                                PortfolioProjectSnapshotResponse::overdueChangeDecisions)
+                        .sum(),
+
+                projects.stream()
+                        .mapToLong(
+                                PortfolioProjectSnapshotResponse::openClaims)
+                        .sum(),
+
+                projects.stream()
+                        .mapToLong(
+                                PortfolioProjectSnapshotResponse::overdueClaimResponses)
+                        .sum(),
+
+                projects.stream()
+                        .mapToLong(
+                                PortfolioProjectSnapshotResponse::overdueCertifications)
+                        .sum(),
+
+                projects.stream()
+                        .mapToLong(
+                                PortfolioProjectSnapshotResponse::overduePayments)
+                        .sum(),
+
+                money(
+                        projects.stream()
+                                .map(
+                                        PortfolioProjectSnapshotResponse::outstandingCertifiedAmount)
+                                .reduce(
+                                        BigDecimal.ZERO,
+                                        BigDecimal::add)),
+
                 exceptionCount);
     }
 
@@ -305,6 +426,7 @@ public class PortfolioExecutiveCalculator {
         if (projects.isEmpty()) {
 
             return new PortfolioBenchmarksResponse(
+                    0,
                     0,
                     0,
                     0,
@@ -355,6 +477,10 @@ public class PortfolioExecutiveCalculator {
                         projects,
                         Metric.INFORMATION),
 
+                average(
+                        projects,
+                        Metric.COMMERCIAL),
+
                 roundTwo(
                         projects.stream()
                                 .mapToDouble(
@@ -404,6 +530,10 @@ public class PortfolioExecutiveCalculator {
                     project);
 
             addSafetyException(
+                    result,
+                    project);
+
+            addCommercialException(
                     result,
                     project);
         }
@@ -824,6 +954,137 @@ public class PortfolioExecutiveCalculator {
         }
     }
 
+    private void addCommercialException(
+            List<PortfolioExceptionResponse> result,
+            PortfolioProjectSnapshotResponse project) {
+
+        if (project.overduePayments()
+                > 0) {
+
+            result.add(
+                    exception(
+                            project,
+                            PortfolioExceptionSeverity.CRITICAL,
+                            PortfolioExceptionDomain.COMMERCIAL,
+                            "Certified payment is overdue",
+                            "Certified project value remains unpaid beyond the contractual payment due date.",
+                            "Overdue payments",
+                            Long.toString(
+                                    project.overduePayments()),
+                            "/projects/"
+                                    + project.projectId()
+                                    + "/commercial",
+                            125
+                                    + (int) Math.min(
+                                            20,
+                                            project.overduePayments()
+                                                    * 5)));
+
+            return;
+        }
+
+        if (project.overdueCertifications()
+                > 0) {
+
+            result.add(
+                    exception(
+                            project,
+                            PortfolioExceptionSeverity.HIGH,
+                            PortfolioExceptionDomain.COMMERCIAL,
+                            "Payment certification is overdue",
+                            "Submitted payment applications have exceeded their certification due date.",
+                            "Overdue certifications",
+                            Long.toString(
+                                    project.overdueCertifications()),
+                            "/projects/"
+                                    + project.projectId()
+                                    + "/commercial",
+                            95
+                                    + (int) Math.min(
+                                            20,
+                                            project.overdueCertifications()
+                                                    * 4)));
+
+            return;
+        }
+
+        if (project.overdueClaimResponses()
+                > 0) {
+
+            result.add(
+                    exception(
+                            project,
+                            PortfolioExceptionSeverity.HIGH,
+                            PortfolioExceptionDomain.COMMERCIAL,
+                            "Claim response is overdue",
+                            "Submitted commercial claims have passed the required response date.",
+                            "Overdue claim responses",
+                            Long.toString(
+                                    project.overdueClaimResponses()),
+                            "/projects/"
+                                    + project.projectId()
+                                    + "/commercial",
+                            85
+                                    + (int) Math.min(
+                                            15,
+                                            project.overdueClaimResponses()
+                                                    * 4)));
+
+            return;
+        }
+
+        if (project.overdueChangeDecisions()
+                > 0) {
+
+            result.add(
+                    exception(
+                            project,
+                            PortfolioExceptionSeverity.HIGH,
+                            PortfolioExceptionDomain.COMMERCIAL,
+                            "Commercial change decision is overdue",
+                            "Submitted change-order valuation remains unresolved beyond the target decision date.",
+                            "Overdue decisions",
+                            Long.toString(
+                                    project.overdueChangeDecisions()),
+                            "/projects/"
+                                    + project.projectId()
+                                    + "/commercial",
+                            80
+                                    + (int) Math.min(
+                                            15,
+                                            project.overdueChangeDecisions()
+                                                    * 4)));
+
+            return;
+        }
+
+        if (project.openClaims()
+                > 0
+                || project.pendingChangeOrders()
+                > 0) {
+
+            result.add(
+                    exception(
+                            project,
+                            PortfolioExceptionSeverity.MEDIUM,
+                            PortfolioExceptionDomain.COMMERCIAL,
+                            "Open commercial exposure requires monitoring",
+                            "The project contains unresolved change-order and/or claim exposure.",
+                            "Open exposures",
+                            Long.toString(
+                                    project.openClaims()
+                                            + project.pendingChangeOrders()),
+                            "/projects/"
+                                    + project.projectId()
+                                    + "/commercial",
+                            45
+                                    + (int) Math.min(
+                                            15,
+                                            project.openClaims()
+                                                    + project.pendingChangeOrders())));
+        }
+    }
+
     private PortfolioExceptionResponse exception(
             PortfolioProjectSnapshotResponse project,
             PortfolioExceptionSeverity severity,
@@ -925,6 +1186,9 @@ public class PortfolioExecutiveCalculator {
 
                                             case INFORMATION ->
                                                     project.informationScore();
+
+                                            case COMMERCIAL ->
+                                                    project.commercialScore();
                                         })
                         .average()
                         .orElse(0));
@@ -1036,6 +1300,7 @@ public class PortfolioExecutiveCalculator {
         PROCUREMENT,
         RISK,
         PRODUCTION,
-        INFORMATION
+        INFORMATION,
+        COMMERCIAL
     }
 }
