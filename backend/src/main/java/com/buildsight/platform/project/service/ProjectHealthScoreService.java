@@ -17,28 +17,31 @@ import com.buildsight.platform.project.domain.Project;
 import com.buildsight.platform.project.domain.ProjectMilestone;
 import com.buildsight.platform.quality.api.QualityIntelligenceResponse;
 import com.buildsight.platform.risk.api.RiskIntelligenceResponse;
+import com.buildsight.platform.safety.api.SafetyIntelligenceResponse;
 
 import org.springframework.stereotype.Service;
 
 @Service
 public class ProjectHealthScoreService {
 
-    private static final double SCHEDULE_WEIGHT = 0.16;
-    private static final double PROGRESS_WEIGHT = 0.07;
-    private static final double MILESTONE_WEIGHT = 0.07;
-    private static final double COST_WEIGHT = 0.17;
-    private static final double PROCUREMENT_WEIGHT = 0.12;
-    private static final double RISK_WEIGHT = 0.09;
-    private static final double PRODUCTION_WEIGHT = 0.13;
-    private static final double INFORMATION_WEIGHT = 0.09;
-    private static final double QUALITY_WEIGHT = 0.10;
+    private static final double SCHEDULE_WEIGHT = 0.15;
+    private static final double PROGRESS_WEIGHT = 0.06;
+    private static final double MILESTONE_WEIGHT = 0.06;
+    private static final double COST_WEIGHT = 0.16;
+    private static final double PROCUREMENT_WEIGHT = 0.11;
+    private static final double RISK_WEIGHT = 0.08;
+    private static final double PRODUCTION_WEIGHT = 0.12;
+    private static final double INFORMATION_WEIGHT = 0.08;
+    private static final double QUALITY_WEIGHT = 0.08;
+    private static final double SAFETY_WEIGHT = 0.10;
 
     private final Clock clock;
 
     public ProjectHealthScoreService(
             Clock clock) {
 
-        this.clock = clock;
+        this.clock =
+                clock;
     }
 
     public ProjectHealthScoreResponse calculate(
@@ -49,7 +52,8 @@ public class ProjectHealthScoreService {
             RiskIntelligenceResponse risk,
             ProductionIntelligenceResponse production,
             DocumentIntelligenceResponse information,
-            QualityIntelligenceResponse quality) {
+            QualityIntelligenceResponse quality,
+            SafetyIntelligenceResponse safety) {
 
         LocalDate today =
                 LocalDate.now(clock);
@@ -110,15 +114,26 @@ public class ProjectHealthScoreService {
                         blockedMilestones);
 
         double overall =
-                scheduleScore * SCHEDULE_WEIGHT
-                        + progressScore * PROGRESS_WEIGHT
-                        + milestoneScore * MILESTONE_WEIGHT
-                        + cost.costScore() * COST_WEIGHT
-                        + procurement.procurementScore() * PROCUREMENT_WEIGHT
-                        + risk.riskScore() * RISK_WEIGHT
-                        + production.productionScore() * PRODUCTION_WEIGHT
-                        + information.informationScore() * INFORMATION_WEIGHT
-                        + quality.qualityScore() * QUALITY_WEIGHT;
+                scheduleScore
+                                * SCHEDULE_WEIGHT
+                        + progressScore
+                                * PROGRESS_WEIGHT
+                        + milestoneScore
+                                * MILESTONE_WEIGHT
+                        + cost.costScore()
+                                * COST_WEIGHT
+                        + procurement.procurementScore()
+                                * PROCUREMENT_WEIGHT
+                        + risk.riskScore()
+                                * RISK_WEIGHT
+                        + production.productionScore()
+                                * PRODUCTION_WEIGHT
+                        + information.informationScore()
+                                * INFORMATION_WEIGHT
+                        + quality.qualityScore()
+                                * QUALITY_WEIGHT
+                        + safety.safetyScore()
+                                * SAFETY_WEIGHT;
 
         int score =
                 (int) Math.round(
@@ -139,6 +154,7 @@ public class ProjectHealthScoreService {
                 production.productionRisk(),
                 information.informationRisk(),
                 quality.qualityRisk(),
+                safety.safetyRisk(),
                 scheduleVarianceDays,
                 roundOne(expectedProgress),
                 roundOne(actualProgress),
@@ -154,7 +170,8 @@ public class ProjectHealthScoreService {
                 roundOne(production.productionScore()),
                 roundOne(information.informationScore()),
                 roundOne(quality.qualityScore()),
-                "Health Score v7 combines schedule (16%), physical progress (7%), milestones (7%), cost (17%), procurement (12%), risk control (9%), site production (13%), information control (9%), and quality/handover performance (10%).");
+                roundOne(safety.safetyScore()),
+                "Health Score v8 combines schedule (15%), physical progress (6%), milestones (6%), cost (16%), procurement (11%), risk control (8%), site production (12%), information control (8%), quality/handover (8%), and HSE/safety performance (10%).");
     }
 
     private double scheduleScore(
@@ -165,7 +182,9 @@ public class ProjectHealthScoreService {
         }
 
         return clamp(
-                100 - varianceDays * 2.0,
+                100
+                        - varianceDays
+                        * 2.0,
                 0,
                 100);
     }
@@ -177,10 +196,13 @@ public class ProjectHealthScoreService {
         double lag =
                 Math.max(
                         0,
-                        expected - actual);
+                        expected
+                                - actual);
 
         return clamp(
-                100 - lag * 1.5,
+                100
+                        - lag
+                        * 1.5,
                 0,
                 100);
     }
@@ -196,8 +218,10 @@ public class ProjectHealthScoreService {
 
         return clamp(
                 100
-                        - overdue * 15.0
-                        - blocked * 20.0,
+                        - overdue
+                        * 15.0
+                        - blocked
+                        * 20.0,
                 0,
                 100);
     }
@@ -211,7 +235,9 @@ public class ProjectHealthScoreService {
             return 0;
         }
 
-        if (!today.isBefore(forecastEnd)) {
+        if (!today.isBefore(
+                forecastEnd)) {
+
             return 100;
         }
 
@@ -222,7 +248,7 @@ public class ProjectHealthScoreService {
                                 start,
                                 forecastEnd));
 
-        long elapsed =
+        long elapsedDays =
                 Math.max(
                         0,
                         ChronoUnit.DAYS.between(
@@ -230,7 +256,9 @@ public class ProjectHealthScoreService {
                                 today));
 
         return clamp(
-                elapsed * 100.0 / totalDays,
+                elapsedDays
+                        * 100.0
+                        / totalDays,
                 0,
                 100);
     }
@@ -265,19 +293,22 @@ public class ProjectHealthScoreService {
 
     private double clamp(
             double value,
-            double min,
-            double max) {
+            double minimum,
+            double maximum) {
 
         return Math.max(
-                min,
+                minimum,
                 Math.min(
-                        max,
+                        maximum,
                         value));
     }
 
     private double roundOne(
             double value) {
 
-        return Math.round(value * 10.0) / 10.0;
+        return Math.round(
+                        value
+                                * 10.0)
+                / 10.0;
     }
 }

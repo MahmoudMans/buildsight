@@ -26,5 +26,9 @@ public record PortfolioSummaryResponse(
         long criticalOpenIssues,
         long blockedWorkPackages,
         long overdueRfis,
+        long openSafetyIncidents,
+        long criticalSafetyIncidents,
+        long overdueSafetyActions,
+        long expiredWorkPermits,
         long totalExceptions) {
 }

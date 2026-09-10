@@ -136,6 +136,7 @@ export interface ProjectHealthScore {
   productionRisk: ProductionRiskLevel;
   informationRisk: InformationRiskLevel;
   qualityRisk: QualityRiskLevel;
+  safetyRisk: SafetyRiskLevel;
   scheduleVarianceDays: number;
   expectedProgressPercentage: number;
   actualProgressPercentage: number;
@@ -151,6 +152,7 @@ export interface ProjectHealthScore {
   productionScore: number;
   informationScore: number;
   qualityScore: number;
+  safetyScore: number;
   explanation: string;
 }
 
@@ -1263,7 +1265,8 @@ export type PortfolioExceptionDomain =
   | "PROCUREMENT"
   | "RISK"
   | "PRODUCTION"
-  | "INFORMATION";
+  | "INFORMATION"
+  | "SAFETY";
 
 export type SupplierConcentrationRisk =
   | "LOW"
@@ -1299,6 +1302,11 @@ export interface PortfolioProjectSnapshot {
   overdueRfis: number;
   criticalOpenRfis: number;
   informationScore: number;
+  openSafetyIncidents: number;
+  criticalSafetyIncidents: number;
+  overdueSafetyActions: number;
+  expiredWorkPermits: number;
+  safetyScore: number;
   attentionScore: number;
   healthRank: number;
 }
@@ -1325,6 +1333,10 @@ export interface PortfolioSummary {
   criticalOpenIssues: number;
   blockedWorkPackages: number;
   overdueRfis: number;
+  openSafetyIncidents: number;
+  criticalSafetyIncidents: number;
+  overdueSafetyActions: number;
+  expiredWorkPermits: number;
   totalExceptions: number;
 }
 
@@ -1704,4 +1716,246 @@ export interface UpdateHandoverItemInput {
   dueDate: string;
   status: HandoverStatus;
   notes: string;
+}
+
+export type SafetyIncidentType =
+  | "NEAR_MISS"
+  | "FIRST_AID"
+  | "MEDICAL_TREATMENT"
+  | "LOST_TIME_INJURY"
+  | "PROPERTY_DAMAGE"
+  | "ENVIRONMENTAL"
+  | "OTHER";
+
+export type SafetySeverity =
+  | "LOW"
+  | "MEDIUM"
+  | "HIGH"
+  | "CRITICAL";
+
+export type SafetyIncidentStatus =
+  | "REPORTED"
+  | "UNDER_INVESTIGATION"
+  | "ACTION_IN_PROGRESS"
+  | "CLOSED"
+  | "VOID";
+
+export type SafetyObservationType =
+  | "SAFE_ACT"
+  | "UNSAFE_ACT"
+  | "UNSAFE_CONDITION"
+  | "GOOD_PRACTICE";
+
+export type HazardCategory =
+  | "PPE"
+  | "HOUSEKEEPING"
+  | "WORK_AT_HEIGHT"
+  | "ELECTRICAL"
+  | "LIFTING"
+  | "EXCAVATION"
+  | "ACCESS_EGRESS"
+  | "TOOLS_EQUIPMENT"
+  | "FIRE"
+  | "ENVIRONMENTAL"
+  | "TRAFFIC"
+  | "OTHER";
+
+export type SafetyObservationStatus =
+  | "OPEN"
+  | "ACTION_IN_PROGRESS"
+  | "CLOSED"
+  | "VOID";
+
+export type SafetyActionStatus =
+  | "OPEN"
+  | "IN_PROGRESS"
+  | "READY_FOR_VERIFICATION"
+  | "CLOSED"
+  | "VOID";
+
+export type WorkPermitType =
+  | "HOT_WORK"
+  | "WORK_AT_HEIGHT"
+  | "CONFINED_SPACE"
+  | "EXCAVATION"
+  | "ELECTRICAL_ISOLATION"
+  | "LIFTING"
+  | "GENERAL";
+
+export type WorkPermitStatus =
+  | "DRAFT"
+  | "ACTIVE"
+  | "SUSPENDED"
+  | "CLOSED"
+  | "CANCELLED";
+
+export type SafetyRiskLevel =
+  | "NO_DATA"
+  | "ON_TRACK"
+  | "WATCH"
+  | "AT_RISK";
+
+export interface SafetyIncident {
+  id: string;
+  projectId: string;
+  reference: string;
+  incidentType: SafetyIncidentType;
+  severity: SafetySeverity;
+  title: string;
+  description: string;
+  location: string | null;
+  occurredDate: string;
+  reportedDate: string;
+  peopleAffected: number;
+  lostTimeDays: number;
+  immediateAction: string | null;
+  rootCause: string | null;
+  investigationNotes: string | null;
+  status: SafetyIncidentStatus;
+  closedDate: string | null;
+  version: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface SafetyObservation {
+  id: string;
+  projectId: string;
+  reference: string;
+  observationType: SafetyObservationType;
+  hazardCategory: HazardCategory;
+  severity: SafetySeverity;
+  title: string;
+  description: string;
+  location: string | null;
+  observedDate: string;
+  observerName: string | null;
+  ownerName: string | null;
+  dueDate: string | null;
+  status: SafetyObservationStatus;
+  closedDate: string | null;
+  overdue: boolean;
+  version: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface SafetyAction {
+  id: string;
+  projectId: string;
+  incidentId: string | null;
+  incidentReference: string | null;
+  observationId: string | null;
+  observationReference: string | null;
+  reference: string;
+  title: string;
+  actionDescription: string;
+  ownerName: string | null;
+  dueDate: string;
+  status: SafetyActionStatus;
+  verificationNotes: string | null;
+  closedDate: string | null;
+  overdue: boolean;
+  version: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface WorkPermit {
+  id: string;
+  projectId: string;
+  reference: string;
+  permitType: WorkPermitType;
+  title: string;
+  location: string | null;
+  issuerName: string | null;
+  receiverName: string | null;
+  validFrom: string;
+  validUntil: string;
+  controls: string | null;
+  status: WorkPermitStatus;
+  closedDate: string | null;
+  expired: boolean;
+  version: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface SafetyIntelligence {
+  totalIncidents: number;
+  openIncidents: number;
+  recordableIncidents: number;
+  lostTimeIncidents: number;
+  criticalOpenIncidents: number;
+  totalObservations: number;
+  unsafeObservations: number;
+  positiveObservations: number;
+  openActions: number;
+  overdueActions: number;
+  activePermits: number;
+  expiredPermits: number;
+  recurringHazardCategories: number;
+  daysSinceLastRecordableIncident: number | null;
+  safetyScore: number;
+  safetyRisk: SafetyRiskLevel;
+  explanation: string;
+}
+
+export interface SafetyControl {
+  project: Project;
+  intelligence: SafetyIntelligence;
+  incidents: SafetyIncident[];
+  observations: SafetyObservation[];
+  actions: SafetyAction[];
+  permits: WorkPermit[];
+}
+
+export interface CreateSafetyIncidentInput {
+  reference: string;
+  incidentType: SafetyIncidentType;
+  severity: SafetySeverity;
+  title: string;
+  description: string;
+  location: string;
+  occurredDate: string;
+  reportedDate: string;
+  peopleAffected: number;
+  lostTimeDays: number;
+  immediateAction: string;
+}
+
+export interface CreateSafetyObservationInput {
+  reference: string;
+  observationType: SafetyObservationType;
+  hazardCategory: HazardCategory;
+  severity: SafetySeverity;
+  title: string;
+  description: string;
+  location: string;
+  observedDate: string;
+  observerName: string;
+  ownerName: string;
+  dueDate: string | null;
+}
+
+export interface CreateSafetyActionInput {
+  incidentId: string | null;
+  observationId: string | null;
+  reference: string;
+  title: string;
+  actionDescription: string;
+  ownerName: string;
+  dueDate: string;
+}
+
+export interface CreateWorkPermitInput {
+  reference: string;
+  permitType: WorkPermitType;
+  title: string;
+  location: string;
+  issuerName: string;
+  receiverName: string;
+  validFrom: string;
+  validUntil: string;
+  controls: string;
 }

@@ -55,6 +55,11 @@ class PortfolioAiPromptBuilderTest {
                         1,
                         0,
                         72,
+                        1,
+                        0,
+                        1,
+                        0,
+                        78,
                         60,
                         1);
 
@@ -81,6 +86,10 @@ class PortfolioAiPromptBuilderTest {
                         0,
                         1,
                         1,
+                        0,
+                        0,
+                        0,
+                        0,
                         5);
 
         PortfolioExecutiveResponse executive =

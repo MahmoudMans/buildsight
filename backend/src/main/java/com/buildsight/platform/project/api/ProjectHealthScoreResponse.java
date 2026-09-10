@@ -8,6 +8,7 @@ import com.buildsight.platform.procurement.api.ProcurementRiskLevel;
 import com.buildsight.platform.production.api.ProductionRiskLevel;
 import com.buildsight.platform.quality.api.QualityRiskLevel;
 import com.buildsight.platform.risk.api.RiskIntelligenceLevel;
+import com.buildsight.platform.safety.api.SafetyRiskLevel;
 
 public record ProjectHealthScoreResponse(
         LocalDate calculationDate,
@@ -20,6 +21,7 @@ public record ProjectHealthScoreResponse(
         ProductionRiskLevel productionRisk,
         InformationRiskLevel informationRisk,
         QualityRiskLevel qualityRisk,
+        SafetyRiskLevel safetyRisk,
         long scheduleVarianceDays,
         double expectedProgressPercentage,
         double actualProgressPercentage,
@@ -35,5 +37,6 @@ public record ProjectHealthScoreResponse(
         double productionScore,
         double informationScore,
         double qualityScore,
+        double safetyScore,
         String explanation) {
 }

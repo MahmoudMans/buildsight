@@ -1184,3 +1184,198 @@ export async function updateHandoverItem(
     },
   );
 }
+
+export async function getProjectSafety(
+  projectId: string,
+): Promise<
+  import("@/types/project").SafetyControl
+> {
+  return request<
+    import("@/types/project").SafetyControl
+  >(
+    `/projects/${projectId}/safety`,
+  );
+}
+
+export async function createSafetyIncident(
+  projectId: string,
+  input: import("@/types/project").CreateSafetyIncidentInput,
+): Promise<
+  import("@/types/project").SafetyIncident
+> {
+  return request<
+    import("@/types/project").SafetyIncident
+  >(
+    `/projects/${projectId}/safety/incidents`,
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function updateSafetyIncident(
+  projectId: string,
+  incidentId: string,
+  input: {
+    version: number;
+    incidentType: import("@/types/project").SafetyIncidentType;
+    severity: import("@/types/project").SafetySeverity;
+    title: string;
+    description: string;
+    location: string;
+    peopleAffected: number;
+    lostTimeDays: number;
+    immediateAction: string;
+    rootCause: string;
+    investigationNotes: string;
+    status: import("@/types/project").SafetyIncidentStatus;
+  },
+): Promise<
+  import("@/types/project").SafetyIncident
+> {
+  return request<
+    import("@/types/project").SafetyIncident
+  >(
+    `/projects/${projectId}/safety/incidents/${incidentId}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function createSafetyObservation(
+  projectId: string,
+  input: import("@/types/project").CreateSafetyObservationInput,
+): Promise<
+  import("@/types/project").SafetyObservation
+> {
+  return request<
+    import("@/types/project").SafetyObservation
+  >(
+    `/projects/${projectId}/safety/observations`,
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function updateSafetyObservation(
+  projectId: string,
+  observationId: string,
+  input: {
+    version: number;
+    observationType: import("@/types/project").SafetyObservationType;
+    hazardCategory: import("@/types/project").HazardCategory;
+    severity: import("@/types/project").SafetySeverity;
+    title: string;
+    description: string;
+    location: string;
+    ownerName: string;
+    dueDate: string | null;
+    status: import("@/types/project").SafetyObservationStatus;
+  },
+): Promise<
+  import("@/types/project").SafetyObservation
+> {
+  return request<
+    import("@/types/project").SafetyObservation
+  >(
+    `/projects/${projectId}/safety/observations/${observationId}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function createSafetyAction(
+  projectId: string,
+  input: import("@/types/project").CreateSafetyActionInput,
+): Promise<
+  import("@/types/project").SafetyAction
+> {
+  return request<
+    import("@/types/project").SafetyAction
+  >(
+    `/projects/${projectId}/safety/actions`,
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function updateSafetyAction(
+  projectId: string,
+  actionId: string,
+  input: {
+    version: number;
+    title: string;
+    actionDescription: string;
+    ownerName: string;
+    dueDate: string;
+    status: import("@/types/project").SafetyActionStatus;
+    verificationNotes: string;
+  },
+): Promise<
+  import("@/types/project").SafetyAction
+> {
+  return request<
+    import("@/types/project").SafetyAction
+  >(
+    `/projects/${projectId}/safety/actions/${actionId}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function createWorkPermit(
+  projectId: string,
+  input: import("@/types/project").CreateWorkPermitInput,
+): Promise<
+  import("@/types/project").WorkPermit
+> {
+  return request<
+    import("@/types/project").WorkPermit
+  >(
+    `/projects/${projectId}/safety/permits`,
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function updateWorkPermit(
+  projectId: string,
+  permitId: string,
+  input: {
+    version: number;
+    permitType: import("@/types/project").WorkPermitType;
+    title: string;
+    location: string;
+    issuerName: string;
+    receiverName: string;
+    validFrom: string;
+    validUntil: string;
+    controls: string;
+    status: import("@/types/project").WorkPermitStatus;
+  },
+): Promise<
+  import("@/types/project").WorkPermit
+> {
+  return request<
+    import("@/types/project").WorkPermit
+  >(
+    `/projects/${projectId}/safety/permits/${permitId}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(input),
+    },
+  );
+}

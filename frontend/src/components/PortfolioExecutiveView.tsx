@@ -671,6 +671,27 @@ export function PortfolioExecutiveView() {
                 summary.overdueRfis
               }
             />
+
+            <HealthCount
+              label="Safety incidents"
+              value={
+                summary.openSafetyIncidents
+              }
+            />
+
+            <HealthCount
+              label="Overdue HSE actions"
+              value={
+                summary.overdueSafetyActions
+              }
+            />
+
+            <HealthCount
+              label="Expired permits"
+              value={
+                summary.expiredWorkPermits
+              }
+            />
           </div>
         </section>
 

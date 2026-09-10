@@ -34,6 +34,10 @@ public class PortfolioAiPromptBuilder {
                 Critical open issues: %s
                 Blocked work packages: %s
                 Overdue RFIs: %s
+                Open safety incidents: %s
+                Critical safety incidents: %s
+                Overdue HSE actions: %s
+                Expired permits-to-work: %s
                 Executive exceptions: %s
                 """
                 .formatted(
@@ -63,6 +67,14 @@ public class PortfolioAiPromptBuilder {
                                 .blockedWorkPackages(),
                         executive.summary()
                                 .overdueRfis(),
+                        executive.summary()
+                                .openSafetyIncidents(),
+                        executive.summary()
+                                .criticalSafetyIncidents(),
+                        executive.summary()
+                                .overdueSafetyActions(),
+                        executive.summary()
+                                .expiredWorkPermits(),
                         executive.summary()
                                 .totalExceptions());
 
@@ -107,6 +119,11 @@ public class PortfolioAiPromptBuilder {
                     Overdue RFIs: %s
                     Critical open RFIs: %s
                     Information score: %s
+                    Open safety incidents: %s
+                    Critical safety incidents: %s
+                    Overdue HSE actions: %s
+                    Expired work permits: %s
+                    Safety score: %s
                     """
                     .formatted(
                             project.code(),
@@ -131,7 +148,12 @@ public class PortfolioAiPromptBuilder {
                             project.productivityIndex(),
                             project.overdueRfis(),
                             project.criticalOpenRfis(),
-                            project.informationScore());
+                            project.informationScore(),
+                            project.openSafetyIncidents(),
+                            project.criticalSafetyIncidents(),
+                            project.overdueSafetyActions(),
+                            project.expiredWorkPermits(),
+                            project.safetyScore());
 
             sources.add(
                     new PortfolioAiSourceResponse(

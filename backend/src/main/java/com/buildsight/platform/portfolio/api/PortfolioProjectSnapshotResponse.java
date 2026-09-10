@@ -35,6 +35,11 @@ public record PortfolioProjectSnapshotResponse(
         long overdueRfis,
         long criticalOpenRfis,
         double informationScore,
+        long openSafetyIncidents,
+        long criticalSafetyIncidents,
+        long overdueSafetyActions,
+        long expiredWorkPermits,
+        double safetyScore,
         int attentionScore,
         int healthRank) {
 
@@ -70,6 +75,11 @@ public record PortfolioProjectSnapshotResponse(
                 overdueRfis,
                 criticalOpenRfis,
                 informationScore,
+                openSafetyIncidents,
+                criticalSafetyIncidents,
+                overdueSafetyActions,
+                expiredWorkPermits,
+                safetyScore,
                 attentionScore,
                 rank);
     }

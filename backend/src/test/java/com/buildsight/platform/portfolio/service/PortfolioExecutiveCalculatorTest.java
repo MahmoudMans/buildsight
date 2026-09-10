@@ -17,8 +17,7 @@ import org.junit.jupiter.api.Test;
 
 class PortfolioExecutiveCalculatorTest {
 
-    private final PortfolioExecutiveCalculator
-            calculator =
+    private final PortfolioExecutiveCalculator calculator =
             new PortfolioExecutiveCalculator();
 
     @Test
@@ -38,12 +37,10 @@ class PortfolioExecutiveCalculatorTest {
 
         var exceptions =
                 calculator.exceptions(
-                        List.of(
-                                project));
+                        List.of(project));
 
         assertTrue(
-                exceptions.size()
-                        >= 5);
+                exceptions.size() >= 5);
 
         assertEquals(
                 PortfolioExceptionSeverity.CRITICAL,
@@ -70,12 +67,19 @@ class PortfolioExecutiveCalculatorTest {
                                 exception ->
                                         exception.domain()
                                                 == PortfolioExceptionDomain.PRODUCTION));
+
+        assertTrue(
+                exceptions.stream()
+                        .anyMatch(
+                                exception ->
+                                        exception.domain()
+                                                == PortfolioExceptionDomain.SAFETY));
     }
 
     @Test
     void healthyPortfolioHasWeightedHealthyScore() {
 
-        var first =
+        PortfolioProjectSnapshotResponse first =
                 snapshot(
                         "BS-001",
                         90,
@@ -87,7 +91,7 @@ class PortfolioExecutiveCalculatorTest {
                         0,
                         0);
 
-        var second =
+        PortfolioProjectSnapshotResponse second =
                 snapshot(
                         "BS-002",
                         82,
@@ -114,13 +118,29 @@ class PortfolioExecutiveCalculatorTest {
                 ProjectHealthBand.HEALTHY,
                 summary.portfolioHealthBand());
 
+        assertEquals(
+                0,
+                summary.openSafetyIncidents());
+
+        assertEquals(
+                0,
+                summary.criticalSafetyIncidents());
+
+        assertEquals(
+                0,
+                summary.overdueSafetyActions());
+
+        assertEquals(
+                0,
+                summary.expiredWorkPermits());
+
         assertTrue(
                 summary.weightedPortfolioHealthScore()
                         >= 80);
     }
 
     @Test
-    void attentionScoreRisesWithCrossDomainExposure() {
+    void attentionScoreRisesWithCrossDomainAndSafetyExposure() {
 
         int healthy =
                 calculator.attentionScore(
@@ -128,6 +148,10 @@ class PortfolioExecutiveCalculatorTest {
                         0,
                         BigDecimal.ZERO,
                         new BigDecimal("100000"),
+                        0,
+                        0,
+                        0,
+                        0,
                         0,
                         0,
                         0,
@@ -148,15 +172,52 @@ class PortfolioExecutiveCalculatorTest {
                         14,
                         2,
                         2,
+                        1,
+                        1,
+                        1,
+                        2,
                         1);
 
         assertTrue(
-                stressed
-                        > healthy);
+                stressed > healthy);
 
         assertTrue(
-                stressed
-                        >= 80);
+                stressed >= 80);
+    }
+
+    @Test
+    void criticalSafetyExposureProducesCriticalPortfolioException() {
+
+        PortfolioProjectSnapshotResponse project =
+                snapshot(
+                        "BS-HSE",
+                        55,
+                        ProjectHealthBand.AT_RISK,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        0);
+
+        var safetyException =
+                calculator.exceptions(
+                                List.of(project))
+                        .stream()
+                        .filter(
+                                exception ->
+                                        exception.domain()
+                                                == PortfolioExceptionDomain.SAFETY)
+                        .findFirst()
+                        .orElseThrow();
+
+        assertEquals(
+                PortfolioExceptionSeverity.CRITICAL,
+                safetyException.severity());
+
+        assertEquals(
+                "Critical HSE incident remains open",
+                safetyException.title());
     }
 
     private PortfolioProjectSnapshotResponse snapshot(
@@ -170,6 +231,9 @@ class PortfolioExecutiveCalculatorTest {
             long blockedPackages,
             long overdueRfis) {
 
+        boolean stressed =
+                health < 60;
+
         return new PortfolioProjectSnapshotResponse(
                 UUID.randomUUID(),
                 code,
@@ -177,41 +241,80 @@ class PortfolioExecutiveCalculatorTest {
                 "Client",
                 "Paris",
                 ProjectStatus.ACTIVE,
+
                 health,
                 band,
-                health < 60
+
+                stressed
                         ? 18
                         : 0,
+
                 new BigDecimal("100000.00"),
+
                 new BigDecimal("100000.00"),
+
                 new BigDecimal("100000.00")
                         .subtract(
-                                BigDecimal.valueOf(
-                                        vac)),
+                                BigDecimal.valueOf(vac)),
+
                 new BigDecimal("50000.00"),
+
                 new BigDecimal("20000.00"),
-                BigDecimal.valueOf(
-                        vac),
+
+                BigDecimal.valueOf(vac),
+
                 health,
+
                 delayedProcurement,
+
                 health,
+
                 highRisk,
+
                 criticalIssues,
+
                 criticalIssues > 0
                         ? 14
                         : 0,
+
                 health,
+
                 blockedPackages,
+
                 health,
-                health < 60
+
+                stressed
                         ? 0.65
                         : 1.05,
+
                 overdueRfis,
+
                 overdueRfis > 0
                         ? 1
                         : 0,
+
                 health,
+
+                stressed
+                        ? 1
+                        : 0,
+
+                stressed
+                        ? 1
+                        : 0,
+
+                stressed
+                        ? 2
+                        : 0,
+
+                stressed
+                        ? 1
+                        : 0,
+
+                health,
+
                 0,
+
                 1);
     }
 }

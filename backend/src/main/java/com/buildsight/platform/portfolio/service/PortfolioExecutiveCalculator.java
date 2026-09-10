@@ -31,7 +31,11 @@ public class PortfolioExecutiveCalculator {
             long forecastDelayDays,
             long blockedPackages,
             long overdueRfis,
-            long criticalOpenRfis) {
+            long criticalOpenRfis,
+            long openSafetyIncidents,
+            long criticalSafetyIncidents,
+            long overdueSafetyActions,
+            long expiredWorkPermits) {
 
         double score =
                 Math.max(
@@ -101,6 +105,30 @@ public class PortfolioExecutiveCalculator {
                         20,
                         criticalOpenRfis
                                 * 10);
+
+        score +=
+                Math.min(
+                        20,
+                        openSafetyIncidents
+                                * 5);
+
+        score +=
+                Math.min(
+                        30,
+                        criticalSafetyIncidents
+                                * 15);
+
+        score +=
+                Math.min(
+                        20,
+                        overdueSafetyActions
+                                * 6);
+
+        score +=
+                Math.min(
+                        24,
+                        expiredWorkPermits
+                                * 12);
 
         return (int) Math.round(
                 clamp(
@@ -248,6 +276,26 @@ public class PortfolioExecutiveCalculator {
                                 PortfolioProjectSnapshotResponse::overdueRfis)
                         .sum(),
 
+                projects.stream()
+                        .mapToLong(
+                                PortfolioProjectSnapshotResponse::openSafetyIncidents)
+                        .sum(),
+
+                projects.stream()
+                        .mapToLong(
+                                PortfolioProjectSnapshotResponse::criticalSafetyIncidents)
+                        .sum(),
+
+                projects.stream()
+                        .mapToLong(
+                                PortfolioProjectSnapshotResponse::overdueSafetyActions)
+                        .sum(),
+
+                projects.stream()
+                        .mapToLong(
+                                PortfolioProjectSnapshotResponse::expiredWorkPermits)
+                        .sum(),
+
                 exceptionCount);
     }
 
@@ -352,6 +400,10 @@ public class PortfolioExecutiveCalculator {
                     project);
 
             addInformationException(
+                    result,
+                    project);
+
+            addSafetyException(
                     result,
                     project);
         }
@@ -666,6 +718,109 @@ public class PortfolioExecutiveCalculator {
                                             20,
                                             project.overdueRfis()
                                                     * 4)));
+        }
+    }
+
+    private void addSafetyException(
+            List<PortfolioExceptionResponse> result,
+            PortfolioProjectSnapshotResponse project) {
+
+        if (project.criticalSafetyIncidents()
+                > 0) {
+
+            result.add(
+                    exception(
+                            project,
+                            PortfolioExceptionSeverity.CRITICAL,
+                            PortfolioExceptionDomain.SAFETY,
+                            "Critical HSE incident remains open",
+                            "The project contains an unresolved critical safety incident.",
+                            "Critical incidents",
+                            Long.toString(
+                                    project.criticalSafetyIncidents()),
+                            "/projects/"
+                                    + project.projectId()
+                                    + "/safety",
+                            125
+                                    + (int) Math.min(
+                                            20,
+                                            project.criticalSafetyIncidents()
+                                                    * 5)));
+
+            return;
+        }
+
+        if (project.expiredWorkPermits()
+                > 0) {
+
+            result.add(
+                    exception(
+                            project,
+                            PortfolioExceptionSeverity.HIGH,
+                            PortfolioExceptionDomain.SAFETY,
+                            "Expired permit-to-work remains active",
+                            "At least one active or suspended permit has exceeded its approved validity window.",
+                            "Expired permits",
+                            Long.toString(
+                                    project.expiredWorkPermits()),
+                            "/projects/"
+                                    + project.projectId()
+                                    + "/safety",
+                            95
+                                    + (int) Math.min(
+                                            20,
+                                            project.expiredWorkPermits()
+                                                    * 5)));
+
+            return;
+        }
+
+        if (project.overdueSafetyActions()
+                > 0) {
+
+            result.add(
+                    exception(
+                            project,
+                            PortfolioExceptionSeverity.HIGH,
+                            PortfolioExceptionDomain.SAFETY,
+                            "Overdue HSE corrective actions",
+                            "Safety corrective actions have exceeded their target completion dates.",
+                            "Overdue actions",
+                            Long.toString(
+                                    project.overdueSafetyActions()),
+                            "/projects/"
+                                    + project.projectId()
+                                    + "/safety",
+                            80
+                                    + (int) Math.min(
+                                            20,
+                                            project.overdueSafetyActions()
+                                                    * 4)));
+
+            return;
+        }
+
+        if (project.openSafetyIncidents()
+                > 0) {
+
+            result.add(
+                    exception(
+                            project,
+                            PortfolioExceptionSeverity.MEDIUM,
+                            PortfolioExceptionDomain.SAFETY,
+                            "Open safety incidents require monitoring",
+                            "One or more safety incidents remain under investigation or corrective action.",
+                            "Open incidents",
+                            Long.toString(
+                                    project.openSafetyIncidents()),
+                            "/projects/"
+                                    + project.projectId()
+                                    + "/safety",
+                            50
+                                    + (int) Math.min(
+                                            15,
+                                            project.openSafetyIncidents()
+                                                    * 3)));
         }
     }
 

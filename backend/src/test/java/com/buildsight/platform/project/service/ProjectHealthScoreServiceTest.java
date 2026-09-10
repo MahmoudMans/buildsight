@@ -27,6 +27,8 @@ import com.buildsight.platform.quality.api.QualityIntelligenceResponse;
 import com.buildsight.platform.quality.api.QualityRiskLevel;
 import com.buildsight.platform.risk.api.RiskIntelligenceLevel;
 import com.buildsight.platform.risk.api.RiskIntelligenceResponse;
+import com.buildsight.platform.safety.api.SafetyIntelligenceResponse;
+import com.buildsight.platform.safety.api.SafetyRiskLevel;
 
 import org.junit.jupiter.api.Test;
 
@@ -53,7 +55,10 @@ class ProjectHealthScoreServiceTest {
                                 information(90),
                                 quality(
                                         35,
-                                        QualityRiskLevel.AT_RISK));
+                                        QualityRiskLevel.AT_RISK),
+                                safety(
+                                        90,
+                                        SafetyRiskLevel.ON_TRACK));
 
         assertEquals(
                 35,
@@ -82,7 +87,10 @@ class ProjectHealthScoreServiceTest {
                                 information(95),
                                 quality(
                                         95,
-                                        QualityRiskLevel.ON_TRACK));
+                                        QualityRiskLevel.ON_TRACK),
+                                safety(
+                                        95,
+                                        SafetyRiskLevel.ON_TRACK));
 
         assertEquals(
                 ProjectHealthBand.HEALTHY,
@@ -232,6 +240,31 @@ class ProjectHealthScoreServiceTest {
                 InformationRiskLevel.ON_TRACK,
                 "Test");
     }
+
+    private SafetyIntelligenceResponse safety(
+            double score,
+            SafetyRiskLevel level) {
+
+        return new SafetyIntelligenceResponse(
+                1,
+                0,
+                0,
+                0,
+                0,
+                4,
+                1,
+                3,
+                0,
+                0,
+                1,
+                0,
+                0,
+                null,
+                score,
+                level,
+                "Test");
+    }
+
 
     private QualityIntelligenceResponse quality(
             double score,

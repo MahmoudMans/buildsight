@@ -1057,6 +1057,16 @@ export function ProjectQualityControlView({
           </a>
 
           <Link
+            href={`/projects/${projectId}/safety`}
+            className="command-nav-item"
+          >
+            HSE
+            <span>
+              Safety control
+            </span>
+          </Link>
+
+          <Link
             href={`/projects/${projectId}/copilot`}
             className="command-nav-item"
           >
