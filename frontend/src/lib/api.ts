@@ -581,3 +581,122 @@ export async function updateProjectDelayEvent(
     },
   );
 }
+
+export async function getProjectProduction(
+  projectId: string,
+): Promise<
+  import("@/types/project").ProductionControl
+> {
+  return request<
+    import("@/types/project").ProductionControl
+  >(
+    `/projects/${projectId}/production`,
+  );
+}
+
+export async function createWorkPackage(
+  projectId: string,
+  input: import("@/types/project").CreateWorkPackageInput,
+): Promise<
+  import("@/types/project").WorkPackage
+> {
+  return request<
+    import("@/types/project").WorkPackage
+  >(
+    `/projects/${projectId}/production/work-packages`,
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function updateWorkPackage(
+  projectId: string,
+  workPackageId: string,
+  input: import("@/types/project").UpdateWorkPackageInput,
+): Promise<
+  import("@/types/project").WorkPackage
+> {
+  return request<
+    import("@/types/project").WorkPackage
+  >(
+    `/projects/${projectId}/production/work-packages/${workPackageId}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function createSiteReport(
+  projectId: string,
+  input: import("@/types/project").CreateSiteReportInput,
+): Promise<
+  import("@/types/project").SiteReport
+> {
+  return request<
+    import("@/types/project").SiteReport
+  >(
+    `/projects/${projectId}/production/site-reports`,
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function updateSiteReport(
+  projectId: string,
+  siteReportId: string,
+  input: import("@/types/project").UpdateSiteReportInput,
+): Promise<
+  import("@/types/project").SiteReport
+> {
+  return request<
+    import("@/types/project").SiteReport
+  >(
+    `/projects/${projectId}/production/site-reports/${siteReportId}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function createProductionEntry(
+  projectId: string,
+  siteReportId: string,
+  input: import("@/types/project").CreateProductionEntryInput,
+): Promise<
+  import("@/types/project").ProductionEntry
+> {
+  return request<
+    import("@/types/project").ProductionEntry
+  >(
+    `/projects/${projectId}/production/site-reports/${siteReportId}/entries`,
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function updateProductionEntry(
+  projectId: string,
+  siteReportId: string,
+  entryId: string,
+  input: import("@/types/project").UpdateProductionEntryInput,
+): Promise<
+  import("@/types/project").ProductionEntry
+> {
+  return request<
+    import("@/types/project").ProductionEntry
+  >(
+    `/projects/${projectId}/production/site-reports/${siteReportId}/entries/${entryId}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(input),
+    },
+  );
+}

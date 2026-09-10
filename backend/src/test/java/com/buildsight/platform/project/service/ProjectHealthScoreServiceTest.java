@@ -15,6 +15,8 @@ import com.buildsight.platform.cost.api.CostIntelligenceResponse;
 import com.buildsight.platform.cost.api.CostRiskLevel;
 import com.buildsight.platform.procurement.api.ProcurementIntelligenceResponse;
 import com.buildsight.platform.procurement.api.ProcurementRiskLevel;
+import com.buildsight.platform.production.api.ProductionIntelligenceResponse;
+import com.buildsight.platform.production.api.ProductionRiskLevel;
 import com.buildsight.platform.project.api.ProjectHealthBand;
 import com.buildsight.platform.project.api.ProjectHealthScoreResponse;
 import com.buildsight.platform.project.domain.Project;
@@ -33,31 +35,10 @@ class ProjectHealthScoreServiceTest {
                     ZoneOffset.UTC);
 
     @Test
-    void projectHealthV4IncludesRiskControlPerformance() {
+    void healthScoreV5IncludesProductionPerformance() {
 
         Project project =
-                Project.create(
-                        UUID.randomUUID(),
-                        "BS-H-V4-001",
-                        "Health Test",
-                        "Health",
-                        "Client",
-                        "Paris",
-                        new BigDecimal(
-                                "1000000.00"),
-                        new BigDecimal(
-                                "900000.00"),
-                        LocalDate.of(
-                                2026,
-                                1,
-                                1),
-                        LocalDate.of(
-                                2026,
-                                12,
-                                31),
-                        ProjectStatus.ACTIVE,
-                        new BigDecimal(
-                                "50.00"));
+                project();
 
         ProjectHealthScoreResponse result =
                 new ProjectHealthScoreService(
@@ -66,22 +47,22 @@ class ProjectHealthScoreServiceTest {
                                 project,
                                 List.of(),
                                 cost(
-                                        90,
-                                        CostRiskLevel.ON_TRACK),
+                                        90),
                                 procurement(
-                                        85,
-                                        ProcurementRiskLevel.ON_TRACK),
+                                        90),
                                 risk(
-                                        40,
-                                        RiskIntelligenceLevel.AT_RISK));
+                                        90),
+                                production(
+                                        45,
+                                        ProductionRiskLevel.AT_RISK));
 
         assertEquals(
-                RiskIntelligenceLevel.AT_RISK,
-                result.riskLevel());
+                45.0,
+                result.productionScore());
 
         assertEquals(
-                40.0,
-                result.riskScore());
+                ProductionRiskLevel.AT_RISK,
+                result.productionRisk());
 
         assertTrue(
                 result.score()
@@ -89,47 +70,23 @@ class ProjectHealthScoreServiceTest {
     }
 
     @Test
-    void healthySixDimensionProjectRemainsHealthy() {
-
-        Project project =
-                Project.create(
-                        UUID.randomUUID(),
-                        "BS-H-V4-002",
-                        "Healthy",
-                        "Healthy project",
-                        "Client",
-                        "Tunis",
-                        new BigDecimal(
-                                "1000000.00"),
-                        new BigDecimal(
-                                "900000.00"),
-                        LocalDate.of(
-                                2026,
-                                7,
-                                1),
-                        LocalDate.of(
-                                2027,
-                                3,
-                                1),
-                        ProjectStatus.ACTIVE,
-                        new BigDecimal(
-                                "35.00"));
+    void healthySevenDimensionProjectRemainsHealthy() {
 
         ProjectHealthScoreResponse result =
                 new ProjectHealthScoreService(
                         CLOCK)
                         .calculate(
-                                project,
+                                project(),
                                 List.of(),
                                 cost(
-                                        100,
-                                        CostRiskLevel.ON_TRACK),
+                                        100),
                                 procurement(
-                                        95,
-                                        ProcurementRiskLevel.ON_TRACK),
+                                        95),
                                 risk(
+                                        95),
+                                production(
                                         95,
-                                        RiskIntelligenceLevel.ON_TRACK));
+                                        ProductionRiskLevel.ON_TRACK));
 
         assertEquals(
                 ProjectHealthBand.HEALTHY,
@@ -140,9 +97,34 @@ class ProjectHealthScoreServiceTest {
                         >= 80);
     }
 
+    private Project project() {
+
+        return Project.create(
+                UUID.randomUUID(),
+                "BS-H-V5",
+                "Health Test",
+                "Health",
+                "Client",
+                "Paris",
+                new BigDecimal(
+                        "1000000.00"),
+                new BigDecimal(
+                        "900000.00"),
+                LocalDate.of(
+                        2026,
+                        7,
+                        1),
+                LocalDate.of(
+                        2027,
+                        3,
+                        1),
+                ProjectStatus.ACTIVE,
+                new BigDecimal(
+                        "35.00"));
+    }
+
     private CostIntelligenceResponse cost(
-            double score,
-            CostRiskLevel risk) {
+            double score) {
 
         return new CostIntelligenceResponse(
                 BigDecimal.ZERO,
@@ -160,13 +142,12 @@ class ProjectHealthScoreServiceTest {
                 0,
                 0,
                 score,
-                risk,
+                CostRiskLevel.ON_TRACK,
                 "Test");
     }
 
     private ProcurementIntelligenceResponse procurement(
-            double score,
-            ProcurementRiskLevel risk) {
+            double score) {
 
         return new ProcurementIntelligenceResponse(
                 1,
@@ -182,13 +163,12 @@ class ProjectHealthScoreServiceTest {
                 80,
                 0,
                 score,
-                risk,
+                ProcurementRiskLevel.ON_TRACK,
                 "Test");
     }
 
     private RiskIntelligenceResponse risk(
-            double score,
-            RiskIntelligenceLevel level) {
+            double score) {
 
         return new RiskIntelligenceResponse(
                 1,
@@ -207,7 +187,36 @@ class ProjectHealthScoreServiceTest {
                 0,
                 0,
                 score,
-                level,
+                RiskIntelligenceLevel.ON_TRACK,
+                "Test");
+    }
+
+    private ProductionIntelligenceResponse production(
+            double score,
+            ProductionRiskLevel risk) {
+
+        return new ProductionIntelligenceResponse(
+                3,
+                2,
+                0,
+                0,
+                4,
+                4,
+                4,
+                LocalDate.of(
+                        2026,
+                        9,
+                        9),
+                false,
+                50,
+                45,
+                5,
+                BigDecimal.ZERO,
+                BigDecimal.ZERO,
+                1.0,
+                10,
+                score,
+                risk,
                 "Test");
     }
 }

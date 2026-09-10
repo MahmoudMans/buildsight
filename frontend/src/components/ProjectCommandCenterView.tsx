@@ -720,8 +720,16 @@ export function ProjectCommandCenterView({
             <span>Risk control</span>
           </Link>
 
-          <div className="command-nav-item muted">
+          <Link
+            href={`/projects/${projectId}/production`}
+            className="command-nav-item"
+          >
             08
+            <span>Production</span>
+          </Link>
+
+          <div className="command-nav-item muted">
+            09
             <span>Documents</span>
             <small>Later</small>
           </div>
@@ -1446,7 +1454,7 @@ export function ProjectCommandCenterView({
               </div>
 
               <h2>
-                Project Health Score v4
+                Project Health Score v5
               </h2>
             </div>
 
@@ -1482,7 +1490,7 @@ export function ProjectCommandCenterView({
 
               <HealthComponent
                 label="Physical progress"
-                weight="15%"
+                weight="10%"
                 value={
                   health.progressScore
                 }
@@ -1514,9 +1522,17 @@ export function ProjectCommandCenterView({
 
               <HealthComponent
                 label="Risk control"
-                weight="20%"
+                weight="10%"
                 value={
                   health.riskScore
+                }
+              />
+
+              <HealthComponent
+                label="Site production"
+                weight="15%"
+                value={
+                  health.productionScore
                 }
               />
             </div>

@@ -7,13 +7,14 @@ import java.util.List;
 
 import com.buildsight.platform.cost.api.CostIntelligenceResponse;
 import com.buildsight.platform.procurement.api.ProcurementIntelligenceResponse;
-import com.buildsight.platform.risk.api.RiskIntelligenceResponse;
+import com.buildsight.platform.production.api.ProductionIntelligenceResponse;
 import com.buildsight.platform.project.api.ProjectHealthBand;
 import com.buildsight.platform.project.api.ProjectHealthScoreResponse;
 import com.buildsight.platform.project.api.ScheduleRiskLevel;
 import com.buildsight.platform.project.domain.MilestoneStatus;
 import com.buildsight.platform.project.domain.Project;
 import com.buildsight.platform.project.domain.ProjectMilestone;
+import com.buildsight.platform.risk.api.RiskIntelligenceResponse;
 
 import org.springframework.stereotype.Service;
 
@@ -26,7 +27,7 @@ public class ProjectHealthScoreService {
 
     private static final double
             PROGRESS_WEIGHT =
-            0.15;
+            0.10;
 
     private static final double
             MILESTONE_WEIGHT =
@@ -42,7 +43,11 @@ public class ProjectHealthScoreService {
 
     private static final double
             RISK_WEIGHT =
-            0.20;
+            0.10;
+
+    private static final double
+            PRODUCTION_WEIGHT =
+            0.15;
 
     private final Clock clock;
 
@@ -58,7 +63,8 @@ public class ProjectHealthScoreService {
             List<ProjectMilestone> milestones,
             CostIntelligenceResponse cost,
             ProcurementIntelligenceResponse procurement,
-            RiskIntelligenceResponse risk) {
+            RiskIntelligenceResponse risk,
+            ProductionIntelligenceResponse production) {
 
         LocalDate today =
                 LocalDate.now(
@@ -132,7 +138,9 @@ public class ProjectHealthScoreService {
                         + procurement.procurementScore()
                                 * PROCUREMENT_WEIGHT
                         + risk.riskScore()
-                                * RISK_WEIGHT;
+                                * RISK_WEIGHT
+                        + production.productionScore()
+                                * PRODUCTION_WEIGHT;
 
         int score =
                 (int) Math.round(
@@ -151,6 +159,7 @@ public class ProjectHealthScoreService {
                 cost.costRisk(),
                 procurement.procurementRisk(),
                 risk.riskLevel(),
+                production.productionRisk(),
                 scheduleVarianceDays,
                 roundOne(
                         expectedProgress),
@@ -172,7 +181,9 @@ public class ProjectHealthScoreService {
                         procurement.procurementScore()),
                 roundOne(
                         risk.riskScore()),
-                "Health Score v4 combines schedule performance (20%), physical progress (15%), milestone execution (10%), cost performance (20%), procurement performance (15%), and project risk-control performance (20%).");
+                roundOne(
+                        production.productionScore()),
+                "Health Score v5 combines schedule performance (20%), physical progress (10%), milestone execution (10%), cost performance (20%), procurement performance (15%), risk-control performance (10%), and site-production performance (15%).");
     }
 
     private double calculateScheduleScore(

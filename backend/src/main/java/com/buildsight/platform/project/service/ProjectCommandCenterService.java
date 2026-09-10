@@ -8,6 +8,8 @@ import com.buildsight.platform.cost.api.CostIntelligenceResponse;
 import com.buildsight.platform.cost.service.CostControlService;
 import com.buildsight.platform.procurement.api.ProcurementIntelligenceResponse;
 import com.buildsight.platform.procurement.service.ProcurementControlService;
+import com.buildsight.platform.production.api.ProductionIntelligenceResponse;
+import com.buildsight.platform.production.service.ProductionControlService;
 import com.buildsight.platform.risk.api.RiskIntelligenceResponse;
 import com.buildsight.platform.risk.service.RiskControlService;
 import com.buildsight.platform.project.api.MilestoneResponse;
@@ -55,6 +57,9 @@ public class ProjectCommandCenterService {
     private final RiskControlService
             riskControlService;
 
+    private final ProductionControlService
+            productionControlService;
+
     public ProjectCommandCenterService(
             ProjectRepository projectRepository,
             ProjectMilestoneRepository milestoneRepository,
@@ -65,7 +70,8 @@ public class ProjectCommandCenterService {
             ProjectHealthScoreService healthScoreService,
             CostControlService costControlService,
             ProcurementControlService procurementControlService,
-            RiskControlService riskControlService) {
+            RiskControlService riskControlService,
+            ProductionControlService productionControlService) {
 
         this.projectRepository =
                 projectRepository;
@@ -96,6 +102,9 @@ public class ProjectCommandCenterService {
 
         this.riskControlService =
                 riskControlService;
+
+        this.productionControlService =
+                productionControlService;
     }
 
     @Transactional(readOnly = true)
@@ -149,6 +158,11 @@ public class ProjectCommandCenterService {
                         .intelligence(
                                 projectId);
 
+        ProductionIntelligenceResponse production =
+                productionControlService
+                        .intelligence(
+                                projectId);
+
         return new ProjectCommandCenterResponse(
                 projectMapper.toResponse(
                         project),
@@ -158,7 +172,8 @@ public class ProjectCommandCenterService {
                         milestones,
                         cost,
                         procurement,
-                        risk),
+                        risk,
+                        production),
 
                 milestoneResponses,
                 progressUpdates);

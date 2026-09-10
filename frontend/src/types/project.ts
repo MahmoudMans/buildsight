@@ -133,6 +133,7 @@ export interface ProjectHealthScore {
   costRisk: CostRiskLevel;
   procurementRisk: ProcurementRiskLevel;
   riskLevel: RiskIntelligenceLevel;
+  productionRisk: ProductionRiskLevel;
   scheduleVarianceDays: number;
   expectedProgressPercentage: number;
   actualProgressPercentage: number;
@@ -145,6 +146,7 @@ export interface ProjectHealthScore {
   costScore: number;
   procurementScore: number;
   riskScore: number;
+  productionScore: number;
   explanation: string;
 }
 
@@ -813,4 +815,183 @@ export interface UpdateDelayEventInput {
   excusable: boolean;
   compensable: boolean;
   status: DelayStatus;
+}
+
+export type WorkPackageStatus =
+  | "PLANNED"
+  | "IN_PROGRESS"
+  | "BLOCKED"
+  | "COMPLETED"
+  | "CANCELLED";
+
+export type SiteReportStatus =
+  | "DRAFT"
+  | "SUBMITTED"
+  | "APPROVED";
+
+export type WeatherCondition =
+  | "CLEAR"
+  | "CLOUDY"
+  | "RAIN"
+  | "WIND"
+  | "EXTREME_HEAT"
+  | "EXTREME_COLD"
+  | "OTHER";
+
+export type ProductionRiskLevel =
+  | "NO_DATA"
+  | "ON_TRACK"
+  | "WATCH"
+  | "AT_RISK";
+
+export interface WorkPackage {
+  id: string;
+  projectId: string;
+  code: string;
+  name: string;
+  description: string | null;
+  unit: string;
+  plannedQuantity: number;
+  plannedLaborHours: number;
+  plannedStartDate: string;
+  plannedEndDate: string;
+  actualStartDate: string | null;
+  actualEndDate: string | null;
+  status: WorkPackageStatus;
+  blockReason: string | null;
+  actualQuantity: number;
+  completionPercentage: number;
+  expectedProgressPercentage: number;
+  expectedQuantity: number;
+  quantityVariance: number;
+  actualLaborHours: number;
+  actualEquipmentHours: number;
+  plannedProductivityRate: number;
+  actualProductivityRate: number;
+  productivityIndex: number;
+  version: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface SiteReport {
+  id: string;
+  projectId: string;
+  reference: string;
+  reportDate: string;
+  weatherCondition: WeatherCondition;
+  generalNotes: string | null;
+  status: SiteReportStatus;
+  entryCount: number;
+  totalLaborHours: number;
+  totalEquipmentHours: number;
+  version: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ProductionEntry {
+  id: string;
+  siteReportId: string;
+  siteReportReference: string;
+  reportDate: string;
+  workPackageId: string;
+  workPackageCode: string;
+  workPackageName: string;
+  unit: string;
+  quantityCompleted: number;
+  laborHours: number;
+  equipmentHours: number;
+  crewSize: number;
+  notes: string | null;
+  version: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ProductionIntelligence {
+  totalPackages: number;
+  activePackages: number;
+  blockedPackages: number;
+  completedPackages: number;
+  totalSiteReports: number;
+  acceptedSiteReports: number;
+  approvedSiteReports: number;
+  latestAcceptedReportDate: string | null;
+  reportingStale: boolean;
+  averagePackageCompletionPercentage: number;
+  averageExpectedProgressPercentage: number;
+  productionVariancePoints: number;
+  totalLaborHours: number;
+  totalEquipmentHours: number;
+  overallProductivityIndex: number;
+  weeklyProductionTrendPercentage: number;
+  productionScore: number;
+  productionRisk: ProductionRiskLevel;
+  explanation: string;
+}
+
+export interface ProductionControl {
+  project: Project;
+  intelligence: ProductionIntelligence;
+  workPackages: WorkPackage[];
+  siteReports: SiteReport[];
+  productionEntries: ProductionEntry[];
+}
+
+export interface CreateWorkPackageInput {
+  code: string;
+  name: string;
+  description: string;
+  unit: string;
+  plannedQuantity: number;
+  plannedLaborHours: number;
+  plannedStartDate: string;
+  plannedEndDate: string;
+}
+
+export interface UpdateWorkPackageInput {
+  version: number;
+  name: string;
+  description: string;
+  unit: string;
+  plannedQuantity: number;
+  plannedLaborHours: number;
+  plannedStartDate: string;
+  plannedEndDate: string;
+  status: WorkPackageStatus;
+  blockReason: string;
+}
+
+export interface CreateSiteReportInput {
+  reference: string;
+  reportDate: string;
+  weatherCondition: WeatherCondition;
+  generalNotes: string;
+}
+
+export interface UpdateSiteReportInput {
+  version: number;
+  reportDate: string;
+  weatherCondition: WeatherCondition;
+  generalNotes: string;
+  status: SiteReportStatus;
+}
+
+export interface CreateProductionEntryInput {
+  workPackageId: string;
+  quantityCompleted: number;
+  laborHours: number;
+  equipmentHours: number;
+  crewSize: number;
+  notes: string;
+}
+
+export interface UpdateProductionEntryInput {
+  version: number;
+  quantityCompleted: number;
+  laborHours: number;
+  equipmentHours: number;
+  crewSize: number;
+  notes: string;
 }
