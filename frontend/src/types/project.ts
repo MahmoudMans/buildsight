@@ -135,6 +135,7 @@ export interface ProjectHealthScore {
   riskLevel: RiskIntelligenceLevel;
   productionRisk: ProductionRiskLevel;
   informationRisk: InformationRiskLevel;
+  qualityRisk: QualityRiskLevel;
   scheduleVarianceDays: number;
   expectedProgressPercentage: number;
   actualProgressPercentage: number;
@@ -149,6 +150,7 @@ export interface ProjectHealthScore {
   riskScore: number;
   productionScore: number;
   informationScore: number;
+  qualityScore: number;
   explanation: string;
 }
 
@@ -1415,4 +1417,291 @@ export interface PortfolioAiBrief {
   chatModel: string;
   sources: PortfolioAiSource[];
   generatedAt: string;
+}
+
+export type QualityInspectionType =
+  | "INTERNAL"
+  | "CLIENT"
+  | "CONSULTANT"
+  | "REGULATORY"
+  | "TEST";
+
+export type QualityDiscipline =
+  | "CIVIL"
+  | "STRUCTURAL"
+  | "ARCHITECTURAL"
+  | "MEP"
+  | "HSE"
+  | "QUALITY"
+  | "GENERAL";
+
+export type QualityInspectionStatus =
+  | "PLANNED"
+  | "IN_PROGRESS"
+  | "COMPLETED"
+  | "CANCELLED";
+
+export type QualityInspectionResult =
+  | "NOT_ASSESSED"
+  | "PASS"
+  | "PASS_WITH_OBSERVATIONS"
+  | "FAIL";
+
+export type NcrCategory =
+  | "WORKMANSHIP"
+  | "MATERIAL"
+  | "DESIGN"
+  | "INSTALLATION"
+  | "DOCUMENTATION"
+  | "TEST_FAILURE"
+  | "OTHER";
+
+export type NcrSeverity =
+  | "MINOR"
+  | "MAJOR"
+  | "CRITICAL";
+
+export type NcrStatus =
+  | "OPEN"
+  | "CORRECTIVE_ACTION_IN_PROGRESS"
+  | "READY_FOR_VERIFICATION"
+  | "CLOSED"
+  | "VOID";
+
+export type PunchPriority =
+  | "LOW"
+  | "MEDIUM"
+  | "HIGH"
+  | "CRITICAL";
+
+export type PunchStatus =
+  | "OPEN"
+  | "IN_PROGRESS"
+  | "READY_FOR_INSPECTION"
+  | "CLOSED"
+  | "VOID";
+
+export type HandoverCategory =
+  | "OM_MANUAL"
+  | "AS_BUILT"
+  | "CERTIFICATE"
+  | "WARRANTY"
+  | "TEST_RECORD"
+  | "TRAINING"
+  | "OTHER";
+
+export type HandoverStatus =
+  | "NOT_STARTED"
+  | "SUBMITTED"
+  | "APPROVED"
+  | "REJECTED"
+  | "NOT_REQUIRED";
+
+export type QualityRiskLevel =
+  | "NO_DATA"
+  | "ON_TRACK"
+  | "WATCH"
+  | "AT_RISK";
+
+export interface QualityInspection {
+  id: string;
+  projectId: string;
+  reference: string;
+  title: string;
+  inspectionType: QualityInspectionType;
+  discipline: QualityDiscipline;
+  plannedDate: string;
+  actualDate: string | null;
+  inspectorName: string | null;
+  status: QualityInspectionStatus;
+  result: QualityInspectionResult;
+  notes: string | null;
+  version: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ProjectNcr {
+  id: string;
+  projectId: string;
+  inspectionId: string | null;
+  inspectionReference: string | null;
+  reference: string;
+  title: string;
+  description: string;
+  category: NcrCategory;
+  severity: NcrSeverity;
+  raisedDate: string;
+  dueDate: string;
+  ownerName: string | null;
+  rootCause: string | null;
+  correctiveAction: string | null;
+  verificationNotes: string | null;
+  status: NcrStatus;
+  closedDate: string | null;
+  overdue: boolean;
+  version: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PunchItem {
+  id: string;
+  projectId: string;
+  reference: string;
+  title: string;
+  description: string | null;
+  location: string | null;
+  trade: string | null;
+  priority: PunchPriority;
+  raisedDate: string;
+  dueDate: string;
+  ownerName: string | null;
+  status: PunchStatus;
+  closedDate: string | null;
+  overdue: boolean;
+  version: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface HandoverItem {
+  id: string;
+  projectId: string;
+  code: string;
+  title: string;
+  category: HandoverCategory;
+  ownerName: string | null;
+  dueDate: string;
+  receivedDate: string | null;
+  approvedDate: string | null;
+  status: HandoverStatus;
+  notes: string | null;
+  overdue: boolean;
+  version: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface QualityIntelligence {
+  totalInspections: number;
+  completedInspections: number;
+  passedInspections: number;
+  failedInspections: number;
+  inspectionPassRatePercentage: number;
+  openNcrs: number;
+  criticalOpenNcrs: number;
+  overdueNcrs: number;
+  recurringDefectCategories: number;
+  openPunchItems: number;
+  overduePunchItems: number;
+  requiredHandoverItems: number;
+  approvedHandoverItems: number;
+  overdueHandoverItems: number;
+  handoverReadinessPercentage: number;
+  qualityScore: number;
+  qualityRisk: QualityRiskLevel;
+  explanation: string;
+}
+
+export interface QualityControl {
+  project: Project;
+  intelligence: QualityIntelligence;
+  inspections: QualityInspection[];
+  ncrs: ProjectNcr[];
+  punchItems: PunchItem[];
+  handoverItems: HandoverItem[];
+}
+
+export interface CreateQualityInspectionInput {
+  reference: string;
+  title: string;
+  inspectionType: QualityInspectionType;
+  discipline: QualityDiscipline;
+  plannedDate: string;
+  inspectorName: string;
+  notes: string;
+}
+
+export interface UpdateQualityInspectionInput {
+  version: number;
+  title: string;
+  inspectionType: QualityInspectionType;
+  discipline: QualityDiscipline;
+  plannedDate: string;
+  actualDate: string | null;
+  inspectorName: string;
+  status: QualityInspectionStatus;
+  result: QualityInspectionResult;
+  notes: string;
+}
+
+export interface CreateNcrInput {
+  inspectionId: string | null;
+  reference: string;
+  title: string;
+  description: string;
+  category: NcrCategory;
+  severity: NcrSeverity;
+  raisedDate: string;
+  dueDate: string;
+  ownerName: string;
+}
+
+export interface UpdateNcrInput {
+  version: number;
+  inspectionId: string | null;
+  title: string;
+  description: string;
+  category: NcrCategory;
+  severity: NcrSeverity;
+  dueDate: string;
+  ownerName: string;
+  rootCause: string;
+  correctiveAction: string;
+  verificationNotes: string;
+  status: NcrStatus;
+}
+
+export interface CreatePunchItemInput {
+  reference: string;
+  title: string;
+  description: string;
+  location: string;
+  trade: string;
+  priority: PunchPriority;
+  raisedDate: string;
+  dueDate: string;
+  ownerName: string;
+}
+
+export interface UpdatePunchItemInput {
+  version: number;
+  title: string;
+  description: string;
+  location: string;
+  trade: string;
+  priority: PunchPriority;
+  dueDate: string;
+  ownerName: string;
+  status: PunchStatus;
+}
+
+export interface CreateHandoverItemInput {
+  code: string;
+  title: string;
+  category: HandoverCategory;
+  ownerName: string;
+  dueDate: string;
+  notes: string;
+}
+
+export interface UpdateHandoverItemInput {
+  version: number;
+  title: string;
+  category: HandoverCategory;
+  ownerName: string;
+  dueDate: string;
+  status: HandoverStatus;
+  notes: string;
 }

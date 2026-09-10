@@ -1032,3 +1032,155 @@ export async function generatePortfolioAiBrief(): Promise<
     },
   );
 }
+
+export async function getProjectQuality(
+  projectId: string,
+): Promise<
+  import("@/types/project").QualityControl
+> {
+  return request<
+    import("@/types/project").QualityControl
+  >(
+    `/projects/${projectId}/quality`,
+  );
+}
+
+export async function createQualityInspection(
+  projectId: string,
+  input: import("@/types/project").CreateQualityInspectionInput,
+): Promise<
+  import("@/types/project").QualityInspection
+> {
+  return request<
+    import("@/types/project").QualityInspection
+  >(
+    `/projects/${projectId}/quality/inspections`,
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function updateQualityInspection(
+  projectId: string,
+  inspectionId: string,
+  input: import("@/types/project").UpdateQualityInspectionInput,
+): Promise<
+  import("@/types/project").QualityInspection
+> {
+  return request<
+    import("@/types/project").QualityInspection
+  >(
+    `/projects/${projectId}/quality/inspections/${inspectionId}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function createProjectNcr(
+  projectId: string,
+  input: import("@/types/project").CreateNcrInput,
+): Promise<
+  import("@/types/project").ProjectNcr
+> {
+  return request<
+    import("@/types/project").ProjectNcr
+  >(
+    `/projects/${projectId}/quality/ncrs`,
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function updateProjectNcr(
+  projectId: string,
+  ncrId: string,
+  input: import("@/types/project").UpdateNcrInput,
+): Promise<
+  import("@/types/project").ProjectNcr
+> {
+  return request<
+    import("@/types/project").ProjectNcr
+  >(
+    `/projects/${projectId}/quality/ncrs/${ncrId}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function createPunchItem(
+  projectId: string,
+  input: import("@/types/project").CreatePunchItemInput,
+): Promise<
+  import("@/types/project").PunchItem
+> {
+  return request<
+    import("@/types/project").PunchItem
+  >(
+    `/projects/${projectId}/quality/punch-items`,
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function updatePunchItem(
+  projectId: string,
+  punchItemId: string,
+  input: import("@/types/project").UpdatePunchItemInput,
+): Promise<
+  import("@/types/project").PunchItem
+> {
+  return request<
+    import("@/types/project").PunchItem
+  >(
+    `/projects/${projectId}/quality/punch-items/${punchItemId}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function createHandoverItem(
+  projectId: string,
+  input: import("@/types/project").CreateHandoverItemInput,
+): Promise<
+  import("@/types/project").HandoverItem
+> {
+  return request<
+    import("@/types/project").HandoverItem
+  >(
+    `/projects/${projectId}/quality/handover-items`,
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function updateHandoverItem(
+  projectId: string,
+  handoverItemId: string,
+  input: import("@/types/project").UpdateHandoverItemInput,
+): Promise<
+  import("@/types/project").HandoverItem
+> {
+  return request<
+    import("@/types/project").HandoverItem
+  >(
+    `/projects/${projectId}/quality/handover-items/${handoverItemId}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(input),
+    },
+  );
+}

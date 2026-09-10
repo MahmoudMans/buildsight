@@ -23,6 +23,8 @@ import com.buildsight.platform.project.api.ProjectHealthBand;
 import com.buildsight.platform.project.api.ProjectHealthScoreResponse;
 import com.buildsight.platform.project.domain.Project;
 import com.buildsight.platform.project.domain.ProjectStatus;
+import com.buildsight.platform.quality.api.QualityIntelligenceResponse;
+import com.buildsight.platform.quality.api.QualityRiskLevel;
 import com.buildsight.platform.risk.api.RiskIntelligenceLevel;
 import com.buildsight.platform.risk.api.RiskIntelligenceResponse;
 
@@ -37,11 +39,10 @@ class ProjectHealthScoreServiceTest {
                     ZoneOffset.UTC);
 
     @Test
-    void healthScoreV6IncludesInformationPerformance() {
+    void healthV7IncludesQualityPerformance() {
 
         ProjectHealthScoreResponse result =
-                new ProjectHealthScoreService(
-                        CLOCK)
+                new ProjectHealthScoreService(CLOCK)
                         .calculate(
                                 project(),
                                 List.of(),
@@ -49,29 +50,28 @@ class ProjectHealthScoreServiceTest {
                                 procurement(90),
                                 risk(90),
                                 production(90),
-                                information(
-                                        45,
-                                        InformationRiskLevel.AT_RISK));
+                                information(90),
+                                quality(
+                                        35,
+                                        QualityRiskLevel.AT_RISK));
 
         assertEquals(
-                45.0,
-                result.informationScore());
+                35,
+                result.qualityScore());
 
         assertEquals(
-                InformationRiskLevel.AT_RISK,
-                result.informationRisk());
+                QualityRiskLevel.AT_RISK,
+                result.qualityRisk());
 
         assertTrue(
-                result.score()
-                        < 90);
+                result.score() < 90);
     }
 
     @Test
-    void healthyEightDimensionProjectRemainsHealthy() {
+    void healthyNineDimensionProjectRemainsHealthy() {
 
         ProjectHealthScoreResponse result =
-                new ProjectHealthScoreService(
-                        CLOCK)
+                new ProjectHealthScoreService(CLOCK)
                         .calculate(
                                 project(),
                                 List.of(),
@@ -79,24 +79,24 @@ class ProjectHealthScoreServiceTest {
                                 procurement(95),
                                 risk(95),
                                 production(95),
-                                information(
+                                information(95),
+                                quality(
                                         95,
-                                        InformationRiskLevel.ON_TRACK));
+                                        QualityRiskLevel.ON_TRACK));
 
         assertEquals(
                 ProjectHealthBand.HEALTHY,
                 result.healthBand());
 
         assertTrue(
-                result.score()
-                        >= 80);
+                result.score() >= 80);
     }
 
     private Project project() {
 
         return Project.create(
                 UUID.randomUUID(),
-                "BS-H-V6",
+                "BS-H-V7",
                 "Health Test",
                 "Health",
                 "Client",
@@ -215,8 +215,7 @@ class ProjectHealthScoreServiceTest {
     }
 
     private DocumentIntelligenceResponse information(
-            double score,
-            InformationRiskLevel risk) {
+            double score) {
 
         return new DocumentIntelligenceResponse(
                 2,
@@ -230,7 +229,32 @@ class ProjectHealthScoreServiceTest {
                 0,
                 1,
                 score,
-                risk,
+                InformationRiskLevel.ON_TRACK,
+                "Test");
+    }
+
+    private QualityIntelligenceResponse quality(
+            double score,
+            QualityRiskLevel level) {
+
+        return new QualityIntelligenceResponse(
+                3,
+                2,
+                2,
+                0,
+                100,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                3,
+                1,
+                0,
+                33.3,
+                score,
+                level,
                 "Test");
     }
 }

@@ -22,6 +22,8 @@ import com.buildsight.platform.procurement.api.ProcurementIntelligenceResponse;
 import com.buildsight.platform.procurement.service.ProcurementControlService;
 import com.buildsight.platform.production.api.ProductionIntelligenceResponse;
 import com.buildsight.platform.production.service.ProductionControlService;
+import com.buildsight.platform.quality.api.QualityIntelligenceResponse;
+import com.buildsight.platform.quality.service.QualityControlService;
 import com.buildsight.platform.project.api.ProjectHealthScoreResponse;
 import com.buildsight.platform.project.domain.Project;
 import com.buildsight.platform.project.repository.ProjectMilestoneRepository;
@@ -57,6 +59,9 @@ public class PortfolioExecutiveService {
     private final DocumentControlService
             documentControlService;
 
+    private final QualityControlService
+            qualityControlService;
+
     private final ProjectHealthScoreService
             healthScoreService;
 
@@ -77,6 +82,7 @@ public class PortfolioExecutiveService {
             RiskControlService riskControlService,
             ProductionControlService productionControlService,
             DocumentControlService documentControlService,
+            QualityControlService qualityControlService,
             ProjectHealthScoreService healthScoreService,
             PortfolioExecutiveCalculator calculator,
             PortfolioSupplierAnalyticsService supplierAnalyticsService,
@@ -102,6 +108,9 @@ public class PortfolioExecutiveService {
 
         this.documentControlService =
                 documentControlService;
+
+        this.qualityControlService =
+                qualityControlService;
 
         this.healthScoreService =
                 healthScoreService;
@@ -323,6 +332,11 @@ public class PortfolioExecutiveService {
                         .intelligence(
                                 project.getId());
 
+        QualityIntelligenceResponse quality =
+                qualityControlService
+                        .intelligence(
+                                project.getId());
+
         ProjectHealthScoreResponse health =
                 healthScoreService
                         .calculate(
@@ -336,7 +350,8 @@ public class PortfolioExecutiveService {
                                 procurement,
                                 risk,
                                 production,
-                                information);
+                                information,
+                                quality);
 
         int attentionScore =
                 calculator.attentionScore(
