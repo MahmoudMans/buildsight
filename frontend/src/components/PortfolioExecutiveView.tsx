@@ -713,6 +713,27 @@ export function PortfolioExecutiveView() {
                 summary.openClaims
               }
             />
+
+            <HealthCount
+              label="Worker demand gap"
+              value={
+                summary.workerDemandGap
+              }
+            />
+
+            <HealthCount
+              label="Equipment demand gap"
+              value={
+                summary.equipmentDemandGap
+              }
+            />
+
+            <HealthCount
+              label="Idle equipment"
+              value={
+                summary.idleEquipment
+              }
+            />
           </div>
         </section>
 
@@ -1096,6 +1117,13 @@ export function PortfolioExecutiveView() {
               label="Commercial"
               value={
                 benchmarks.averageCommercialScore
+              }
+            />
+
+            <Benchmark
+              label="Resources"
+              value={
+                benchmarks.averageResourceScore
               }
             />
           </div>

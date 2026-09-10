@@ -33,6 +33,8 @@ import com.buildsight.platform.project.domain.Project;
 import com.buildsight.platform.project.repository.ProjectMilestoneRepository;
 import com.buildsight.platform.project.repository.ProjectRepository;
 import com.buildsight.platform.project.service.ProjectHealthScoreService;
+import com.buildsight.platform.resource.api.ResourceModels.ResourceIntelligenceResponse;
+import com.buildsight.platform.resource.service.ResourceControlService;
 import com.buildsight.platform.risk.api.RiskIntelligenceResponse;
 import com.buildsight.platform.risk.service.RiskControlService;
 
@@ -72,6 +74,9 @@ public class PortfolioExecutiveService {
     private final CommercialControlService
             commercialControlService;
 
+    private final ResourceControlService
+            resourceControlService;
+
     private final ProjectHealthScoreService
             healthScoreService;
 
@@ -95,6 +100,7 @@ public class PortfolioExecutiveService {
             QualityControlService qualityControlService,
             SafetyControlService safetyControlService,
             CommercialControlService commercialControlService,
+            ResourceControlService resourceControlService,
             ProjectHealthScoreService healthScoreService,
             PortfolioExecutiveCalculator calculator,
             PortfolioSupplierAnalyticsService supplierAnalyticsService,
@@ -129,6 +135,9 @@ public class PortfolioExecutiveService {
 
         this.commercialControlService =
                 commercialControlService;
+
+        this.resourceControlService =
+                resourceControlService;
 
         this.healthScoreService =
                 healthScoreService;
@@ -321,6 +330,13 @@ public class PortfolioExecutiveService {
                                 true),
 
                         metric(
+                                "Resource score",
+                                project.resourceScore(),
+                                benchmark.averageResourceScore(),
+                                "/100",
+                                true),
+
+                        metric(
                                 "Productivity index",
                                 project.productivityIndex(),
                                 benchmark.averageProductivityIndex(),
@@ -372,6 +388,11 @@ public class PortfolioExecutiveService {
                         .intelligence(
                                 project.getId());
 
+        ResourceIntelligenceResponse resources =
+                resourceControlService
+                        .intelligence(
+                                project.getId());
+
         ProjectHealthScoreResponse health =
                 healthScoreService
                         .calculate(
@@ -388,7 +409,8 @@ public class PortfolioExecutiveService {
                                 information,
                                 quality,
                                 safety,
-                                commercial);
+                                commercial,
+                                resources);
 
         int attentionScore =
                 calculator.attentionScore(
@@ -463,6 +485,15 @@ public class PortfolioExecutiveService {
                 commercial.outstandingCertifiedAmount(),
                 commercial.forecastCashflowVariance(),
                 commercial.commercialScore(),
+                resources.laborUtilizationPercentage(),
+                resources.overtimePercentage(),
+                resources.averageProductivityIndex(),
+                resources.lowProductivityWorkPackages(),
+                resources.equipmentUtilizationPercentage(),
+                resources.idleEquipment(),
+                resources.workerDemandGap(),
+                resources.equipmentDemandGap(),
+                resources.resourceScore(),
                 attentionScore,
                 0);
     }

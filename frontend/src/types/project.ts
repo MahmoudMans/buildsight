@@ -138,6 +138,7 @@ export interface ProjectHealthScore {
   qualityRisk: QualityRiskLevel;
   safetyRisk: SafetyRiskLevel;
   commercialRisk: CommercialRiskLevel;
+  resourceRisk: ResourceRiskLevel;
   scheduleVarianceDays: number;
   expectedProgressPercentage: number;
   actualProgressPercentage: number;
@@ -155,6 +156,7 @@ export interface ProjectHealthScore {
   qualityScore: number;
   safetyScore: number;
   commercialScore: number;
+  resourceScore: number;
   explanation: string;
 }
 
@@ -1269,7 +1271,8 @@ export type PortfolioExceptionDomain =
   | "PRODUCTION"
   | "INFORMATION"
   | "SAFETY"
-  | "COMMERCIAL";
+  | "COMMERCIAL"
+  | "RESOURCE";
 
 export type SupplierConcentrationRisk =
   | "LOW"
@@ -1319,6 +1322,15 @@ export interface PortfolioProjectSnapshot {
   outstandingCertifiedAmount: number;
   forecastCashflowVariance: number;
   commercialScore: number;
+  laborUtilizationPercentage: number;
+  overtimePercentage: number;
+  averageLaborProductivityIndex: number;
+  lowProductivityWorkPackages: number;
+  equipmentUtilizationPercentage: number;
+  idleEquipment: number;
+  workerDemandGap: number;
+  equipmentDemandGap: number;
+  resourceScore: number;
   attentionScore: number;
   healthRank: number;
 }
@@ -1356,6 +1368,11 @@ export interface PortfolioSummary {
   overdueCertifications: number;
   overduePayments: number;
   outstandingCertifiedAmount: number;
+  workerDemandGap: number;
+  equipmentDemandGap: number;
+  idleEquipment: number;
+  lowProductivityWorkPackages: number;
+  resourceAtRiskProjects: number;
   totalExceptions: number;
 }
 
@@ -1367,6 +1384,7 @@ export interface PortfolioBenchmarks {
   averageProductionScore: number;
   averageInformationScore: number;
   averageCommercialScore: number;
+  averageResourceScore: number;
   averageProductivityIndex: number;
   bestHealthProjectCode: string | null;
   worstHealthProjectCode: string | null;
@@ -2188,4 +2206,210 @@ export interface CreateCashflowPeriodInput {
   plannedOutflow: number;
   forecastOutflow: number;
   actualOutflow: number;
+}
+
+export type WorkforcePlanStatus =
+  | "DRAFT"
+  | "APPROVED"
+  | "CLOSED";
+
+export type EquipmentOwnership =
+  | "OWNED"
+  | "RENTED"
+  | "SUBCONTRACTOR";
+
+export type EquipmentStatus =
+  | "AVAILABLE"
+  | "DEPLOYED"
+  | "IDLE"
+  | "MAINTENANCE"
+  | "OFF_HIRE";
+
+export type ResourceDemandType =
+  | "LABOR"
+  | "EQUIPMENT";
+
+export type ResourceForecastStatus =
+  | "OPEN"
+  | "CLOSED";
+
+export type ResourceRiskLevel =
+  | "NO_DATA"
+  | "ON_TRACK"
+  | "WATCH"
+  | "AT_RISK";
+
+export interface WorkforcePlan {
+  id: string;
+  projectId: string;
+  periodStart: string;
+  periodEnd: string;
+  trade: string;
+  workPackageId: string | null;
+  plannedWorkers: number;
+  plannedRegularHours: number;
+  plannedProductiveHours: number;
+  plannedProductivityRate: number | null;
+  status: WorkforcePlanStatus;
+  version: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface WorkforceDeployment {
+  id: string;
+  projectId: string;
+  workDate: string;
+  trade: string;
+  workPackageId: string | null;
+  workers: number;
+  regularHours: number;
+  overtimeHours: number;
+  totalLaborHours: number;
+  productiveHours: number;
+  quantityCompleted: number;
+  plannedProductivityRate: number | null;
+  actualProductivityRate: number;
+  productivityIndex: number;
+  notes: string | null;
+  version: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ProjectEquipment {
+  id: string;
+  projectId: string;
+  code: string;
+  description: string;
+  category: string;
+  ownership: EquipmentOwnership;
+  status: EquipmentStatus;
+  dailyCost: number;
+  version: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface EquipmentUsage {
+  id: string;
+  projectId: string;
+  equipmentId: string;
+  equipmentCode: string;
+  workPackageId: string | null;
+  workDate: string;
+  availableHours: number;
+  operatingHours: number;
+  idleHours: number;
+  downtimeHours: number;
+  utilizationPercentage: number;
+  notes: string | null;
+  version: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ResourceForecast {
+  id: string;
+  projectId: string;
+  periodStart: string;
+  periodEnd: string;
+  resourceType: ResourceDemandType;
+  resourceKey: string;
+  requiredQuantity: number;
+  availableQuantity: number;
+  shortage: number;
+  notes: string | null;
+  status: ResourceForecastStatus;
+  version: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ResourceIntelligence {
+  workforcePlans: number;
+  workforceDeployments: number;
+  plannedLaborHours: number;
+  actualLaborHours: number;
+  productiveLaborHours: number;
+  overtimeHours: number;
+  overtimePercentage: number;
+  laborUtilizationPercentage: number;
+  averageProductivityIndex: number;
+  lowProductivityWorkPackages: number;
+  equipmentCount: number;
+  idleEquipment: number;
+  equipmentAvailableHours: number;
+  equipmentOperatingHours: number;
+  equipmentDowntimeHours: number;
+  equipmentUtilizationPercentage: number;
+  openResourceForecasts: number;
+  workerDemandGap: number;
+  equipmentDemandGap: number;
+  resourceScore: number;
+  resourceRisk: ResourceRiskLevel;
+  explanation: string;
+}
+
+export interface ResourceControl {
+  project: Project;
+  intelligence: ResourceIntelligence;
+  workforcePlans: WorkforcePlan[];
+  deployments: WorkforceDeployment[];
+  equipment: ProjectEquipment[];
+  equipmentUsage: EquipmentUsage[];
+  forecasts: ResourceForecast[];
+}
+
+export interface CreateWorkforcePlanInput {
+  periodStart: string;
+  periodEnd: string;
+  trade: string;
+  workPackageId: string | null;
+  plannedWorkers: number;
+  plannedRegularHours: number;
+  plannedProductiveHours: number;
+  plannedProductivityRate: number | null;
+}
+
+export interface CreateWorkforceDeploymentInput {
+  workDate: string;
+  trade: string;
+  workPackageId: string | null;
+  workers: number;
+  regularHours: number;
+  overtimeHours: number;
+  productiveHours: number;
+  quantityCompleted: number;
+  plannedProductivityRate: number | null;
+  notes: string;
+}
+
+export interface CreateEquipmentInput {
+  code: string;
+  description: string;
+  category: string;
+  ownership: EquipmentOwnership;
+  dailyCost: number;
+}
+
+export interface CreateEquipmentUsageInput {
+  equipmentId: string;
+  workPackageId: string | null;
+  workDate: string;
+  availableHours: number;
+  operatingHours: number;
+  idleHours: number;
+  downtimeHours: number;
+  notes: string;
+}
+
+export interface CreateResourceForecastInput {
+  periodStart: string;
+  periodEnd: string;
+  resourceType: ResourceDemandType;
+  resourceKey: string;
+  requiredQuantity: number;
+  availableQuantity: number;
+  notes: string;
 }

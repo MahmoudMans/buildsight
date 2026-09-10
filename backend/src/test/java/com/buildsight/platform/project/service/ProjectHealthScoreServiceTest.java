@@ -27,6 +27,8 @@ import com.buildsight.platform.project.domain.Project;
 import com.buildsight.platform.project.domain.ProjectStatus;
 import com.buildsight.platform.quality.api.QualityIntelligenceResponse;
 import com.buildsight.platform.quality.api.QualityRiskLevel;
+import com.buildsight.platform.resource.api.ResourceModels.ResourceIntelligenceResponse;
+import com.buildsight.platform.resource.api.ResourceRiskLevel;
 import com.buildsight.platform.risk.api.RiskIntelligenceLevel;
 import com.buildsight.platform.risk.api.RiskIntelligenceResponse;
 import com.buildsight.platform.safety.api.SafetyIntelligenceResponse;
@@ -43,7 +45,7 @@ class ProjectHealthScoreServiceTest {
                     ZoneOffset.UTC);
 
     @Test
-    void healthV9IncludesCommercialPerformance() {
+    void healthV10IncludesResourcePerformance() {
 
         ProjectHealthScoreResponse result =
                 new ProjectHealthScoreService(
@@ -63,16 +65,19 @@ class ProjectHealthScoreServiceTest {
                                         90,
                                         SafetyRiskLevel.ON_TRACK),
                                 commercial(
-                                        35,
-                                        CommercialRiskLevel.AT_RISK));
+                                        90,
+                                        CommercialRiskLevel.ON_TRACK),
+                                resources(
+                                        30,
+                                        ResourceRiskLevel.AT_RISK));
 
         assertEquals(
-                35,
-                result.commercialScore());
+                30,
+                result.resourceScore());
 
         assertEquals(
-                CommercialRiskLevel.AT_RISK,
-                result.commercialRisk());
+                ResourceRiskLevel.AT_RISK,
+                result.resourceRisk());
 
         assertTrue(
                 result.score()
@@ -80,7 +85,7 @@ class ProjectHealthScoreServiceTest {
     }
 
     @Test
-    void healthyElevenDimensionProjectRemainsHealthy() {
+    void healthyTwelveDimensionProjectRemainsHealthy() {
 
         ProjectHealthScoreResponse result =
                 new ProjectHealthScoreService(
@@ -101,7 +106,10 @@ class ProjectHealthScoreServiceTest {
                                         SafetyRiskLevel.ON_TRACK),
                                 commercial(
                                         95,
-                                        CommercialRiskLevel.ON_TRACK));
+                                        CommercialRiskLevel.ON_TRACK),
+                                resources(
+                                        95,
+                                        ResourceRiskLevel.ON_TRACK));
 
         assertEquals(
                 ProjectHealthBand.HEALTHY,
@@ -116,7 +124,7 @@ class ProjectHealthScoreServiceTest {
 
         return Project.create(
                 UUID.randomUUID(),
-                "BS-H-V9",
+                "BS-H-V10",
                 "Health Test",
                 "Health",
                 "Client",
@@ -332,6 +340,35 @@ class ProjectHealthScoreServiceTest {
                 BigDecimal.ZERO,
                 BigDecimal.ZERO,
                 BigDecimal.ZERO,
+                score,
+                level,
+                "Test");
+    }
+
+    private ResourceIntelligenceResponse resources(
+            double score,
+            ResourceRiskLevel level) {
+
+        return new ResourceIntelligenceResponse(
+                1,
+                1,
+                new BigDecimal("100"),
+                new BigDecimal("90"),
+                new BigDecimal("80"),
+                new BigDecimal("5"),
+                5.6,
+                88.9,
+                1.02,
+                0,
+                1,
+                0,
+                new BigDecimal("10"),
+                new BigDecimal("8"),
+                new BigDecimal("1"),
+                80,
+                1,
+                0,
+                0,
                 score,
                 level,
                 "Test");

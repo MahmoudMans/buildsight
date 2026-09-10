@@ -1100,6 +1100,16 @@ export function ProjectCommercialControlView({
               Cash flow
             </span>
           </a>
+
+          <Link
+            href={`/projects/${projectId}/resources`}
+            className="command-nav-item"
+          >
+            09
+            <span>
+              Resources
+            </span>
+          </Link>
         </nav>
 
         <div className="command-sidebar-footer">

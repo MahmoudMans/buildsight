@@ -37,8 +37,95 @@ public record PortfolioSummaryResponse(
         long overdueCertifications,
         long overduePayments,
         BigDecimal outstandingCertifiedAmount,
+        double workerDemandGap,
+        double equipmentDemandGap,
+        long idleEquipment,
+        long lowProductivityWorkPackages,
+        long resourceAtRiskProjects,
         long totalExceptions) {
 
+    /*
+     * Step 12 compatibility.
+     */
+    public PortfolioSummaryResponse(
+            long totalProjects,
+            long planningProjects,
+            long activeProjects,
+            long onHoldProjects,
+            long completedProjects,
+            long healthyProjects,
+            long watchProjects,
+            long atRiskProjects,
+            BigDecimal totalApprovedBudget,
+            BigDecimal totalRevisedCostPlan,
+            BigDecimal totalForecastAtCompletion,
+            BigDecimal totalActualCosts,
+            BigDecimal totalOutstandingCommitments,
+            BigDecimal portfolioVarianceAtCompletion,
+            double weightedPortfolioHealthScore,
+            ProjectHealthBand portfolioHealthBand,
+            long delayedProcurementPackages,
+            long highExposureRisks,
+            long criticalOpenIssues,
+            long blockedWorkPackages,
+            long overdueRfis,
+            long openSafetyIncidents,
+            long criticalSafetyIncidents,
+            long overdueSafetyActions,
+            long expiredWorkPermits,
+            long pendingChangeOrders,
+            long overdueChangeDecisions,
+            long openClaims,
+            long overdueClaimResponses,
+            long overdueCertifications,
+            long overduePayments,
+            BigDecimal outstandingCertifiedAmount,
+            long totalExceptions) {
+
+        this(
+                totalProjects,
+                planningProjects,
+                activeProjects,
+                onHoldProjects,
+                completedProjects,
+                healthyProjects,
+                watchProjects,
+                atRiskProjects,
+                totalApprovedBudget,
+                totalRevisedCostPlan,
+                totalForecastAtCompletion,
+                totalActualCosts,
+                totalOutstandingCommitments,
+                portfolioVarianceAtCompletion,
+                weightedPortfolioHealthScore,
+                portfolioHealthBand,
+                delayedProcurementPackages,
+                highExposureRisks,
+                criticalOpenIssues,
+                blockedWorkPackages,
+                overdueRfis,
+                openSafetyIncidents,
+                criticalSafetyIncidents,
+                overdueSafetyActions,
+                expiredWorkPermits,
+                pendingChangeOrders,
+                overdueChangeDecisions,
+                openClaims,
+                overdueClaimResponses,
+                overdueCertifications,
+                overduePayments,
+                outstandingCertifiedAmount,
+                0,
+                0,
+                0,
+                0,
+                0,
+                totalExceptions);
+    }
+
+    /*
+     * Step 11 compatibility.
+     */
     public PortfolioSummaryResponse(
             long totalProjects,
             long planningProjects,
@@ -100,6 +187,11 @@ public record PortfolioSummaryResponse(
                 0,
                 0,
                 BigDecimal.ZERO,
+                0,
+                0,
+                0,
+                0,
+                0,
                 totalExceptions);
     }
 }

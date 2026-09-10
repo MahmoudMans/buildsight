@@ -17,6 +17,7 @@ import com.buildsight.platform.project.domain.MilestoneStatus;
 import com.buildsight.platform.project.domain.Project;
 import com.buildsight.platform.project.domain.ProjectMilestone;
 import com.buildsight.platform.quality.api.QualityIntelligenceResponse;
+import com.buildsight.platform.resource.api.ResourceModels.ResourceIntelligenceResponse;
 import com.buildsight.platform.risk.api.RiskIntelligenceResponse;
 import com.buildsight.platform.safety.api.SafetyIntelligenceResponse;
 
@@ -25,17 +26,18 @@ import org.springframework.stereotype.Service;
 @Service
 public class ProjectHealthScoreService {
 
-    private static final double SCHEDULE_WEIGHT = 0.14;
+    private static final double SCHEDULE_WEIGHT = 0.13;
     private static final double PROGRESS_WEIGHT = 0.05;
     private static final double MILESTONE_WEIGHT = 0.05;
-    private static final double COST_WEIGHT = 0.14;
-    private static final double PROCUREMENT_WEIGHT = 0.10;
-    private static final double RISK_WEIGHT = 0.07;
-    private static final double PRODUCTION_WEIGHT = 0.11;
-    private static final double INFORMATION_WEIGHT = 0.07;
-    private static final double QUALITY_WEIGHT = 0.07;
-    private static final double SAFETY_WEIGHT = 0.10;
-    private static final double COMMERCIAL_WEIGHT = 0.10;
+    private static final double COST_WEIGHT = 0.13;
+    private static final double PROCUREMENT_WEIGHT = 0.09;
+    private static final double RISK_WEIGHT = 0.06;
+    private static final double PRODUCTION_WEIGHT = 0.10;
+    private static final double INFORMATION_WEIGHT = 0.06;
+    private static final double QUALITY_WEIGHT = 0.06;
+    private static final double SAFETY_WEIGHT = 0.09;
+    private static final double COMMERCIAL_WEIGHT = 0.09;
+    private static final double RESOURCE_WEIGHT = 0.09;
 
     private final Clock clock;
 
@@ -56,10 +58,12 @@ public class ProjectHealthScoreService {
             DocumentIntelligenceResponse information,
             QualityIntelligenceResponse quality,
             SafetyIntelligenceResponse safety,
-            CommercialIntelligenceResponse commercial) {
+            CommercialIntelligenceResponse commercial,
+            ResourceIntelligenceResponse resources) {
 
         LocalDate today =
-                LocalDate.now(clock);
+                LocalDate.now(
+                        clock);
 
         long scheduleVarianceDays =
                 ChronoUnit.DAYS.between(
@@ -127,7 +131,8 @@ public class ProjectHealthScoreService {
                         + information.informationScore() * INFORMATION_WEIGHT
                         + quality.qualityScore() * QUALITY_WEIGHT
                         + safety.safetyScore() * SAFETY_WEIGHT
-                        + commercial.commercialScore() * COMMERCIAL_WEIGHT;
+                        + commercial.commercialScore() * COMMERCIAL_WEIGHT
+                        + resources.resourceScore() * RESOURCE_WEIGHT;
 
         int score =
                 (int) Math.round(
@@ -150,6 +155,7 @@ public class ProjectHealthScoreService {
                 quality.qualityRisk(),
                 safety.safetyRisk(),
                 commercial.commercialRisk(),
+                resources.resourceRisk(),
                 scheduleVarianceDays,
                 roundOne(expectedProgress),
                 roundOne(actualProgress),
@@ -167,7 +173,8 @@ public class ProjectHealthScoreService {
                 roundOne(quality.qualityScore()),
                 roundOne(safety.safetyScore()),
                 roundOne(commercial.commercialScore()),
-                "Health Score v9 combines schedule (14%), physical progress (5%), milestones (5%), cost (14%), procurement (10%), risk control (7%), site production (11%), information control (7%), quality/handover (7%), HSE/safety (10%), and commercial/cash-flow performance (10%).");
+                roundOne(resources.resourceScore()),
+                "Health Score v10 combines schedule (13%), physical progress (5%), milestones (5%), cost (13%), procurement (9%), risk control (6%), site production (10%), information control (6%), quality/handover (6%), HSE/safety (9%), commercial/cash-flow (9%), and workforce/resource performance (9%).");
     }
 
     private double scheduleScore(
@@ -192,7 +199,8 @@ public class ProjectHealthScoreService {
         double lag =
                 Math.max(
                         0,
-                        expected - actual);
+                        expected
+                                - actual);
 
         return clamp(
                 100
@@ -230,7 +238,9 @@ public class ProjectHealthScoreService {
             return 0;
         }
 
-        if (!today.isBefore(forecastEnd)) {
+        if (!today.isBefore(
+                forecastEnd)) {
+
             return 100;
         }
 

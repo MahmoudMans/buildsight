@@ -417,6 +417,34 @@ public class PortfolioExecutiveCalculator {
                                         BigDecimal.ZERO,
                                         BigDecimal::add)),
 
+                roundOne(
+                        projects.stream()
+                                .mapToDouble(
+                                        PortfolioProjectSnapshotResponse::workerDemandGap)
+                                .sum()),
+
+                roundOne(
+                        projects.stream()
+                                .mapToDouble(
+                                        PortfolioProjectSnapshotResponse::equipmentDemandGap)
+                                .sum()),
+
+                projects.stream()
+                        .mapToLong(
+                                PortfolioProjectSnapshotResponse::idleEquipment)
+                        .sum(),
+
+                projects.stream()
+                        .mapToLong(
+                                PortfolioProjectSnapshotResponse::lowProductivityWorkPackages)
+                        .sum(),
+
+                projects.stream()
+                        .filter(
+                                project ->
+                                        project.resourceScore() < 60)
+                        .count(),
+
                 exceptionCount);
     }
 
@@ -426,6 +454,7 @@ public class PortfolioExecutiveCalculator {
         if (projects.isEmpty()) {
 
             return new PortfolioBenchmarksResponse(
+                    0,
                     0,
                     0,
                     0,
@@ -481,6 +510,10 @@ public class PortfolioExecutiveCalculator {
                         projects,
                         Metric.COMMERCIAL),
 
+                average(
+                        projects,
+                        Metric.RESOURCE),
+
                 roundTwo(
                         projects.stream()
                                 .mapToDouble(
@@ -534,6 +567,10 @@ public class PortfolioExecutiveCalculator {
                     project);
 
             addCommercialException(
+                    result,
+                    project);
+
+            addResourceException(
                     result,
                     project);
         }
@@ -1085,6 +1122,96 @@ public class PortfolioExecutiveCalculator {
         }
     }
 
+    private void addResourceException(
+            List<PortfolioExceptionResponse> result,
+            PortfolioProjectSnapshotResponse project) {
+
+        if (project.workerDemandGap() > 0
+                || project.equipmentDemandGap() > 0) {
+
+            double gap =
+                    project.workerDemandGap()
+                            + project.equipmentDemandGap();
+
+            PortfolioExceptionSeverity severity =
+                    gap >= 8
+                            ? PortfolioExceptionSeverity.HIGH
+                            : PortfolioExceptionSeverity.MEDIUM;
+
+            result.add(
+                    exception(
+                            project,
+                            severity,
+                            PortfolioExceptionDomain.RESOURCE,
+                            "Forward resource demand exceeds availability",
+                            "The active resource forecast identifies labor and/or equipment shortages in an upcoming project period.",
+                            "Combined resource gap",
+                            roundOne(gap)
+                                    + " units",
+                            "/projects/"
+                                    + project.projectId()
+                                    + "/resources",
+                            severityScore(severity)
+                                    + (int) Math.min(
+                                            25,
+                                            gap * 2)));
+
+            return;
+        }
+
+        if (project.resourceScore() < 60) {
+
+            result.add(
+                    exception(
+                            project,
+                            PortfolioExceptionSeverity.HIGH,
+                            PortfolioExceptionDomain.RESOURCE,
+                            "Resource performance is at risk",
+                            "Workforce productivity, utilization or equipment deployment is materially below BuildSight resource-control thresholds.",
+                            "Resource score",
+                            roundOne(
+                                    project.resourceScore())
+                                    + "/100",
+                            "/projects/"
+                                    + project.projectId()
+                                    + "/resources",
+                            82
+                                    + (int) Math.min(
+                                            18,
+                                            60
+                                                    - project.resourceScore())));
+
+            return;
+        }
+
+        if (project.lowProductivityWorkPackages() > 0
+                || project.overtimePercentage() > 25
+                || project.idleEquipment() > 0) {
+
+            result.add(
+                    exception(
+                            project,
+                            PortfolioExceptionSeverity.MEDIUM,
+                            PortfolioExceptionDomain.RESOURCE,
+                            "Resource efficiency requires monitoring",
+                            "BuildSight detected low work-package productivity, elevated overtime and/or idle equipment exposure.",
+                            "Resource signals",
+                            Long.toString(
+                                    project.lowProductivityWorkPackages()
+                                            + project.idleEquipment()),
+                            "/projects/"
+                                    + project.projectId()
+                                    + "/resources",
+                            48
+                                    + (int) Math.min(
+                                            15,
+                                            project.lowProductivityWorkPackages()
+                                                    * 3
+                                                    + project.idleEquipment()
+                                                    * 2)));
+        }
+    }
+
     private PortfolioExceptionResponse exception(
             PortfolioProjectSnapshotResponse project,
             PortfolioExceptionSeverity severity,
@@ -1189,6 +1316,9 @@ public class PortfolioExecutiveCalculator {
 
                                             case COMMERCIAL ->
                                                     project.commercialScore();
+
+                                            case RESOURCE ->
+                                                    project.resourceScore();
                                         })
                         .average()
                         .orElse(0));
@@ -1301,6 +1431,7 @@ public class PortfolioExecutiveCalculator {
         RISK,
         PRODUCTION,
         INFORMATION,
-        COMMERCIAL
+        COMMERCIAL,
+        RESOURCE
     }
 }

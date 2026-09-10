@@ -45,6 +45,11 @@ public class PortfolioAiPromptBuilder {
                 Overdue certifications: %s
                 Overdue payments: %s
                 Outstanding certified amount: %s
+                Worker demand gap: %s
+                Equipment demand gap: %s
+                Idle equipment: %s
+                Low-productivity work packages: %s
+                Resource at-risk projects: %s
                 Executive exceptions: %s
                 """
                 .formatted(
@@ -96,6 +101,16 @@ public class PortfolioAiPromptBuilder {
                                 .overduePayments(),
                         executive.summary()
                                 .outstandingCertifiedAmount(),
+                        executive.summary()
+                                .workerDemandGap(),
+                        executive.summary()
+                                .equipmentDemandGap(),
+                        executive.summary()
+                                .idleEquipment(),
+                        executive.summary()
+                                .lowProductivityWorkPackages(),
+                        executive.summary()
+                                .resourceAtRiskProjects(),
                         executive.summary()
                                 .totalExceptions());
 
@@ -154,6 +169,15 @@ public class PortfolioAiPromptBuilder {
                     Outstanding certified amount: %s
                     Forecast cashflow variance: %s
                     Commercial score: %s
+                    Labor utilization percentage: %s
+                    Overtime percentage: %s
+                    Average labor productivity index: %s
+                    Low-productivity work packages: %s
+                    Equipment utilization percentage: %s
+                    Idle equipment: %s
+                    Worker demand gap: %s
+                    Equipment demand gap: %s
+                    Resource score: %s
                     """
                     .formatted(
                             project.code(),
@@ -192,7 +216,16 @@ public class PortfolioAiPromptBuilder {
                             project.overduePayments(),
                             project.outstandingCertifiedAmount(),
                             project.forecastCashflowVariance(),
-                            project.commercialScore());
+                            project.commercialScore(),
+                            project.laborUtilizationPercentage(),
+                            project.overtimePercentage(),
+                            project.averageLaborProductivityIndex(),
+                            project.lowProductivityWorkPackages(),
+                            project.equipmentUtilizationPercentage(),
+                            project.idleEquipment(),
+                            project.workerDemandGap(),
+                            project.equipmentDemandGap(),
+                            project.resourceScore());
 
             sources.add(
                     new PortfolioAiSourceResponse(

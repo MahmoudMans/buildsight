@@ -761,10 +761,18 @@ export function ProjectCommandCenterView({
           </Link>
 
           <Link
-            href={`/projects/${projectId}/copilot`}
+            href={`/projects/${projectId}/resources`}
             className="command-nav-item"
           >
             13
+            <span>Resources</span>
+          </Link>
+
+          <Link
+            href={`/projects/${projectId}/copilot`}
+            className="command-nav-item"
+          >
+            14
             <span>AI Copilot</span>
           </Link>
 
@@ -1496,7 +1504,7 @@ export function ProjectCommandCenterView({
               </div>
 
               <h2>
-                Project Health Score v9
+                Project Health Score v10
               </h2>
             </div>
 
@@ -1524,7 +1532,7 @@ export function ProjectCommandCenterView({
             <div className="health-components">
               <HealthComponent
                 label="Schedule performance"
-                weight="14%"
+                weight="13%"
                 value={
                   health.scheduleScore
                 }
@@ -1548,7 +1556,7 @@ export function ProjectCommandCenterView({
 
               <HealthComponent
                 label="Cost performance"
-                weight="14%"
+                weight="13%"
                 value={
                   health.costScore
                 }
@@ -1556,7 +1564,7 @@ export function ProjectCommandCenterView({
 
               <HealthComponent
                 label="Procurement performance"
-                weight="10%"
+                weight="9%"
                 value={
                   health.procurementScore
                 }
@@ -1564,7 +1572,7 @@ export function ProjectCommandCenterView({
 
               <HealthComponent
                 label="Risk control"
-                weight="7%"
+                weight="6%"
                 value={
                   health.riskScore
                 }
@@ -1572,7 +1580,7 @@ export function ProjectCommandCenterView({
 
               <HealthComponent
                 label="Site production"
-                weight="11%"
+                weight="10%"
                 value={
                   health.productionScore
                 }
@@ -1580,7 +1588,7 @@ export function ProjectCommandCenterView({
 
               <HealthComponent
                 label="Information control"
-                weight="7%"
+                weight="6%"
                 value={
                   health.informationScore
                 }
@@ -1588,7 +1596,7 @@ export function ProjectCommandCenterView({
 
               <HealthComponent
                 label="Quality & handover"
-                weight="7%"
+                weight="6%"
                 value={
                   health.qualityScore
                 }
@@ -1596,7 +1604,7 @@ export function ProjectCommandCenterView({
 
               <HealthComponent
                 label="Safety / HSE"
-                weight="10%"
+                weight="9%"
                 value={
                   health.safetyScore
                 }
@@ -1604,9 +1612,17 @@ export function ProjectCommandCenterView({
 
               <HealthComponent
                 label="Commercial & cash flow"
-                weight="10%"
+                weight="9%"
                 value={
                   health.commercialScore
+                }
+              />
+
+              <HealthComponent
+                label="Workforce & resources"
+                weight="9%"
+                value={
+                  health.resourceScore
                 }
               />
             </div>

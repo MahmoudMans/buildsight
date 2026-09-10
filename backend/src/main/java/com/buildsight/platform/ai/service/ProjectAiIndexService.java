@@ -34,6 +34,8 @@ import com.buildsight.platform.production.api.ProductionIntelligenceResponse;
 import com.buildsight.platform.production.service.ProductionControlService;
 import com.buildsight.platform.project.domain.Project;
 import com.buildsight.platform.project.repository.ProjectRepository;
+import com.buildsight.platform.resource.api.ResourceModels.ResourceIntelligenceResponse;
+import com.buildsight.platform.resource.service.ResourceControlService;
 import com.buildsight.platform.risk.api.RiskIntelligenceResponse;
 import com.buildsight.platform.risk.service.RiskControlService;
 
@@ -61,6 +63,9 @@ public class ProjectAiIndexService {
 
     private final CommercialControlService
             commercialControlService;
+
+    private final ResourceControlService
+            resourceControlService;
 
     private final CostControlService
             costControlService;
@@ -104,6 +109,7 @@ public class ProjectAiIndexService {
             DocumentRevisionRepository revisionRepository,
             ProjectRfiRepository rfiRepository,
             CommercialControlService commercialControlService,
+            ResourceControlService resourceControlService,
             CostControlService costControlService,
             ProcurementControlService procurementControlService,
             RiskControlService riskControlService,
@@ -137,6 +143,9 @@ public class ProjectAiIndexService {
 
         this.commercialControlService =
                 commercialControlService;
+
+        this.resourceControlService =
+                resourceControlService;
 
         this.costControlService =
                 costControlService;
@@ -413,6 +422,11 @@ public class ProjectAiIndexService {
                         .intelligence(
                                 project.getId());
 
+        ResourceIntelligenceResponse resources =
+                resourceControlService
+                        .intelligence(
+                                project.getId());
+
         CostIntelligenceResponse cost =
                 costControlService
                         .get(
@@ -522,6 +536,27 @@ public class ProjectAiIndexService {
                 Forecast Cashflow Variance: %s
                 Commercial Score: %s
                 Commercial Risk: %s
+
+
+                Resource Intelligence
+                Workforce Plans: %s
+                Workforce Deployments: %s
+                Planned Labor Hours: %s
+                Actual Labor Hours: %s
+                Productive Labor Hours: %s
+                Overtime Hours: %s
+                Overtime Percentage: %s
+                Labor Utilization Percentage: %s
+                Average Productivity Index: %s
+                Low Productivity Work Packages: %s
+                Equipment Count: %s
+                Idle Equipment: %s
+                Equipment Utilization Percentage: %s
+                Equipment Downtime Hours: %s
+                Worker Demand Gap: %s
+                Equipment Demand Gap: %s
+                Resource Score: %s
+                Resource Risk: %s
 """
                 .formatted(
                         project.getCode(),
@@ -594,7 +629,26 @@ public class ProjectAiIndexService {
                         commercial.forecastNetCashflow(),
                         commercial.forecastCashflowVariance(),
                         commercial.commercialScore(),
-                        commercial.commercialRisk());
+                        commercial.commercialRisk(),
+
+                        resources.workforcePlans(),
+                        resources.workforceDeployments(),
+                        resources.plannedLaborHours(),
+                        resources.actualLaborHours(),
+                        resources.productiveLaborHours(),
+                        resources.overtimeHours(),
+                        resources.overtimePercentage(),
+                        resources.laborUtilizationPercentage(),
+                        resources.averageProductivityIndex(),
+                        resources.lowProductivityWorkPackages(),
+                        resources.equipmentCount(),
+                        resources.idleEquipment(),
+                        resources.equipmentUtilizationPercentage(),
+                        resources.equipmentDowntimeHours(),
+                        resources.workerDemandGap(),
+                        resources.equipmentDemandGap(),
+                        resources.resourceScore(),
+                        resources.resourceRisk());
 
         return new AiSourceDraft(
                 AiSourceType.PROJECT_FACT,

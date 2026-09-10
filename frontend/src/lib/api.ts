@@ -1531,3 +1531,154 @@ export async function updateCashflowPeriod(
     },
   );
 }
+
+export async function getProjectResources(
+  projectId: string,
+): Promise<
+  import("@/types/project").ResourceControl
+> {
+  return request<
+    import("@/types/project").ResourceControl
+  >(
+    `/projects/${projectId}/resources`,
+  );
+}
+
+export async function createWorkforcePlan(
+  projectId: string,
+  input: import("@/types/project").CreateWorkforcePlanInput,
+): Promise<
+  import("@/types/project").WorkforcePlan
+> {
+  return request<
+    import("@/types/project").WorkforcePlan
+  >(
+    `/projects/${projectId}/resources/workforce-plans`,
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function updateWorkforcePlan(
+  projectId: string,
+  planId: string,
+  input: Record<string, unknown>,
+): Promise<
+  import("@/types/project").WorkforcePlan
+> {
+  return request<
+    import("@/types/project").WorkforcePlan
+  >(
+    `/projects/${projectId}/resources/workforce-plans/${planId}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function createWorkforceDeployment(
+  projectId: string,
+  input: import("@/types/project").CreateWorkforceDeploymentInput,
+): Promise<
+  import("@/types/project").WorkforceDeployment
+> {
+  return request<
+    import("@/types/project").WorkforceDeployment
+  >(
+    `/projects/${projectId}/resources/deployments`,
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function createProjectEquipment(
+  projectId: string,
+  input: import("@/types/project").CreateEquipmentInput,
+): Promise<
+  import("@/types/project").ProjectEquipment
+> {
+  return request<
+    import("@/types/project").ProjectEquipment
+  >(
+    `/projects/${projectId}/resources/equipment`,
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function updateProjectEquipment(
+  projectId: string,
+  equipmentId: string,
+  input: Record<string, unknown>,
+): Promise<
+  import("@/types/project").ProjectEquipment
+> {
+  return request<
+    import("@/types/project").ProjectEquipment
+  >(
+    `/projects/${projectId}/resources/equipment/${equipmentId}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function createEquipmentUsage(
+  projectId: string,
+  input: import("@/types/project").CreateEquipmentUsageInput,
+): Promise<
+  import("@/types/project").EquipmentUsage
+> {
+  return request<
+    import("@/types/project").EquipmentUsage
+  >(
+    `/projects/${projectId}/resources/equipment-usage`,
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function createResourceForecast(
+  projectId: string,
+  input: import("@/types/project").CreateResourceForecastInput,
+): Promise<
+  import("@/types/project").ResourceForecast
+> {
+  return request<
+    import("@/types/project").ResourceForecast
+  >(
+    `/projects/${projectId}/resources/forecasts`,
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function updateResourceForecast(
+  projectId: string,
+  forecastId: string,
+  input: Record<string, unknown>,
+): Promise<
+  import("@/types/project").ResourceForecast
+> {
+  return request<
+    import("@/types/project").ResourceForecast
+  >(
+    `/projects/${projectId}/resources/forecasts/${forecastId}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(input),
+    },
+  );
+}

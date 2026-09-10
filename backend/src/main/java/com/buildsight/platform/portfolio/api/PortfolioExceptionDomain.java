@@ -9,5 +9,6 @@ public enum PortfolioExceptionDomain {
     PRODUCTION,
     INFORMATION,
     SAFETY,
-    COMMERCIAL
+    COMMERCIAL,
+    RESOURCE
 }
