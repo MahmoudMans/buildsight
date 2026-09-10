@@ -1682,3 +1682,163 @@ export async function updateResourceForecast(
     },
   );
 }
+
+export async function getProjectSchedule(
+  projectId: string,
+): Promise<
+  import("@/types/project").ScheduleControl
+> {
+  return request<
+    import("@/types/project").ScheduleControl
+  >(
+    `/projects/${projectId}/schedule`,
+  );
+}
+
+export async function getScheduleLookahead(
+  projectId: string,
+  weeks: 2 | 4 | 6,
+): Promise<
+  import("@/types/project").ScheduleLookahead
+> {
+  return request<
+    import("@/types/project").ScheduleLookahead
+  >(
+    `/projects/${projectId}/schedule/lookahead?weeks=${weeks}`,
+  );
+}
+
+export async function createScheduleActivity(
+  projectId: string,
+  input: import("@/types/project").CreateScheduleActivityInput,
+): Promise<
+  import("@/types/project").ScheduleActivity
+> {
+  return request<
+    import("@/types/project").ScheduleActivity
+  >(
+    `/projects/${projectId}/schedule/activities`,
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function updateScheduleActivity(
+  projectId: string,
+  activityId: string,
+  input: Record<string, unknown>,
+): Promise<
+  import("@/types/project").ScheduleActivity
+> {
+  return request<
+    import("@/types/project").ScheduleActivity
+  >(
+    `/projects/${projectId}/schedule/activities/${activityId}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function createScheduleDependency(
+  projectId: string,
+  input: import("@/types/project").CreateScheduleDependencyInput,
+): Promise<
+  import("@/types/project").ScheduleDependency
+> {
+  return request<
+    import("@/types/project").ScheduleDependency
+  >(
+    `/projects/${projectId}/schedule/dependencies`,
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function deleteScheduleDependency(
+  projectId: string,
+  dependencyId: string,
+): Promise<void> {
+  await request<void>(
+    `/projects/${projectId}/schedule/dependencies/${dependencyId}`,
+    {
+      method: "DELETE",
+    },
+  );
+}
+
+export async function createScheduleConstraint(
+  projectId: string,
+  input: import("@/types/project").CreateScheduleConstraintInput,
+): Promise<
+  import("@/types/project").ScheduleConstraint
+> {
+  return request<
+    import("@/types/project").ScheduleConstraint
+  >(
+    `/projects/${projectId}/schedule/constraints`,
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function updateScheduleConstraint(
+  projectId: string,
+  constraintId: string,
+  input: Record<string, unknown>,
+): Promise<
+  import("@/types/project").ScheduleConstraint
+> {
+  return request<
+    import("@/types/project").ScheduleConstraint
+  >(
+    `/projects/${projectId}/schedule/constraints/${constraintId}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function captureScheduleBaseline(
+  projectId: string,
+  input: {
+    name: string;
+    dataDate: string;
+  },
+): Promise<
+  import("@/types/project").ScheduleBaseline
+> {
+  return request<
+    import("@/types/project").ScheduleBaseline
+  >(
+    `/projects/${projectId}/schedule/baselines`,
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function approveScheduleBaseline(
+  projectId: string,
+  baselineId: string,
+): Promise<
+  import("@/types/project").ScheduleBaseline
+> {
+  return request<
+    import("@/types/project").ScheduleBaseline
+  >(
+    `/projects/${projectId}/schedule/baselines/${baselineId}/approve`,
+    {
+      method: "POST",
+    },
+  );
+}

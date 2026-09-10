@@ -769,10 +769,18 @@ export function ProjectCommandCenterView({
           </Link>
 
           <Link
-            href={`/projects/${projectId}/copilot`}
+            href={`/projects/${projectId}/schedule`}
             className="command-nav-item"
           >
             14
+            <span>Schedule</span>
+          </Link>
+
+          <Link
+            href={`/projects/${projectId}/copilot`}
+            className="command-nav-item"
+          >
+            15
             <span>AI Copilot</span>
           </Link>
 
@@ -1504,7 +1512,7 @@ export function ProjectCommandCenterView({
               </div>
 
               <h2>
-                Project Health Score v10
+                Project Health Score v11
               </h2>
             </div>
 
@@ -1531,7 +1539,7 @@ export function ProjectCommandCenterView({
 
             <div className="health-components">
               <HealthComponent
-                label="Schedule performance"
+                label="Schedule intelligence"
                 weight="13%"
                 value={
                   health.scheduleScore

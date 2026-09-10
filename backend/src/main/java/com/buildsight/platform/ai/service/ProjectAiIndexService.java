@@ -39,6 +39,8 @@ import com.buildsight.platform.resource.service.ResourceControlService;
 import com.buildsight.platform.risk.api.RiskIntelligenceResponse;
 import com.buildsight.platform.risk.service.RiskControlService;
 
+import com.buildsight.platform.schedule.api.ScheduleModels.ScheduleIntelligenceResponse;
+import com.buildsight.platform.schedule.service.ScheduleControlService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -66,6 +68,9 @@ public class ProjectAiIndexService {
 
     private final ResourceControlService
             resourceControlService;
+
+    private final ScheduleControlService
+            scheduleControlService;
 
     private final CostControlService
             costControlService;
@@ -110,6 +115,7 @@ public class ProjectAiIndexService {
             ProjectRfiRepository rfiRepository,
             CommercialControlService commercialControlService,
             ResourceControlService resourceControlService,
+            ScheduleControlService scheduleControlService,
             CostControlService costControlService,
             ProcurementControlService procurementControlService,
             RiskControlService riskControlService,
@@ -146,6 +152,9 @@ public class ProjectAiIndexService {
 
         this.resourceControlService =
                 resourceControlService;
+
+        this.scheduleControlService =
+                scheduleControlService;
 
         this.costControlService =
                 costControlService;
@@ -427,6 +436,11 @@ public class ProjectAiIndexService {
                         .intelligence(
                                 project.getId());
 
+        ScheduleIntelligenceResponse schedule =
+                scheduleControlService
+                        .intelligence(
+                                project.getId());
+
         CostIntelligenceResponse cost =
                 costControlService
                         .get(
@@ -557,6 +571,25 @@ public class ProjectAiIndexService {
                 Equipment Demand Gap: %s
                 Resource Score: %s
                 Resource Risk: %s
+
+                Schedule Intelligence
+                Network Valid: %s
+                Activity Count: %s
+                Overdue Activities: %s
+                Critical Activities: %s
+                Near-Critical Activities: %s
+                Critical Path Length Days: %s
+                Open Constraints: %s
+                Overdue Constraints: %s
+                Constrained Critical Activities: %s
+                Approved Baseline: %s
+                Baseline Finish: %s
+                CPM Forecast Finish: %s
+                Baseline Finish Variance Days: %s
+                Project Finish Variance Days: %s
+                Schedule Score: %s
+                Schedule Risk: %s
+                Critical Activity Codes: %s
 """
                 .formatted(
                         project.getCode(),
@@ -648,8 +681,25 @@ public class ProjectAiIndexService {
                         resources.workerDemandGap(),
                         resources.equipmentDemandGap(),
                         resources.resourceScore(),
-                        resources.resourceRisk());
+                        resources.resourceRisk(),
 
+                        schedule.networkValid(),
+                        schedule.activityCount(),
+                        schedule.overdueActivities(),
+                        schedule.criticalActivities(),
+                        schedule.nearCriticalActivities(),
+                        schedule.criticalPathLengthDays(),
+                        schedule.openConstraints(),
+                        schedule.overdueConstraints(),
+                        schedule.constrainedCriticalActivities(),
+                        schedule.approvedBaselineName(),
+                        schedule.baselineFinishDate(),
+                        schedule.cpmForecastFinishDate(),
+                        schedule.baselineFinishVarianceDays(),
+                        schedule.projectFinishVarianceDays(),
+                        schedule.scheduleScore(),
+                        schedule.scheduleRisk(),
+                        schedule.criticalPathActivityCodes());
         return new AiSourceDraft(
                 AiSourceType.PROJECT_FACT,
                 project.getId(),

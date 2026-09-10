@@ -2413,3 +2413,196 @@ export interface CreateResourceForecastInput {
   availableQuantity: number;
   notes: string;
 }
+
+export type ScheduleBaselineStatus =
+  | "DRAFT"
+  | "APPROVED"
+  | "SUPERSEDED";
+
+export type ScheduleActivityStatus =
+  | "NOT_STARTED"
+  | "IN_PROGRESS"
+  | "ON_HOLD"
+  | "COMPLETED";
+
+export type ScheduleDependencyType =
+  | "FS"
+  | "SS"
+  | "FF"
+  | "SF";
+
+export type ScheduleConstraintType =
+  | "DESIGN_INFORMATION"
+  | "MATERIAL"
+  | "ACCESS"
+  | "LABOR"
+  | "EQUIPMENT"
+  | "APPROVAL"
+  | "PERMIT"
+  | "PREDECESSOR"
+  | "OTHER";
+
+export type ScheduleConstraintStatus =
+  | "OPEN"
+  | "RESOLVED"
+  | "WAIVED";
+
+export interface ScheduleActivity {
+  id: string;
+  projectId: string;
+  activityCode: string;
+  name: string;
+  discipline: string | null;
+  workPackageId: string | null;
+  currentStart: string;
+  currentFinish: string;
+  originalDurationDays: number;
+  remainingDurationDays: number;
+  actualStart: string | null;
+  actualFinish: string | null;
+  progressPercentage: number;
+  status: ScheduleActivityStatus;
+  earlyStartDay: number;
+  earlyFinishDay: number;
+  lateStartDay: number;
+  lateFinishDay: number;
+  totalFloatDays: number;
+  critical: boolean;
+  nearCritical: boolean;
+  overdue: boolean;
+  version: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ScheduleDependency {
+  id: string;
+  projectId: string;
+  predecessorActivityId: string;
+  predecessorCode: string;
+  successorActivityId: string;
+  successorCode: string;
+  dependencyType: ScheduleDependencyType;
+  lagDays: number;
+  createdAt: string;
+}
+
+export interface ScheduleConstraint {
+  id: string;
+  projectId: string;
+  activityId: string;
+  activityCode: string;
+  constraintType: ScheduleConstraintType;
+  title: string;
+  ownerName: string | null;
+  dueDate: string;
+  status: ScheduleConstraintStatus;
+  resolutionNotes: string | null;
+  resolvedDate: string | null;
+  overdue: boolean;
+  version: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ScheduleBaseline {
+  id: string;
+  projectId: string;
+  name: string;
+  dataDate: string;
+  status: ScheduleBaselineStatus;
+  approvedAt: string | null;
+  activityCount: number;
+  baselineFinishDate: string | null;
+  version: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ScheduleIntelligence {
+  dataDate: string;
+  networkValid: boolean;
+  networkError: string | null;
+  activityCount: number;
+  completedActivities: number;
+  inProgressActivities: number;
+  overdueActivities: number;
+  criticalActivities: number;
+  nearCriticalActivities: number;
+  criticalPathLengthDays: number;
+  averageTotalFloatDays: number;
+  openConstraints: number;
+  overdueConstraints: number;
+  constrainedCriticalActivities: number;
+  lookahead14DayActivities: number;
+  lookahead28DayActivities: number;
+  lookahead42DayActivities: number;
+  approvedBaselineName: string | null;
+  baselineFinishDate: string | null;
+  cpmForecastFinishDate: string | null;
+  baselineFinishVarianceDays: number;
+  projectFinishVarianceDays: number;
+  scheduleScore: number;
+  scheduleRisk: ScheduleRiskLevel;
+  criticalPathActivityCodes: string[];
+  explanation: string;
+}
+
+export interface ScheduleLookaheadActivity {
+  activityId: string;
+  activityCode: string;
+  name: string;
+  discipline: string | null;
+  currentStart: string;
+  currentFinish: string;
+  progressPercentage: number;
+  totalFloatDays: number;
+  critical: boolean;
+  nearCritical: boolean;
+  openConstraints: number;
+  constrained: boolean;
+}
+
+export interface ScheduleLookahead {
+  weeks: number;
+  fromDate: string;
+  toDate: string;
+  activityCount: number;
+  criticalActivities: number;
+  constrainedActivities: number;
+  activities: ScheduleLookaheadActivity[];
+}
+
+export interface ScheduleControl {
+  project: Project;
+  intelligence: ScheduleIntelligence;
+  baselines: ScheduleBaseline[];
+  activities: ScheduleActivity[];
+  dependencies: ScheduleDependency[];
+  constraints: ScheduleConstraint[];
+}
+
+export interface CreateScheduleActivityInput {
+  activityCode: string;
+  name: string;
+  discipline: string;
+  workPackageId: string | null;
+  currentStart: string;
+  currentFinish: string;
+  originalDurationDays: number;
+}
+
+export interface CreateScheduleDependencyInput {
+  predecessorActivityId: string;
+  successorActivityId: string;
+  dependencyType: ScheduleDependencyType;
+  lagDays: number;
+}
+
+export interface CreateScheduleConstraintInput {
+  activityId: string;
+  constraintType: ScheduleConstraintType;
+  title: string;
+  ownerName: string;
+  dueDate: string;
+}

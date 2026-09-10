@@ -35,6 +35,8 @@ import com.buildsight.platform.project.repository.ProjectRepository;
 import com.buildsight.platform.project.service.ProjectHealthScoreService;
 import com.buildsight.platform.resource.api.ResourceModels.ResourceIntelligenceResponse;
 import com.buildsight.platform.resource.service.ResourceControlService;
+import com.buildsight.platform.schedule.api.ScheduleModels.ScheduleIntelligenceResponse;
+import com.buildsight.platform.schedule.service.ScheduleControlService;
 import com.buildsight.platform.risk.api.RiskIntelligenceResponse;
 import com.buildsight.platform.risk.service.RiskControlService;
 
@@ -77,6 +79,9 @@ public class PortfolioExecutiveService {
     private final ResourceControlService
             resourceControlService;
 
+    private final ScheduleControlService
+            scheduleControlService;
+
     private final ProjectHealthScoreService
             healthScoreService;
 
@@ -101,6 +106,7 @@ public class PortfolioExecutiveService {
             SafetyControlService safetyControlService,
             CommercialControlService commercialControlService,
             ResourceControlService resourceControlService,
+            ScheduleControlService scheduleControlService,
             ProjectHealthScoreService healthScoreService,
             PortfolioExecutiveCalculator calculator,
             PortfolioSupplierAnalyticsService supplierAnalyticsService,
@@ -138,6 +144,9 @@ public class PortfolioExecutiveService {
 
         this.resourceControlService =
                 resourceControlService;
+
+        this.scheduleControlService =
+                scheduleControlService;
 
         this.healthScoreService =
                 healthScoreService;
@@ -393,6 +402,11 @@ public class PortfolioExecutiveService {
                         .intelligence(
                                 project.getId());
 
+        ScheduleIntelligenceResponse schedule =
+                scheduleControlService
+                        .intelligence(
+                                project.getId());
+
         ProjectHealthScoreResponse health =
                 healthScoreService
                         .calculate(
@@ -401,6 +415,8 @@ public class PortfolioExecutiveService {
                                 milestoneRepository
                                         .findByProjectIdOrderBySortOrderAscPlannedDateAsc(
                                                 project.getId()),
+
+                                schedule,
 
                                 cost,
                                 procurement,

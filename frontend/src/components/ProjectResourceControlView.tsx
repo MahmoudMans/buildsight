@@ -838,6 +838,16 @@ export function ProjectResourceControlView({
               Forecast
             </span>
           </a>
+
+          <Link
+            href={`/projects/${projectId}/schedule`}
+            className="command-nav-item"
+          >
+            09
+            <span>
+              Schedule
+            </span>
+          </Link>
         </nav>
 
         <div className="command-sidebar-footer">

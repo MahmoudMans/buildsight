@@ -18,6 +18,8 @@ import com.buildsight.platform.quality.api.QualityIntelligenceResponse;
 import com.buildsight.platform.quality.service.QualityControlService;
 import com.buildsight.platform.safety.api.SafetyIntelligenceResponse;
 import com.buildsight.platform.safety.service.SafetyControlService;
+import com.buildsight.platform.schedule.api.ScheduleModels.ScheduleIntelligenceResponse;
+import com.buildsight.platform.schedule.service.ScheduleControlService;
 import com.buildsight.platform.risk.api.RiskIntelligenceResponse;
 import com.buildsight.platform.resource.api.ResourceModels.ResourceIntelligenceResponse;
 import com.buildsight.platform.resource.service.ResourceControlService;
@@ -85,6 +87,9 @@ public class ProjectCommandCenterService {
     private final ResourceControlService
             resourceControlService;
 
+    private final ScheduleControlService
+            scheduleControlService;
+
     public ProjectCommandCenterService(
             ProjectRepository projectRepository,
             ProjectMilestoneRepository milestoneRepository,
@@ -101,7 +106,8 @@ public class ProjectCommandCenterService {
             QualityControlService qualityControlService,
             SafetyControlService safetyControlService,
             CommercialControlService commercialControlService,
-            ResourceControlService resourceControlService) {
+            ResourceControlService resourceControlService,
+            ScheduleControlService scheduleControlService) {
 
         this.projectRepository =
                 projectRepository;
@@ -150,6 +156,9 @@ public class ProjectCommandCenterService {
 
         this.resourceControlService =
                 resourceControlService;
+
+        this.scheduleControlService =
+                scheduleControlService;
     }
 
     @Transactional(readOnly = true)
@@ -233,6 +242,11 @@ public class ProjectCommandCenterService {
                         .intelligence(
                                 projectId);
 
+        ScheduleIntelligenceResponse schedule =
+                scheduleControlService
+                        .intelligence(
+                                projectId);
+
         return new ProjectCommandCenterResponse(
                 projectMapper.toResponse(
                         project),
@@ -240,6 +254,7 @@ public class ProjectCommandCenterService {
                 healthScoreService.calculate(
                         project,
                         milestones,
+                        schedule,
                         cost,
                         procurement,
                         risk,

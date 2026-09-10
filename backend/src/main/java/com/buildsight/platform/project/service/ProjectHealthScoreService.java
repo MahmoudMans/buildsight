@@ -20,6 +20,7 @@ import com.buildsight.platform.quality.api.QualityIntelligenceResponse;
 import com.buildsight.platform.resource.api.ResourceModels.ResourceIntelligenceResponse;
 import com.buildsight.platform.risk.api.RiskIntelligenceResponse;
 import com.buildsight.platform.safety.api.SafetyIntelligenceResponse;
+import com.buildsight.platform.schedule.api.ScheduleModels.ScheduleIntelligenceResponse;
 
 import org.springframework.stereotype.Service;
 
@@ -65,14 +66,59 @@ public class ProjectHealthScoreService {
                 LocalDate.now(
                         clock);
 
-        long scheduleVarianceDays =
+        long legacyVariance =
                 ChronoUnit.DAYS.between(
                         project.getPlannedEndDate(),
                         project.getForecastEndDate());
 
+        ScheduleIntelligenceResponse fallbackSchedule =
+                ScheduleIntelligenceResponse.legacy(
+                        today,
+                        project.getForecastEndDate(),
+                        legacyVariance,
+                        legacyScheduleScore(
+                                legacyVariance),
+                        legacyScheduleRisk(
+                                legacyVariance));
+
+        return calculate(
+                project,
+                milestones,
+                fallbackSchedule,
+                cost,
+                procurement,
+                risk,
+                production,
+                information,
+                quality,
+                safety,
+                commercial,
+                resources);
+    }
+
+    public ProjectHealthScoreResponse calculate(
+            Project project,
+            List<ProjectMilestone> milestones,
+            ScheduleIntelligenceResponse schedule,
+            CostIntelligenceResponse cost,
+            ProcurementIntelligenceResponse procurement,
+            RiskIntelligenceResponse risk,
+            ProductionIntelligenceResponse production,
+            DocumentIntelligenceResponse information,
+            QualityIntelligenceResponse quality,
+            SafetyIntelligenceResponse safety,
+            CommercialIntelligenceResponse commercial,
+            ResourceIntelligenceResponse resources) {
+
+        LocalDate today =
+                LocalDate.now(
+                        clock);
+
+        long scheduleVarianceDays =
+                schedule.projectFinishVarianceDays();
+
         double scheduleScore =
-                scheduleScore(
-                        scheduleVarianceDays);
+                schedule.scheduleScore();
 
         double expectedProgress =
                 expectedProgress(
@@ -145,8 +191,7 @@ public class ProjectHealthScoreService {
                 today,
                 score,
                 healthBand(score),
-                scheduleRisk(
-                        scheduleVarianceDays),
+                schedule.scheduleRisk(),
                 cost.costRisk(),
                 procurement.procurementRisk(),
                 risk.riskLevel(),
@@ -174,10 +219,10 @@ public class ProjectHealthScoreService {
                 roundOne(safety.safetyScore()),
                 roundOne(commercial.commercialScore()),
                 roundOne(resources.resourceScore()),
-                "Health Score v10 combines schedule (13%), physical progress (5%), milestones (5%), cost (13%), procurement (9%), risk control (6%), site production (10%), information control (6%), quality/handover (6%), HSE/safety (9%), commercial/cash-flow (9%), and workforce/resource performance (9%).");
+                "Health Score v11 combines CPM-derived Schedule Intelligence (13%), physical progress (5%), milestones (5%), cost (13%), procurement (9%), risk control (6%), site production (10%), information control (6%), quality/handover (6%), HSE/safety (9%), commercial/cash-flow (9%), and workforce/resource performance (9%).");
     }
 
-    private double scheduleScore(
+    private double legacyScheduleScore(
             long varianceDays) {
 
         if (varianceDays <= 0) {
@@ -280,7 +325,7 @@ public class ProjectHealthScoreService {
         return ProjectHealthBand.AT_RISK;
     }
 
-    private ScheduleRiskLevel scheduleRisk(
+    private ScheduleRiskLevel legacyScheduleRisk(
             long varianceDays) {
 
         if (varianceDays <= 0) {
