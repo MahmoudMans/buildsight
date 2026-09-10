@@ -987,3 +987,48 @@ export async function getProjectAiHistory(
     `/projects/${projectId}/ai/history`,
   );
 }
+
+export async function getPortfolioExecutive(): Promise<
+  import("@/types/project").PortfolioExecutive
+> {
+  return request<
+    import("@/types/project").PortfolioExecutive
+  >(
+    "/portfolio/executive",
+  );
+}
+
+export async function getPortfolioProjectComparison(
+  projectId: string,
+): Promise<
+  import("@/types/project").PortfolioProjectComparison
+> {
+  return request<
+    import("@/types/project").PortfolioProjectComparison
+  >(
+    `/portfolio/projects/${projectId}/comparison`,
+  );
+}
+
+export async function getPortfolioAiStatus(): Promise<
+  import("@/types/project").PortfolioAiStatus
+> {
+  return request<
+    import("@/types/project").PortfolioAiStatus
+  >(
+    "/portfolio/ai/status",
+  );
+}
+
+export async function generatePortfolioAiBrief(): Promise<
+  import("@/types/project").PortfolioAiBrief
+> {
+  return request<
+    import("@/types/project").PortfolioAiBrief
+  >(
+    "/portfolio/ai/brief",
+    {
+      method: "POST",
+    },
+  );
+}

@@ -1248,3 +1248,171 @@ export interface AiHistoryItem {
   sourceCount: number;
   createdAt: string;
 }
+
+export type PortfolioExceptionSeverity =
+  | "CRITICAL"
+  | "HIGH"
+  | "MEDIUM";
+
+export type PortfolioExceptionDomain =
+  | "OVERALL"
+  | "SCHEDULE"
+  | "COST"
+  | "PROCUREMENT"
+  | "RISK"
+  | "PRODUCTION"
+  | "INFORMATION";
+
+export type SupplierConcentrationRisk =
+  | "LOW"
+  | "MODERATE"
+  | "HIGH";
+
+export interface PortfolioProjectSnapshot {
+  projectId: string;
+  code: string;
+  name: string;
+  clientName: string;
+  location: string;
+  status: ProjectStatus;
+  healthScore: number;
+  healthBand: ProjectHealthBand;
+  scheduleVarianceDays: number;
+  approvedBudget: number;
+  revisedCostPlan: number;
+  forecastAtCompletion: number;
+  actualCosts: number;
+  outstandingCommitments: number;
+  varianceAtCompletion: number;
+  costScore: number;
+  delayedProcurementPackages: number;
+  procurementScore: number;
+  highExposureRisks: number;
+  criticalOpenIssues: number;
+  forecastDelayDays: number;
+  riskScore: number;
+  blockedWorkPackages: number;
+  productionScore: number;
+  productivityIndex: number;
+  overdueRfis: number;
+  criticalOpenRfis: number;
+  informationScore: number;
+  attentionScore: number;
+  healthRank: number;
+}
+
+export interface PortfolioSummary {
+  totalProjects: number;
+  planningProjects: number;
+  activeProjects: number;
+  onHoldProjects: number;
+  completedProjects: number;
+  healthyProjects: number;
+  watchProjects: number;
+  atRiskProjects: number;
+  totalApprovedBudget: number;
+  totalRevisedCostPlan: number;
+  totalForecastAtCompletion: number;
+  totalActualCosts: number;
+  totalOutstandingCommitments: number;
+  portfolioVarianceAtCompletion: number;
+  weightedPortfolioHealthScore: number;
+  portfolioHealthBand: ProjectHealthBand;
+  delayedProcurementPackages: number;
+  highExposureRisks: number;
+  criticalOpenIssues: number;
+  blockedWorkPackages: number;
+  overdueRfis: number;
+  totalExceptions: number;
+}
+
+export interface PortfolioBenchmarks {
+  averageHealthScore: number;
+  averageCostScore: number;
+  averageProcurementScore: number;
+  averageRiskScore: number;
+  averageProductionScore: number;
+  averageInformationScore: number;
+  averageProductivityIndex: number;
+  bestHealthProjectCode: string | null;
+  worstHealthProjectCode: string | null;
+}
+
+export interface PortfolioException {
+  id: string;
+  projectId: string;
+  projectCode: string;
+  projectName: string;
+  severity: PortfolioExceptionSeverity;
+  domain: PortfolioExceptionDomain;
+  title: string;
+  detail: string;
+  metricLabel: string;
+  metricValue: string;
+  route: string;
+  priorityScore: number;
+}
+
+export interface SupplierConcentration {
+  supplierId: string;
+  supplierCode: string;
+  supplierName: string;
+  supplierType: string;
+  awardedPackages: number;
+  awardedValue: number;
+  portfolioAwardSharePercentage: number;
+  concentrationRisk: SupplierConcentrationRisk;
+}
+
+export interface PortfolioExecutive {
+  calculationDate: string;
+  summary: PortfolioSummary;
+  benchmarks: PortfolioBenchmarks;
+  projects: PortfolioProjectSnapshot[];
+  exceptions: PortfolioException[];
+  supplierConcentration: SupplierConcentration[];
+}
+
+export interface PortfolioComparisonMetric {
+  metric: string;
+  projectValue: number;
+  portfolioAverage: number;
+  delta: number;
+  unit: string;
+  higherIsBetter: boolean;
+  favorable: boolean;
+}
+
+export interface PortfolioProjectComparison {
+  projectId: string;
+  projectCode: string;
+  projectName: string;
+  healthRank: number;
+  totalProjects: number;
+  healthPercentile: number;
+  metrics: PortfolioComparisonMetric[];
+}
+
+export interface PortfolioAiStatus {
+  ollamaReachable: boolean;
+  chatModel: string;
+  chatModelAvailable: boolean;
+  ready: boolean;
+  message: string;
+}
+
+export interface PortfolioAiSource {
+  citation: string;
+  projectId: string | null;
+  projectCode: string;
+  projectName: string;
+  evidence: string;
+}
+
+export interface PortfolioAiBrief {
+  answer: string;
+  grounded: boolean;
+  chatModel: string;
+  sources: PortfolioAiSource[];
+  generatedAt: string;
+}

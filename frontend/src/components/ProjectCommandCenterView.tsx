@@ -743,6 +743,14 @@ export function ProjectCommandCenterView({
             10
             <span>AI Copilot</span>
           </Link>
+
+          <Link
+            href="/portfolio"
+            className="command-nav-item"
+          >
+            PX
+            <span>Executive portfolio</span>
+          </Link>
         </nav>
 
         <div className="command-sidebar-footer">

@@ -440,6 +440,16 @@ export function ProjectAiCopilotView({
               AI Copilot
             </span>
           </div>
+
+          <Link
+            href="/portfolio"
+            className="command-nav-item"
+          >
+            PX
+            <span>
+              Executive portfolio
+            </span>
+          </Link>
         </nav>
 
         <div className="command-sidebar-footer">
