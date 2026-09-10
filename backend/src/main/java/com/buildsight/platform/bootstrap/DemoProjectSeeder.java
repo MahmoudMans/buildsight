@@ -17,10 +17,12 @@ import com.buildsight.platform.project.repository.ProjectRepository;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
+@Order(10)
 @ConditionalOnProperty(
         name = "buildsight.demo.seed-enabled",
         havingValue = "true")

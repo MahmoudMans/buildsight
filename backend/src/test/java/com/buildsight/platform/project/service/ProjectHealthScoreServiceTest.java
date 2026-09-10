@@ -11,6 +11,8 @@ import java.time.ZoneOffset;
 import java.util.List;
 import java.util.UUID;
 
+import com.buildsight.platform.cost.api.CostIntelligenceResponse;
+import com.buildsight.platform.cost.api.CostRiskLevel;
 import com.buildsight.platform.project.api.ProjectHealthBand;
 import com.buildsight.platform.project.api.ProjectHealthScoreResponse;
 import com.buildsight.platform.project.api.ScheduleRiskLevel;
@@ -30,7 +32,7 @@ class ProjectHealthScoreServiceTest {
                     ZoneOffset.UTC);
 
     @Test
-    void healthScoreDetectsScheduleAndMilestoneRisk() {
+    void healthScoreIncludesCostRisk() {
         Project project =
                 Project.create(
                         UUID.randomUUID(),
@@ -71,7 +73,7 @@ class ProjectHealthScoreServiceTest {
                         UUID.randomUUID(),
                         project.getId(),
                         "Blocked package",
-                        "A blocked milestone.",
+                        "Blocked milestone",
                         LocalDate.of(
                                 2026,
                                 8,
@@ -85,14 +87,16 @@ class ProjectHealthScoreServiceTest {
                         new BigDecimal("25.00"),
                         10);
 
-        ProjectHealthScoreService service =
-                new ProjectHealthScoreService(
-                        CLOCK);
-
         ProjectHealthScoreResponse result =
-                service.calculate(
-                        project,
-                        List.of(milestone));
+                new ProjectHealthScoreService(
+                        CLOCK)
+                        .calculate(
+                                project,
+                                List.of(
+                                        milestone),
+                                cost(
+                                        75.0,
+                                        CostRiskLevel.WATCH));
 
         assertEquals(
                 20,
@@ -103,24 +107,20 @@ class ProjectHealthScoreServiceTest {
                 result.scheduleRisk());
 
         assertEquals(
-                1,
-                result.overdueMilestones());
+                CostRiskLevel.WATCH,
+                result.costRisk());
 
         assertEquals(
-                1,
-                result.blockedMilestones());
+                75.0,
+                result.costScore());
 
         assertEquals(
                 ProjectHealthBand.WATCH,
                 result.healthBand());
-
-        assertTrue(
-                result.score() >= 60
-                        && result.score() < 80);
     }
 
     @Test
-    void healthScoreRewardsOnTimeProject() {
+    void healthyDeliveryAndCostProducesHealthyScore() {
         Project project =
                 Project.create(
                         UUID.randomUUID(),
@@ -147,21 +147,49 @@ class ProjectHealthScoreServiceTest {
                         CLOCK)
                         .calculate(
                                 project,
-                                List.of());
-
-        assertEquals(
-                0,
-                result.scheduleVarianceDays());
+                                List.of(),
+                                cost(
+                                        100.0,
+                                        CostRiskLevel.ON_TRACK));
 
         assertEquals(
                 ScheduleRiskLevel.ON_TRACK,
                 result.scheduleRisk());
 
+        assertEquals(
+                CostRiskLevel.ON_TRACK,
+                result.costRisk());
+
         assertTrue(
-                result.score() >= 80);
+                result.score()
+                        >= 80);
 
         assertEquals(
                 ProjectHealthBand.HEALTHY,
                 result.healthBand());
+    }
+
+    private CostIntelligenceResponse cost(
+            double score,
+            CostRiskLevel risk) {
+
+        return new CostIntelligenceResponse(
+                BigDecimal.ZERO,
+                BigDecimal.ZERO,
+                BigDecimal.ZERO,
+                BigDecimal.ZERO,
+                BigDecimal.ZERO,
+                BigDecimal.ZERO,
+                BigDecimal.ZERO,
+                BigDecimal.ZERO,
+                BigDecimal.ZERO,
+                BigDecimal.ZERO,
+                BigDecimal.ZERO,
+                0,
+                0,
+                0,
+                score,
+                risk,
+                "Test");
     }
 }

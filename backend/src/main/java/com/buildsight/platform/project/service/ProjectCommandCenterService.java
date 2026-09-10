@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.UUID;
 
 import com.buildsight.platform.common.exception.ResourceNotFoundException;
+import com.buildsight.platform.cost.api.CostIntelligenceResponse;
+import com.buildsight.platform.cost.service.CostControlService;
 import com.buildsight.platform.project.api.MilestoneResponse;
 import com.buildsight.platform.project.api.ProgressUpdateResponse;
 import com.buildsight.platform.project.api.ProjectCommandCenterResponse;
@@ -19,15 +21,29 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ProjectCommandCenterService {
 
-    private final ProjectRepository projectRepository;
-    private final ProjectMilestoneRepository milestoneRepository;
+    private final ProjectRepository
+            projectRepository;
+
+    private final ProjectMilestoneRepository
+            milestoneRepository;
+
     private final ProjectProgressUpdateRepository
             progressUpdateRepository;
-    private final ProjectMapper projectMapper;
-    private final MilestoneMapper milestoneMapper;
-    private final ProgressUpdateMapper progressUpdateMapper;
+
+    private final ProjectMapper
+            projectMapper;
+
+    private final MilestoneMapper
+            milestoneMapper;
+
+    private final ProgressUpdateMapper
+            progressUpdateMapper;
+
     private final ProjectHealthScoreService
             healthScoreService;
+
+    private final CostControlService
+            costControlService;
 
     public ProjectCommandCenterService(
             ProjectRepository projectRepository,
@@ -36,18 +52,32 @@ public class ProjectCommandCenterService {
             ProjectMapper projectMapper,
             MilestoneMapper milestoneMapper,
             ProgressUpdateMapper progressUpdateMapper,
-            ProjectHealthScoreService healthScoreService) {
+            ProjectHealthScoreService healthScoreService,
+            CostControlService costControlService) {
 
-        this.projectRepository = projectRepository;
-        this.milestoneRepository = milestoneRepository;
+        this.projectRepository =
+                projectRepository;
+
+        this.milestoneRepository =
+                milestoneRepository;
+
         this.progressUpdateRepository =
                 progressUpdateRepository;
-        this.projectMapper = projectMapper;
-        this.milestoneMapper = milestoneMapper;
+
+        this.projectMapper =
+                projectMapper;
+
+        this.milestoneMapper =
+                milestoneMapper;
+
         this.progressUpdateMapper =
                 progressUpdateMapper;
+
         this.healthScoreService =
                 healthScoreService;
+
+        this.costControlService =
+                costControlService;
     }
 
     @Transactional(readOnly = true)
@@ -56,36 +86,52 @@ public class ProjectCommandCenterService {
 
         Project project =
                 projectRepository
-                        .findById(projectId)
-                        .orElseThrow(() ->
-                                new ResourceNotFoundException(
-                                        "Project '%s' was not found."
-                                                .formatted(
-                                                        projectId)));
+                        .findById(
+                                projectId)
+                        .orElseThrow(
+                                () ->
+                                        new ResourceNotFoundException(
+                                                "Project '%s' was not found."
+                                                        .formatted(
+                                                                projectId)));
 
         List<ProjectMilestone> milestones =
                 milestoneRepository
                         .findByProjectIdOrderBySortOrderAscPlannedDateAsc(
                                 projectId);
 
-        List<MilestoneResponse> milestoneResponses =
+        List<MilestoneResponse>
+                milestoneResponses =
                 milestones.stream()
-                        .map(milestoneMapper::toResponse)
+                        .map(
+                                milestoneMapper::toResponse)
                         .toList();
 
-        List<ProgressUpdateResponse> progressUpdates =
+        List<ProgressUpdateResponse>
+                progressUpdates =
                 progressUpdateRepository
                         .findTop20ByProjectIdOrderByUpdateDateDescCreatedAtDesc(
                                 projectId)
                         .stream()
-                        .map(progressUpdateMapper::toResponse)
+                        .map(
+                                progressUpdateMapper::toResponse)
                         .toList();
 
+        CostIntelligenceResponse cost =
+                costControlService
+                        .get(
+                                projectId)
+                        .intelligence();
+
         return new ProjectCommandCenterResponse(
-                projectMapper.toResponse(project),
+                projectMapper.toResponse(
+                        project),
+
                 healthScoreService.calculate(
                         project,
-                        milestones),
+                        milestones,
+                        cost),
+
                 milestoneResponses,
                 progressUpdates);
     }

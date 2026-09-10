@@ -696,11 +696,13 @@ export function ProjectCommandCenterView({
             <span>Progress</span>
           </a>
 
-          <div className="command-nav-item muted">
+          <Link
+            href={`/projects/${projectId}/costs`}
+            className="command-nav-item"
+          >
             05
             <span>Cost control</span>
-            <small>Next</small>
-          </div>
+          </Link>
 
           <div className="command-nav-item muted">
             06
@@ -1434,7 +1436,7 @@ export function ProjectCommandCenterView({
               </div>
 
               <h2>
-                Project Health Score
+                Project Health Score v2
               </h2>
             </div>
 
@@ -1462,7 +1464,7 @@ export function ProjectCommandCenterView({
             <div className="health-components">
               <HealthComponent
                 label="Schedule performance"
-                weight="40%"
+                weight="30%"
                 value={
                   health.scheduleScore
                 }
@@ -1470,7 +1472,7 @@ export function ProjectCommandCenterView({
 
               <HealthComponent
                 label="Physical progress"
-                weight="35%"
+                weight="25%"
                 value={
                   health.progressScore
                 }
@@ -1478,9 +1480,17 @@ export function ProjectCommandCenterView({
 
               <HealthComponent
                 label="Milestone execution"
-                weight="25%"
+                weight="20%"
                 value={
                   health.milestoneScore
+                }
+              />
+
+              <HealthComponent
+                label="Cost performance"
+                weight="25%"
+                value={
+                  health.costScore
                 }
               />
             </div>

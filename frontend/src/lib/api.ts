@@ -161,3 +161,119 @@ export async function updateProjectMilestone(
     },
   );
 }
+
+export async function getProjectCostControl(
+  projectId: string,
+): Promise<
+  import("@/types/project").CostControl
+> {
+  return request<
+    import("@/types/project").CostControl
+  >(
+    `/projects/${projectId}/cost-control`,
+  );
+}
+
+export async function createProjectCostCode(
+  projectId: string,
+  input: import("@/types/project").CreateCostCodeInput,
+): Promise<
+  import("@/types/project").CostCode
+> {
+  return request<
+    import("@/types/project").CostCode
+  >(
+    `/projects/${projectId}/cost-control/cost-codes`,
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function createProjectBudgetLine(
+  projectId: string,
+  input: import("@/types/project").CreateBudgetLineInput,
+): Promise<
+  import("@/types/project").BudgetLine
+> {
+  return request<
+    import("@/types/project").BudgetLine
+  >(
+    `/projects/${projectId}/cost-control/budget-lines`,
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function updateProjectBudgetLine(
+  projectId: string,
+  budgetLineId: string,
+  input: import("@/types/project").UpdateBudgetLineInput,
+): Promise<
+  import("@/types/project").BudgetLine
+> {
+  return request<
+    import("@/types/project").BudgetLine
+  >(
+    `/projects/${projectId}/cost-control/budget-lines/${budgetLineId}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function createProjectCommitment(
+  projectId: string,
+  input: import("@/types/project").CreateCommitmentInput,
+): Promise<
+  import("@/types/project").Commitment
+> {
+  return request<
+    import("@/types/project").Commitment
+  >(
+    `/projects/${projectId}/cost-control/commitments`,
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function updateProjectCommitment(
+  projectId: string,
+  commitmentId: string,
+  input: import("@/types/project").UpdateCommitmentInput,
+): Promise<
+  import("@/types/project").Commitment
+> {
+  return request<
+    import("@/types/project").Commitment
+  >(
+    `/projects/${projectId}/cost-control/commitments/${commitmentId}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function createProjectActualCost(
+  projectId: string,
+  input: import("@/types/project").CreateActualCostInput,
+): Promise<
+  import("@/types/project").ActualCost
+> {
+  return request<
+    import("@/types/project").ActualCost
+  >(
+    `/projects/${projectId}/cost-control/actual-costs`,
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}
