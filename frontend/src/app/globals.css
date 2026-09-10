@@ -4850,3 +4850,496 @@ h2 {
     flex-direction: column;
   }
 }
+
+
+/* ==========================================================================
+   BUILDSIGHT STEP 8 — LOCAL AI PROJECT COPILOT
+   ========================================================================== */
+
+.copilot-shell {
+  min-height: 100vh;
+}
+
+.copilot-sidebar {
+  background: #121917;
+  bottom: 0;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  left: 0;
+  padding: 26px 21px 20px;
+  position: fixed;
+  top: 0;
+  width: 250px;
+  z-index: 30;
+}
+
+.copilot-main {
+  margin-left: 250px;
+  min-height: 100vh;
+  padding: 30px 35px 48px;
+}
+
+.copilot-topbar {
+  align-items: flex-end;
+  display: flex;
+  gap: 30px;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.copilot-topbar h1 {
+  font-size: 31px;
+}
+
+.copilot-topbar p {
+  color: #818b86;
+  font-size: 10px;
+  line-height: 1.55;
+  margin: 7px 0 0;
+  max-width: 700px;
+}
+
+.copilot-ready-badge {
+  align-items: center;
+  background: #f4eeee;
+  border-radius: 999px;
+  color: #8d554d;
+  display: flex;
+  font-size: 7px;
+  font-weight: 850;
+  gap: 6px;
+  padding: 8px 10px;
+}
+
+.copilot-ready-badge span {
+  background: #a85b50;
+  border-radius: 50%;
+  height: 6px;
+  width: 6px;
+}
+
+.copilot-ready-badge.ready {
+  background: #e3f2e8;
+  color: #347054;
+}
+
+.copilot-ready-badge.ready span {
+  background: #3b8a65;
+}
+
+.copilot-status-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+  margin-bottom: 18px;
+}
+
+.copilot-status-card {
+  background: white;
+  border: 1px solid #e1e5e0;
+  border-radius: 12px;
+  min-height: 130px;
+  padding: 17px;
+  position: relative;
+}
+
+.copilot-status-dot {
+  background: #bd6a5d;
+  border-radius: 50%;
+  height: 7px;
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  width: 7px;
+}
+
+.copilot-status-dot.good {
+  background: #4e9b75;
+}
+
+.copilot-status-card > span,
+.copilot-status-card > strong,
+.copilot-status-card > small {
+  display: block;
+}
+
+.copilot-status-card > span {
+  color: #858e8a;
+  font-size: 7px;
+  font-weight: 850;
+  letter-spacing: 0.1em;
+}
+
+.copilot-status-card > strong {
+  font-size: 13px;
+  line-height: 1.35;
+  margin-top: 24px;
+  overflow-wrap: anywhere;
+}
+
+.copilot-status-card > small {
+  color: #949c98;
+  font-size: 7px;
+  line-height: 1.45;
+  margin-top: 7px;
+}
+
+.copilot-setup-card,
+.copilot-index-card,
+.copilot-chat-card,
+.copilot-answer-card,
+.copilot-history-card {
+  background: white;
+  border: 1px solid #e1e5e0;
+  border-radius: 13px;
+  margin-bottom: 18px;
+  padding: 20px;
+}
+
+.copilot-setup-card {
+  align-items: center;
+  background: #fff9eb;
+  border-color: #ebdfbb;
+  display: flex;
+  gap: 25px;
+  justify-content: space-between;
+}
+
+.copilot-setup-card h2,
+.copilot-index-card h2,
+.copilot-chat-card h2,
+.copilot-answer-card h2,
+.copilot-history-card h2 {
+  font-size: 18px;
+}
+
+.copilot-setup-card p,
+.copilot-index-card p,
+.copilot-chat-card p {
+  color: #7e8984;
+  font-size: 8px;
+  line-height: 1.55;
+}
+
+.copilot-setup-card code {
+  background: #1b2420;
+  border-radius: 8px;
+  color: #d7ff45;
+  font-size: 9px;
+  padding: 13px 15px;
+}
+
+.copilot-index-card {
+  align-items: center;
+  display: flex;
+  gap: 25px;
+  justify-content: space-between;
+}
+
+.copilot-chat-card {
+  background: #121917;
+  border-color: #121917;
+  color: white;
+}
+
+.copilot-chat-card .eyebrow {
+  color: #d7ff45;
+}
+
+.copilot-chat-card p {
+  color: #7f8d87;
+}
+
+.copilot-chat-heading {
+  align-items: flex-start;
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
+}
+
+.copilot-chat-heading .secondary-button {
+  background: #1c2622;
+  border-color: #314039;
+  color: #cad2ce;
+}
+
+.copilot-question-form {
+  margin-top: 18px;
+}
+
+.copilot-question-form textarea {
+  background: #1a2420;
+  border: 1px solid #2d3a35;
+  border-radius: 10px;
+  color: white;
+  min-height: 110px;
+  outline: none;
+  padding: 13px;
+  resize: vertical;
+  width: 100%;
+}
+
+.copilot-question-form textarea:focus {
+  border-color: #5b6e65;
+}
+
+.copilot-question-form .primary-button {
+  background: #d7ff45;
+  border-color: #d7ff45;
+  color: #162019;
+  margin-top: 9px;
+}
+
+.copilot-not-ready {
+  background: #1a2420;
+  border-radius: 8px;
+  color: #a5afaa;
+  font-size: 8px;
+  margin-top: 12px;
+  padding: 10px;
+}
+
+.copilot-answer-card {
+  padding: 0;
+  overflow: hidden;
+}
+
+.copilot-answer-header {
+  align-items: center;
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.grounding-badge {
+  background: #f9e8e5;
+  border-radius: 999px;
+  color: #9a4a41;
+  font-size: 7px;
+  font-weight: 850;
+  padding: 7px 9px;
+}
+
+.grounding-badge.grounded {
+  background: #e2f3e9;
+  color: #317052;
+}
+
+.copilot-answer-question {
+  background: #f6f8f5;
+  border-bottom: 1px solid #e7ebe6;
+  border-top: 1px solid #e7ebe6;
+  color: #4d5853;
+  font-size: 9px;
+  font-weight: 750;
+  padding: 13px 20px;
+}
+
+.copilot-answer-text {
+  color: #343d39;
+  font-size: 10px;
+  line-height: 1.8;
+  padding: 20px;
+  white-space: pre-wrap;
+}
+
+.copilot-model-meta {
+  border-top: 1px solid #edf0ec;
+  color: #929a96;
+  display: flex;
+  font-size: 7px;
+  gap: 20px;
+  padding: 10px 20px;
+}
+
+.copilot-sources {
+  background: #f8faf7;
+  border-top: 1px solid #e6eae5;
+  display: grid;
+  gap: 9px;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  padding: 20px;
+}
+
+.copilot-sources-title {
+  color: #727c77;
+  font-size: 8px;
+  font-weight: 850;
+  grid-column: span 2;
+  letter-spacing: 0.08em;
+  margin-bottom: 2px;
+  text-transform: uppercase;
+}
+
+.copilot-sources article {
+  background: white;
+  border: 1px solid #e1e5e0;
+  border-radius: 9px;
+  padding: 13px;
+}
+
+.copilot-source-top {
+  align-items: center;
+  display: flex;
+  gap: 7px;
+}
+
+.copilot-source-top strong {
+  background: #17201c;
+  border-radius: 6px;
+  color: #d7ff45;
+  font-size: 7px;
+  padding: 4px 6px;
+}
+
+.copilot-source-top span {
+  color: #69736e;
+  font-size: 6px;
+  font-weight: 800;
+}
+
+.copilot-source-top small {
+  color: #969e9a;
+  font-size: 6px;
+  margin-left: auto;
+}
+
+.copilot-sources h3 {
+  font-size: 9px;
+  margin: 10px 0 0;
+}
+
+.copilot-sources h4 {
+  color: #6c7671;
+  font-size: 8px;
+  font-weight: 600;
+  margin: 4px 0 0;
+}
+
+.copilot-sources p {
+  color: #858e8a;
+  font-size: 7px;
+  line-height: 1.6;
+  margin: 9px 0 0;
+}
+
+.copilot-history-card {
+  padding: 0;
+  overflow: hidden;
+}
+
+.copilot-history-heading {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.copilot-history-heading > span {
+  color: #818b86;
+  font-size: 8px;
+}
+
+.copilot-history-list {
+  border-top: 1px solid #e6eae5;
+}
+
+.copilot-history-list article {
+  border-bottom: 1px solid #ecefec;
+  padding: 14px 20px;
+}
+
+.copilot-history-list article:last-child {
+  border-bottom: 0;
+}
+
+.copilot-history-list article > div {
+  display: flex;
+  gap: 15px;
+  justify-content: space-between;
+}
+
+.copilot-history-list strong {
+  font-size: 9px;
+}
+
+.copilot-history-list article > div > span {
+  color: #969e9a;
+  font-size: 7px;
+  white-space: nowrap;
+}
+
+.copilot-history-list p {
+  color: #818a86;
+  display: -webkit-box;
+  font-size: 8px;
+  line-height: 1.55;
+  margin: 7px 0 0;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.copilot-history-list footer {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.copilot-history-list footer span {
+  background: #f1f3f0;
+  border-radius: 999px;
+  color: #78817d;
+  font-size: 6px;
+  padding: 4px 6px;
+}
+
+.copilot-history-list footer .grounded-history {
+  background: #e4f3ea;
+  color: #347154;
+}
+
+@media (max-width: 1180px) {
+  .copilot-status-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .copilot-sidebar {
+    display: none;
+  }
+
+  .copilot-main {
+    margin-left: 0;
+    padding: 24px 18px 40px;
+  }
+}
+
+@media (max-width: 680px) {
+  .copilot-topbar,
+  .copilot-setup-card,
+  .copilot-index-card,
+  .copilot-chat-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .copilot-status-grid,
+  .copilot-sources {
+    grid-template-columns: 1fr;
+  }
+
+  .copilot-sources-title {
+    grid-column: span 1;
+  }
+
+  .copilot-setup-card code {
+    width: 100%;
+  }
+}

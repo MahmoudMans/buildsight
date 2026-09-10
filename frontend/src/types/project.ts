@@ -1191,3 +1191,60 @@ export interface CreateTransmittalInput {
   notes: string;
   revisionIds: string[];
 }
+
+export type AiSourceType =
+  | "PROJECT_FACT"
+  | "DOCUMENT_REVISION"
+  | "RFI";
+
+export interface AiStatus {
+  ollamaReachable: boolean;
+  chatModel: string;
+  chatModelAvailable: boolean;
+  embeddingModel: string;
+  embeddingModelAvailable: boolean;
+  embeddingDimensions: number;
+  indexedChunks: number;
+  lastIndexedAt: string | null;
+  ready: boolean;
+  message: string;
+}
+
+export interface AiIndexResult {
+  indexedSources: number;
+  indexedChunks: number;
+  embeddingModel: string;
+  embeddingDimensions: number;
+  indexedAt: string;
+}
+
+export interface AiSourceCitation {
+  citation: string;
+  sourceType: AiSourceType;
+  sourceId: string;
+  sourceParentId: string | null;
+  reference: string;
+  title: string;
+  snippet: string;
+  similarity: number;
+}
+
+export interface AiAnswer {
+  interactionId: string;
+  question: string;
+  answer: string;
+  grounded: boolean;
+  chatModel: string;
+  embeddingModel: string;
+  sources: AiSourceCitation[];
+  createdAt: string;
+}
+
+export interface AiHistoryItem {
+  id: string;
+  question: string;
+  answer: string;
+  grounded: boolean;
+  sourceCount: number;
+  createdAt: string;
+}

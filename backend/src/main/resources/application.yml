@@ -61,3 +61,11 @@ buildsight:
 
   ai:
     ollama-base-url: ${BUILDSIGHT_OLLAMA_BASE_URL:http://localhost:11434}
+
+    chat-model: ${BUILDSIGHT_AI_CHAT_MODEL:qwen3:4b}
+    embedding-model: ${BUILDSIGHT_AI_EMBEDDING_MODEL:qwen3-embedding:0.6b}
+    embedding-dimensions: ${BUILDSIGHT_AI_EMBEDDING_DIMENSIONS:1024}
+    retrieval-limit: ${BUILDSIGHT_AI_RETRIEVAL_LIMIT:8}
+    embedding-batch-size: ${BUILDSIGHT_AI_EMBEDDING_BATCH_SIZE:16}
+  ollama:
+    base-url: ${OLLAMA_BASE_URL:http://localhost:11434}

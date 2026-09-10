@@ -952,6 +952,16 @@ export function ProjectDocumentControlView({
             </span>
           </div>
 
+          <Link
+            href={`/projects/${projectId}/copilot`}
+            className="command-nav-item"
+          >
+            AI
+            <span>
+              Project Copilot
+            </span>
+          </Link>
+
           <a
             href="#documents"
             className="command-nav-item"

@@ -509,22 +509,6 @@ export function ProjectProcurementView({
       ],
     );
 
-  const evaluationPackages =
-    useMemo(
-      () =>
-        data?.packages.filter(
-          (
-            packageItem,
-          ) =>
-            packageItem.status
-            ===
-            "EVALUATION",
-        ) ?? [],
-      [
-        data,
-      ],
-    );
-
   const awardedPackages =
     useMemo(
       () =>

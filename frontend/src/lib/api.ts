@@ -914,3 +914,76 @@ export async function searchProjectDocuments(
     )}`,
   );
 }
+
+export async function getProjectAiStatus(
+  projectId: string,
+): Promise<
+  import("@/types/project").AiStatus
+> {
+  return request<
+    import("@/types/project").AiStatus
+  >(
+    `/projects/${projectId}/ai/status`,
+  );
+}
+
+export async function rebuildProjectAiIndex(
+  projectId: string,
+): Promise<
+  import("@/types/project").AiIndexResult
+> {
+  return request<
+    import("@/types/project").AiIndexResult
+  >(
+    `/projects/${projectId}/ai/index/rebuild`,
+    {
+      method: "POST",
+    },
+  );
+}
+
+export async function askProjectAi(
+  projectId: string,
+  question: string,
+): Promise<
+  import("@/types/project").AiAnswer
+> {
+  return request<
+    import("@/types/project").AiAnswer
+  >(
+    `/projects/${projectId}/ai/ask`,
+    {
+      method: "POST",
+      body: JSON.stringify({
+        question,
+      }),
+    },
+  );
+}
+
+export async function getProjectAiAttentionBrief(
+  projectId: string,
+): Promise<
+  import("@/types/project").AiAnswer
+> {
+  return request<
+    import("@/types/project").AiAnswer
+  >(
+    `/projects/${projectId}/ai/attention-brief`,
+    {
+      method: "POST",
+    },
+  );
+}
+
+export async function getProjectAiHistory(
+  projectId: string,
+): Promise<
+  import("@/types/project").AiHistoryItem[]
+> {
+  return request<
+    import("@/types/project").AiHistoryItem[]
+  >(
+    `/projects/${projectId}/ai/history`,
+  );
+}

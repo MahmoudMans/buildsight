@@ -735,6 +735,14 @@ export function ProjectCommandCenterView({
             09
             <span>Documents</span>
           </Link>
+
+          <Link
+            href={`/projects/${projectId}/copilot`}
+            className="command-nav-item"
+          >
+            10
+            <span>AI Copilot</span>
+          </Link>
         </nav>
 
         <div className="command-sidebar-footer">
