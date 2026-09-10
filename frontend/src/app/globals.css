@@ -772,3 +772,1014 @@ h2 {
     display: none;
   }
 }
+
+
+/* ==========================================================================
+   BUILDSIGHT — PROJECT COMMAND CENTER
+   STEP 2
+   ========================================================================== */
+
+.project-link {
+  color: #303735;
+  display: block;
+  font-size: 10px;
+  font-weight: 750;
+  text-decoration: none;
+}
+
+.project-link:hover {
+  text-decoration: underline;
+}
+
+.command-shell {
+  min-height: 100vh;
+}
+
+.command-sidebar {
+  background: #121917;
+  bottom: 0;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  left: 0;
+  padding: 26px 21px 20px;
+  position: fixed;
+  top: 0;
+  width: 250px;
+  z-index: 30;
+}
+
+.command-brand {
+  align-items: center;
+  color: inherit;
+  display: flex;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.command-brand strong,
+.command-brand span {
+  display: block;
+}
+
+.command-brand strong {
+  font-size: 15px;
+  letter-spacing: -0.02em;
+}
+
+.command-brand span {
+  color: #82908a;
+  font-size: 9px;
+  margin-top: 3px;
+}
+
+.command-nav-label {
+  color: #68746f;
+  font-size: 8px;
+  font-weight: 850;
+  letter-spacing: 0.15em;
+  margin: 40px 10px 13px;
+}
+
+.command-navigation {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.command-nav-item {
+  align-items: center;
+  border-radius: 8px;
+  color: #75827d;
+  display: flex;
+  font-family:
+    ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    monospace;
+  font-size: 8px;
+  gap: 11px;
+  padding: 10px 11px;
+  text-decoration: none;
+}
+
+.command-nav-item span {
+  color: #a8b2ae;
+  flex: 1;
+  font-family:
+    Inter,
+    ui-sans-serif,
+    sans-serif;
+  font-size: 11px;
+  font-weight: 650;
+}
+
+.command-nav-item small {
+  background: #212b27;
+  border-radius: 999px;
+  color: #6f7c77;
+  font-family:
+    Inter,
+    ui-sans-serif,
+    sans-serif;
+  font-size: 7px;
+  padding: 3px 6px;
+}
+
+.command-nav-item.active {
+  background: #212b27;
+  color: #d7ff45;
+}
+
+.command-nav-item.active span {
+  color: white;
+}
+
+.command-nav-item:hover:not(.muted) {
+  background: #19221f;
+}
+
+.command-nav-item.muted {
+  cursor: default;
+  opacity: 0.68;
+}
+
+.command-sidebar-footer {
+  background: #19231f;
+  border: 1px solid #26322e;
+  border-radius: 10px;
+  margin-top: auto;
+  padding: 13px;
+}
+
+.command-sidebar-footer span,
+.command-sidebar-footer strong,
+.command-sidebar-footer small {
+  display: block;
+}
+
+.command-sidebar-footer span {
+  color: #6e7c76;
+  font-size: 7px;
+  font-weight: 850;
+  letter-spacing: 0.13em;
+}
+
+.command-sidebar-footer strong {
+  font-size: 11px;
+  margin-top: 8px;
+}
+
+.command-sidebar-footer small {
+  color: #72807a;
+  font-size: 8px;
+  line-height: 1.5;
+  margin-top: 7px;
+}
+
+.command-main {
+  margin-left: 250px;
+  min-height: 100vh;
+  padding: 30px 35px 48px;
+}
+
+.command-topbar {
+  align-items: flex-end;
+  display: flex;
+  gap: 30px;
+  justify-content: space-between;
+  margin-bottom: 25px;
+}
+
+.back-link {
+  color: #7d8883;
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 700;
+  margin-bottom: 18px;
+  text-decoration: none;
+}
+
+.back-link:hover {
+  color: #303936;
+}
+
+.command-heading-row {
+  align-items: center;
+  display: flex;
+  gap: 16px;
+}
+
+.command-heading-row h1 {
+  font-size: 29px;
+}
+
+.command-client {
+  color: #818a86;
+  font-size: 10px;
+  margin: 6px 0 0;
+}
+
+.command-alert {
+  background: #fff2f0;
+  border: 1px solid #efcec8;
+  border-radius: 10px;
+  margin-bottom: 18px;
+  padding: 12px 15px;
+}
+
+.command-alert strong,
+.command-alert span {
+  display: block;
+}
+
+.command-alert strong {
+  color: #8d453d;
+  font-size: 10px;
+}
+
+.command-alert span {
+  color: #9c625c;
+  font-size: 9px;
+  margin-top: 4px;
+}
+
+.command-kpi-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+  margin-bottom: 18px;
+}
+
+.command-kpi {
+  background: white;
+  border: 1px solid #e3e6e2;
+  border-radius: 12px;
+  min-height: 155px;
+  padding: 17px;
+}
+
+.command-kpi-label {
+  color: #828c87;
+  font-size: 8px;
+  font-weight: 850;
+  letter-spacing: 0.1em;
+}
+
+.command-kpi-value {
+  font-size: 25px;
+  font-weight: 780;
+  letter-spacing: -0.045em;
+  margin-top: 19px;
+}
+
+.command-kpi-sub {
+  color: #929a97;
+  font-size: 8px;
+  margin-top: 7px;
+}
+
+.health-kpi {
+  background: #121917;
+  border-color: #121917;
+  color: white;
+}
+
+.health-kpi .command-kpi-label {
+  color: #80908a;
+}
+
+.health-kpi p {
+  color: #718079;
+  font-size: 8px;
+  margin: 11px 0 0;
+}
+
+.health-score-row {
+  align-items: center;
+  display: flex;
+  gap: 9px;
+  margin-top: 13px;
+}
+
+.health-score-number {
+  color: #d7ff45;
+  font-size: 42px;
+  font-weight: 820;
+  letter-spacing: -0.06em;
+}
+
+.health-score-max {
+  color: #77857f;
+  font-size: 8px;
+  margin-bottom: 5px;
+}
+
+.health-band,
+.schedule-risk {
+  border-radius: 999px;
+  display: inline-block;
+  font-size: 7px;
+  font-weight: 850;
+  padding: 5px 7px;
+}
+
+.health-healthy {
+  background: #dff4e8;
+  color: #287051;
+}
+
+.health-watch {
+  background: #fff0cd;
+  color: #8d6418;
+}
+
+.health-at-risk {
+  background: #fbe3df;
+  color: #9a493f;
+}
+
+.risk-on-track {
+  background: #e2f2e9;
+  color: #307254;
+}
+
+.risk-watch {
+  background: #fff2d9;
+  color: #91681f;
+}
+
+.risk-at-risk {
+  background: #fbe5e1;
+  color: #98493f;
+}
+
+.command-mini-progress {
+  background: #e8ebe7;
+  border-radius: 999px;
+  height: 5px;
+  margin-top: 14px;
+  overflow: hidden;
+}
+
+.command-mini-progress > div {
+  background: #364d44;
+  border-radius: inherit;
+  height: 100%;
+}
+
+.budget-difference {
+  color: #68736e;
+  font-size: 8px;
+  margin-top: 12px;
+}
+
+.command-two-column {
+  display: grid;
+  gap: 18px;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  margin-bottom: 18px;
+}
+
+.command-card,
+.command-edit-panel {
+  background: white;
+  border: 1px solid #e3e6e2;
+  border-radius: 13px;
+  margin-bottom: 18px;
+  padding: 20px;
+}
+
+.command-two-column .command-card {
+  margin-bottom: 0;
+}
+
+.command-card-header {
+  align-items: center;
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
+}
+
+.command-card-header h2 {
+  font-size: 18px;
+}
+
+.card-description {
+  color: #7c8681;
+  font-size: 9px;
+  line-height: 1.65;
+  margin: 15px 0 0;
+}
+
+.schedule-list {
+  margin-top: 17px;
+}
+
+.schedule-list > div {
+  align-items: center;
+  border-bottom: 1px solid #eef0ed;
+  display: flex;
+  justify-content: space-between;
+  padding: 11px 0;
+}
+
+.schedule-list > div:last-child {
+  border-bottom: 0;
+}
+
+.schedule-list span {
+  color: #7f8984;
+  font-size: 9px;
+}
+
+.schedule-list strong {
+  font-size: 9px;
+}
+
+.status-action-grid {
+  display: grid;
+  gap: 8px;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  margin-top: 18px;
+}
+
+.status-action-grid button {
+  background: #fafbf9;
+  border: 1px solid #dfe3de;
+  border-radius: 8px;
+  color: #4b5651;
+  font-size: 9px;
+  font-weight: 750;
+  min-height: 39px;
+  padding: 9px;
+}
+
+.status-action-grid button:hover {
+  background: #f1f4f0;
+  border-color: #cbd1cb;
+}
+
+.status-action-grid button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.workflow-terminal {
+  background: #f7f8f6;
+  border-radius: 8px;
+  color: #7d8783;
+  font-size: 9px;
+  grid-column: span 2;
+  padding: 13px;
+}
+
+.health-card {
+  scroll-margin-top: 20px;
+}
+
+.health-calculation-date {
+  color: #8b9490;
+  font-size: 8px;
+}
+
+.health-layout {
+  align-items: center;
+  display: grid;
+  gap: 35px;
+  grid-template-columns:
+    150px
+    minmax(300px, 1.5fr)
+    minmax(180px, 0.8fr);
+  margin-top: 25px;
+}
+
+.health-ring {
+  align-items: center;
+  aspect-ratio: 1;
+  background:
+    radial-gradient(
+      circle at center,
+      white 55%,
+      transparent 56%
+    ),
+    conic-gradient(
+      #263c34 0deg,
+      #263c34 305deg,
+      #e7eae6 305deg,
+      #e7eae6 360deg
+    );
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  max-width: 135px;
+}
+
+.health-ring > div {
+  text-align: center;
+}
+
+.health-ring strong {
+  display: block;
+  font-size: 31px;
+  letter-spacing: -0.05em;
+}
+
+.health-ring span {
+  color: #89928e;
+  font-size: 8px;
+}
+
+.health-components {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.health-component-header {
+  align-items: flex-end;
+  display: flex;
+  justify-content: space-between;
+}
+
+.health-component-header strong,
+.health-component-header span {
+  display: block;
+}
+
+.health-component-header strong {
+  font-size: 9px;
+}
+
+.health-component-header span {
+  color: #939b98;
+  font-size: 7px;
+  margin-top: 3px;
+}
+
+.health-component-header b {
+  font-size: 10px;
+}
+
+.health-component-track {
+  background: #ebeeea;
+  border-radius: 999px;
+  height: 6px;
+  margin-top: 7px;
+  overflow: hidden;
+}
+
+.health-component-track div {
+  background: #31483f;
+  border-radius: inherit;
+  height: 100%;
+}
+
+.health-signals {
+  background: #f8f9f7;
+  border: 1px solid #e7eae6;
+  border-radius: 10px;
+  padding: 5px 13px;
+}
+
+.health-signals > div {
+  align-items: center;
+  border-bottom: 1px solid #e9ece8;
+  display: flex;
+  justify-content: space-between;
+  padding: 11px 0;
+}
+
+.health-signals > div:last-child {
+  border-bottom: 0;
+}
+
+.health-signals span {
+  color: #818b86;
+  font-size: 8px;
+}
+
+.health-signals strong {
+  font-size: 9px;
+}
+
+.health-explanation {
+  border-top: 1px solid #eceeeb;
+  color: #858f8a;
+  font-size: 8px;
+  line-height: 1.6;
+  margin: 20px 0 0;
+  padding-top: 13px;
+}
+
+.command-form,
+.milestone-form {
+  border-top: 1px solid #e7eae6;
+  display: grid;
+  gap: 15px;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  margin-top: 18px;
+  padding-top: 18px;
+}
+
+.command-form label,
+.milestone-form label,
+.progress-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.command-form label > span,
+.milestone-form label > span,
+.progress-form label > span {
+  color: #69736f;
+  font-size: 9px;
+  font-weight: 750;
+}
+
+.command-form input,
+.command-form textarea,
+.milestone-form input,
+.milestone-form textarea,
+.progress-form input,
+.progress-form textarea {
+  background: #fbfcfa;
+  border: 1px solid #dce1dc;
+  border-radius: 8px;
+  color: #252c29;
+  outline: none;
+  padding: 10px 11px;
+  transition: 130ms ease;
+  width: 100%;
+}
+
+.command-form input,
+.milestone-form input,
+.progress-form input {
+  height: 40px;
+}
+
+.command-form textarea,
+.milestone-form textarea,
+.progress-form textarea {
+  resize: vertical;
+}
+
+.command-form input:focus,
+.command-form textarea:focus,
+.milestone-form input:focus,
+.milestone-form textarea:focus,
+.progress-form input:focus,
+.progress-form textarea:focus {
+  background: white;
+  border-color: #96a19b;
+  box-shadow:
+    0 0 0 3px
+    rgba(33, 45, 41, 0.04);
+}
+
+.command-form small {
+  color: #a54c43;
+  font-size: 8px;
+}
+
+.milestone-form {
+  background: #fafbf9;
+  border: 1px solid #e5e8e4;
+  border-radius: 10px;
+  margin-top: 18px;
+  padding: 17px;
+}
+
+.milestone-table-wrapper {
+  margin: 18px -20px -20px;
+  overflow-x: auto;
+}
+
+.milestone-table {
+  border-collapse: collapse;
+  min-width: 850px;
+  width: 100%;
+}
+
+.milestone-table th {
+  background: #fafbf9;
+  border-bottom: 1px solid #e4e7e3;
+  border-top: 1px solid #e4e7e3;
+  color: #87908c;
+  font-size: 7px;
+  font-weight: 850;
+  letter-spacing: 0.1em;
+  padding: 10px 15px;
+  text-align: left;
+}
+
+.milestone-table td {
+  border-bottom: 1px solid #edf0ec;
+  color: #59625e;
+  font-size: 8px;
+  padding: 13px 15px;
+  vertical-align: middle;
+}
+
+.milestone-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.milestone-name {
+  max-width: 300px;
+}
+
+.milestone-name strong,
+.milestone-name span {
+  display: block;
+}
+
+.milestone-name strong {
+  color: #303835;
+  font-size: 9px;
+}
+
+.milestone-name span {
+  color: #8d9692;
+  font-size: 8px;
+  line-height: 1.45;
+  margin-top: 4px;
+}
+
+.milestone-status {
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 7px;
+  font-weight: 800;
+  outline: none;
+  padding: 6px 8px;
+}
+
+.milestone-planned {
+  background: #eaf1f5;
+  color: #466d82;
+}
+
+.milestone-in-progress {
+  background: #e9f4ed;
+  color: #387055;
+}
+
+.milestone-completed {
+  background: #e7f2e1;
+  color: #55783f;
+}
+
+.milestone-blocked {
+  background: #f9e5e2;
+  color: #96483e;
+}
+
+.progress-layout {
+  align-items: stretch;
+}
+
+.progress-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.percentage-input {
+  position: relative;
+}
+
+.percentage-input > span {
+  color: #717b76;
+  font-size: 10px;
+  position: absolute;
+  right: 12px;
+  top: 13px;
+}
+
+.history-count {
+  align-items: center;
+  background: #f2f4f1;
+  border-radius: 999px;
+  color: #68726e;
+  display: flex;
+  font-size: 8px;
+  height: 25px;
+  justify-content: center;
+  width: 25px;
+}
+
+.progress-history {
+  margin-top: 18px;
+}
+
+.progress-history-row {
+  display: flex;
+  min-height: 63px;
+}
+
+.history-marker {
+  align-items: center;
+  display: flex;
+  flex: 0 0 23px;
+  flex-direction: column;
+}
+
+.history-marker span {
+  background: #3a5248;
+  border: 3px solid #e8eeeb;
+  border-radius: 100%;
+  height: 11px;
+  width: 11px;
+}
+
+.history-marker i {
+  background: #e1e5e1;
+  flex: 1;
+  margin: 3px 0;
+  width: 1px;
+}
+
+.history-content {
+  flex: 1;
+  padding: 0 0 19px 8px;
+}
+
+.history-heading {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.history-heading strong {
+  font-size: 10px;
+}
+
+.history-heading span {
+  color: #8e9793;
+  font-size: 8px;
+}
+
+.history-content p {
+  color: #747f7a;
+  font-size: 8px;
+  line-height: 1.55;
+  margin: 5px 0 0;
+}
+
+.empty-history {
+  color: #8a9490;
+  font-size: 9px;
+  padding: 15px 0;
+}
+
+.command-footer {
+  color: #9aa29e;
+  display: flex;
+  font-size: 7px;
+  justify-content: space-between;
+  padding: 8px 3px 0;
+}
+
+.command-loading,
+.command-error-page {
+  align-items: center;
+  background: #f3f4f1;
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.command-loading {
+  flex-direction: column;
+  gap: 13px;
+}
+
+.loading-mark {
+  align-items: center;
+  background: #d7ff45;
+  border-radius: 12px;
+  display: flex;
+  font-size: 25px;
+  font-weight: 900;
+  height: 52px;
+  justify-content: center;
+  width: 52px;
+}
+
+.command-loading strong {
+  color: #616b66;
+  font-size: 10px;
+}
+
+.command-error-card {
+  background: white;
+  border: 1px solid #e0e4df;
+  border-radius: 14px;
+  max-width: 420px;
+  padding: 28px;
+  width: calc(100% - 30px);
+}
+
+.command-error-card h1 {
+  font-size: 25px;
+  margin-top: 20px;
+}
+
+.command-error-card p {
+  color: #75807b;
+  font-size: 10px;
+  line-height: 1.6;
+}
+
+.command-error-actions {
+  display: flex;
+  gap: 9px;
+  margin-top: 20px;
+}
+
+.secondary-link-button {
+  align-items: center;
+  background: white;
+  border: 1px solid #d3d8d3;
+  border-radius: 9px;
+  color: #19201e;
+  display: inline-flex;
+  font-size: 11px;
+  font-weight: 800;
+  justify-content: center;
+  padding: 10px 15px;
+  text-decoration: none;
+}
+
+@media (max-width: 1180px) {
+  .command-kpi-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .health-layout {
+    grid-template-columns:
+      130px 1fr;
+  }
+
+  .health-signals {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 900px) {
+  .command-sidebar {
+    display: none;
+  }
+
+  .command-main {
+    margin-left: 0;
+    padding: 24px 18px 40px;
+  }
+}
+
+@media (max-width: 680px) {
+  .command-kpi-grid,
+  .command-two-column,
+  .command-form,
+  .milestone-form,
+  .health-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .health-signals {
+    grid-column: span 1;
+  }
+
+  .field-wide,
+  .field-full {
+    grid-column: span 1;
+  }
+
+  .command-topbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .command-heading-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .status-action-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .workflow-terminal {
+    grid-column: span 1;
+  }
+}

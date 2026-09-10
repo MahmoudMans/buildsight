@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import {
   FormEvent,
   useEffect,
@@ -664,7 +666,12 @@ export function BuildSightDashboard() {
                           </div>
 
                           <div>
-                            <strong>{project.name}</strong>
+                            <Link
+                              className="project-link"
+                              href={`/projects/${project.id}`}
+                            >
+                              {project.name}
+                            </Link>
                             <span>{project.code}</span>
                           </div>
                         </div>

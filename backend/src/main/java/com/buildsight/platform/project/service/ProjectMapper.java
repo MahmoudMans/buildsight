@@ -44,6 +44,7 @@ public class ProjectMapper {
                 project.getApprovedBudget(),
                 project.getPlannedStartDate(),
                 project.getPlannedEndDate(),
+                project.getForecastEndDate(),
                 project.getActualStartDate(),
                 project.getActualEndDate(),
                 project.getStatus(),
@@ -53,12 +54,15 @@ public class ProjectMapper {
                 project.getUpdatedAt());
     }
 
-    private String normalizeNullable(String value) {
+    public String normalizeNullable(String value) {
         if (value == null) {
             return null;
         }
 
         String trimmed = value.trim();
-        return trimmed.isBlank() ? null : trimmed;
+
+        return trimmed.isBlank()
+                ? null
+                : trimmed;
     }
 }

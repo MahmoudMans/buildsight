@@ -1,6 +1,13 @@
 import type {
+  ChangeProjectStatusInput,
+  CreateMilestoneInput,
   CreateProjectInput,
+  Milestone,
   Project,
+  ProjectCommandCenter,
+  RecordProgressInput,
+  UpdateMilestoneInput,
+  UpdateProjectInput,
 } from "@/types/project";
 
 const API_BASE_URL =
@@ -22,6 +29,7 @@ export class BuildSightApiError extends Error {
     fieldErrors: Record<string, string> = {},
   ) {
     super(message);
+
     this.name = "BuildSightApiError";
     this.status = status;
     this.fieldErrors = fieldErrors;
@@ -32,27 +40,32 @@ async function request<T>(
   path: string,
   init?: RequestInit,
 ): Promise<T> {
-  const response = await fetch(`${API_BASE_URL}${path}`, {
-    ...init,
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      ...init?.headers,
+  const response = await fetch(
+    `${API_BASE_URL}${path}`,
+    {
+      ...init,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        ...init?.headers,
+      },
     },
-  });
+  );
 
   if (!response.ok) {
     let body: ApiErrorBody = {};
 
     try {
-      body = (await response.json()) as ApiErrorBody;
+      body =
+        (await response.json()) as ApiErrorBody;
     } catch {
       body = {};
     }
 
     throw new BuildSightApiError(
       response.status,
-      body.message ?? `Request failed with status ${response.status}.`,
+      body.message ??
+        `Request failed with status ${response.status}.`,
       body.fieldErrors ?? {},
     );
   }
@@ -60,7 +73,9 @@ async function request<T>(
   return (await response.json()) as T;
 }
 
-export async function getProjects(): Promise<Project[]> {
+export async function getProjects(): Promise<
+  Project[]
+> {
   return request<Project[]>("/projects");
 }
 
@@ -71,4 +86,78 @@ export async function createProject(
     method: "POST",
     body: JSON.stringify(input),
   });
+}
+
+export async function getProjectCommandCenter(
+  projectId: string,
+): Promise<ProjectCommandCenter> {
+  return request<ProjectCommandCenter>(
+    `/projects/${projectId}/command-center`,
+  );
+}
+
+export async function updateProject(
+  projectId: string,
+  input: UpdateProjectInput,
+): Promise<Project> {
+  return request<Project>(
+    `/projects/${projectId}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function changeProjectStatus(
+  projectId: string,
+  input: ChangeProjectStatusInput,
+): Promise<Project> {
+  return request<Project>(
+    `/projects/${projectId}/status`,
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function recordProjectProgress(
+  projectId: string,
+  input: RecordProgressInput,
+): Promise<Project> {
+  return request<Project>(
+    `/projects/${projectId}/progress`,
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function createProjectMilestone(
+  projectId: string,
+  input: CreateMilestoneInput,
+): Promise<Milestone> {
+  return request<Milestone>(
+    `/projects/${projectId}/milestones`,
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function updateProjectMilestone(
+  projectId: string,
+  milestoneId: string,
+  input: UpdateMilestoneInput,
+): Promise<Milestone> {
+  return request<Milestone>(
+    `/projects/${projectId}/milestones/${milestoneId}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(input),
+    },
+  );
 }

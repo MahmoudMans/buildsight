@@ -18,6 +18,7 @@ public record ProjectResponse(
         BigDecimal approvedBudget,
         LocalDate plannedStartDate,
         LocalDate plannedEndDate,
+        LocalDate forecastEndDate,
         LocalDate actualStartDate,
         LocalDate actualEndDate,
         ProjectStatus status,

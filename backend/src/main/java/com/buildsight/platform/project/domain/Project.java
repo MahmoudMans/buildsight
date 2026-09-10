@@ -59,6 +59,9 @@ public class Project {
     @Column(name = "planned_end_date", nullable = false)
     private LocalDate plannedEndDate;
 
+    @Column(name = "forecast_end_date", nullable = false)
+    private LocalDate forecastEndDate;
+
     @Column(name = "actual_start_date")
     private LocalDate actualStartDate;
 
@@ -113,6 +116,7 @@ public class Project {
         this.approvedBudget = Objects.requireNonNull(approvedBudget);
         this.plannedStartDate = Objects.requireNonNull(plannedStartDate);
         this.plannedEndDate = Objects.requireNonNull(plannedEndDate);
+        this.forecastEndDate = plannedEndDate;
         this.status = Objects.requireNonNull(status);
         this.physicalProgressPercentage =
                 Objects.requireNonNull(physicalProgressPercentage);
@@ -145,6 +149,70 @@ public class Project {
                 plannedEndDate,
                 status,
                 physicalProgressPercentage);
+    }
+
+    public void updateDetails(
+            String name,
+            String description,
+            String clientName,
+            String location,
+            BigDecimal contractValue,
+            BigDecimal approvedBudget,
+            LocalDate plannedStartDate,
+            LocalDate plannedEndDate,
+            LocalDate forecastEndDate) {
+
+        this.name = Objects.requireNonNull(name);
+        this.description = description;
+        this.clientName = Objects.requireNonNull(clientName);
+        this.location = Objects.requireNonNull(location);
+        this.contractValue = Objects.requireNonNull(contractValue);
+        this.approvedBudget = Objects.requireNonNull(approvedBudget);
+        this.plannedStartDate = Objects.requireNonNull(plannedStartDate);
+        this.plannedEndDate = Objects.requireNonNull(plannedEndDate);
+        this.forecastEndDate = Objects.requireNonNull(forecastEndDate);
+    }
+
+    public void changeStatus(
+            ProjectStatus targetStatus,
+            LocalDate effectiveDate) {
+
+        this.status = Objects.requireNonNull(targetStatus);
+
+        if (targetStatus == ProjectStatus.ACTIVE
+                && actualStartDate == null) {
+
+            actualStartDate =
+                    Objects.requireNonNull(effectiveDate);
+        }
+
+        if (targetStatus == ProjectStatus.COMPLETED) {
+            if (actualStartDate == null) {
+                actualStartDate =
+                        Objects.requireNonNull(effectiveDate);
+            }
+
+            actualEndDate =
+                    Objects.requireNonNull(effectiveDate);
+
+            physicalProgressPercentage =
+                    new BigDecimal("100.00");
+        }
+    }
+
+    public void recordProgress(
+            BigDecimal progressPercentage,
+            LocalDate effectiveDate) {
+
+        this.physicalProgressPercentage =
+                Objects.requireNonNull(progressPercentage);
+
+        if (progressPercentage.compareTo(BigDecimal.ZERO) > 0
+                && actualStartDate == null) {
+
+            actualStartDate =
+                    Objects.requireNonNull(effectiveDate);
+        }
     }
 
     @PrePersist
@@ -201,6 +269,10 @@ public class Project {
 
     public LocalDate getPlannedEndDate() {
         return plannedEndDate;
+    }
+
+    public LocalDate getForecastEndDate() {
+        return forecastEndDate;
     }
 
     public LocalDate getActualStartDate() {
