@@ -704,11 +704,13 @@ export function ProjectCommandCenterView({
             <span>Cost control</span>
           </Link>
 
-          <div className="command-nav-item muted">
+          <Link
+            href={`/projects/${projectId}/procurement`}
+            className="command-nav-item"
+          >
             06
             <span>Procurement</span>
-            <small>Next</small>
-          </div>
+          </Link>
 
           <div className="command-nav-item muted">
             07
@@ -1436,7 +1438,7 @@ export function ProjectCommandCenterView({
               </div>
 
               <h2>
-                Project Health Score v2
+                Project Health Score v3
               </h2>
             </div>
 
@@ -1464,7 +1466,7 @@ export function ProjectCommandCenterView({
             <div className="health-components">
               <HealthComponent
                 label="Schedule performance"
-                weight="30%"
+                weight="25%"
                 value={
                   health.scheduleScore
                 }
@@ -1472,7 +1474,7 @@ export function ProjectCommandCenterView({
 
               <HealthComponent
                 label="Physical progress"
-                weight="25%"
+                weight="20%"
                 value={
                   health.progressScore
                 }
@@ -1480,7 +1482,7 @@ export function ProjectCommandCenterView({
 
               <HealthComponent
                 label="Milestone execution"
-                weight="20%"
+                weight="15%"
                 value={
                   health.milestoneScore
                 }
@@ -1488,9 +1490,17 @@ export function ProjectCommandCenterView({
 
               <HealthComponent
                 label="Cost performance"
-                weight="25%"
+                weight="20%"
                 value={
                   health.costScore
+                }
+              />
+
+              <HealthComponent
+                label="Procurement performance"
+                weight="20%"
+                value={
+                  health.procurementScore
                 }
               />
             </div>

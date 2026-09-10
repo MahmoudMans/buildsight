@@ -277,3 +277,155 @@ export async function createProjectActualCost(
     },
   );
 }
+
+export async function getProjectProcurement(
+  projectId: string,
+): Promise<
+  import("@/types/project").ProcurementControl
+> {
+  return request<
+    import("@/types/project").ProcurementControl
+  >(
+    `/projects/${projectId}/procurement`,
+  );
+}
+
+export async function createSupplier(
+  input: import("@/types/project").CreateSupplierInput,
+): Promise<
+  import("@/types/project").Supplier
+> {
+  return request<
+    import("@/types/project").Supplier
+  >(
+    "/suppliers",
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function updateSupplier(
+  supplierId: string,
+  input: import("@/types/project").UpdateSupplierInput,
+): Promise<
+  import("@/types/project").Supplier
+> {
+  return request<
+    import("@/types/project").Supplier
+  >(
+    `/suppliers/${supplierId}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function createProcurementPackage(
+  projectId: string,
+  input: import("@/types/project").CreateProcurementPackageInput,
+): Promise<
+  import("@/types/project").ProcurementPackage
+> {
+  return request<
+    import("@/types/project").ProcurementPackage
+  >(
+    `/projects/${projectId}/procurement/packages`,
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function updateProcurementPackage(
+  projectId: string,
+  packageId: string,
+  input: import("@/types/project").UpdateProcurementPackageInput,
+): Promise<
+  import("@/types/project").ProcurementPackage
+> {
+  return request<
+    import("@/types/project").ProcurementPackage
+  >(
+    `/projects/${projectId}/procurement/packages/${packageId}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function createProcurementBid(
+  projectId: string,
+  packageId: string,
+  input: import("@/types/project").CreateProcurementBidInput,
+): Promise<
+  import("@/types/project").ProcurementBid
+> {
+  return request<
+    import("@/types/project").ProcurementBid
+  >(
+    `/projects/${projectId}/procurement/packages/${packageId}/bids`,
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function updateProcurementBid(
+  projectId: string,
+  packageId: string,
+  bidId: string,
+  input: import("@/types/project").UpdateProcurementBidInput,
+): Promise<
+  import("@/types/project").ProcurementBid
+> {
+  return request<
+    import("@/types/project").ProcurementBid
+  >(
+    `/projects/${projectId}/procurement/packages/${packageId}/bids/${bidId}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function awardProcurementPackage(
+  projectId: string,
+  packageId: string,
+  input: import("@/types/project").AwardProcurementPackageInput,
+): Promise<
+  import("@/types/project").ProcurementPackage
+> {
+  return request<
+    import("@/types/project").ProcurementPackage
+  >(
+    `/projects/${projectId}/procurement/packages/${packageId}/award`,
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function createSupplierPerformanceEvaluation(
+  projectId: string,
+  input: import("@/types/project").CreateSupplierPerformanceEvaluationInput,
+): Promise<
+  import("@/types/project").SupplierPerformanceEvaluation
+> {
+  return request<
+    import("@/types/project").SupplierPerformanceEvaluation
+  >(
+    `/projects/${projectId}/procurement/performance-evaluations`,
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}

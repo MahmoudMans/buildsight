@@ -131,6 +131,7 @@ export interface ProjectHealthScore {
   healthBand: ProjectHealthBand;
   scheduleRisk: ScheduleRiskLevel;
   costRisk: CostRiskLevel;
+  procurementRisk: ProcurementRiskLevel;
   scheduleVarianceDays: number;
   expectedProgressPercentage: number;
   actualProgressPercentage: number;
@@ -141,6 +142,7 @@ export interface ProjectHealthScore {
   progressScore: number;
   milestoneScore: number;
   costScore: number;
+  procurementScore: number;
   explanation: string;
 }
 
@@ -314,4 +316,233 @@ export interface CreateActualCostInput {
   description: string;
   amount: number;
   costDate: string;
+}
+
+export type SupplierType =
+  | "SUPPLIER"
+  | "SUBCONTRACTOR"
+  | "CONSULTANT";
+
+export type SupplierQualificationStatus =
+  | "PENDING"
+  | "QUALIFIED"
+  | "CONDITIONAL"
+  | "SUSPENDED"
+  | "REJECTED";
+
+export type ProcurementPackageStatus =
+  | "PLANNING"
+  | "TENDERING"
+  | "EVALUATION"
+  | "AWARDED"
+  | "CLOSED"
+  | "CANCELLED";
+
+export type ProcurementBidStatus =
+  | "RECEIVED"
+  | "SHORTLISTED"
+  | "REJECTED"
+  | "SELECTED";
+
+export type ProcurementRiskLevel =
+  | "NO_DATA"
+  | "ON_TRACK"
+  | "WATCH"
+  | "AT_RISK";
+
+export interface Supplier {
+  id: string;
+  code: string;
+  name: string;
+  supplierType: SupplierType;
+  trade: string | null;
+  country: string | null;
+  contactPerson: string | null;
+  email: string | null;
+  qualificationStatus: SupplierQualificationStatus;
+  version: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ProcurementPackage {
+  id: string;
+  projectId: string;
+  costCodeId: string;
+  costCode: string;
+  costCodeName: string;
+  reference: string;
+  title: string;
+  description: string | null;
+  estimatedValue: number;
+  plannedIssueDate: string;
+  actualIssueDate: string | null;
+  bidDueDate: string;
+  awardDueDate: string;
+  forecastAwardDate: string;
+  requiredOnSiteDate: string;
+  status: ProcurementPackageStatus;
+  awardedSupplierId: string | null;
+  awardedSupplierName: string | null;
+  awardedValue: number | null;
+  awardDate: string | null;
+  commitmentId: string | null;
+  commitmentReference: string | null;
+  bidCount: number;
+  version: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ProcurementBid {
+  id: string;
+  procurementPackageId: string;
+  packageReference: string;
+  supplierId: string;
+  supplierCode: string;
+  supplierName: string;
+  supplierQualificationStatus: SupplierQualificationStatus;
+  bidAmount: number;
+  submittedDate: string;
+  technicalScore: number;
+  commercialScore: number;
+  combinedScore: number;
+  deliveryDays: number;
+  status: ProcurementBidStatus;
+  notes: string | null;
+  version: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface SupplierPerformanceEvaluation {
+  id: string;
+  projectId: string;
+  supplierId: string;
+  supplierName: string;
+  procurementPackageId: string | null;
+  packageReference: string | null;
+  evaluationDate: string;
+  qualityScore: number;
+  deliveryScore: number;
+  safetyScore: number;
+  commercialScore: number;
+  overallScore: number;
+  comments: string | null;
+  createdAt: string;
+}
+
+export interface ProcurementIntelligence {
+  totalPackages: number;
+  openPackages: number;
+  awardedPackages: number;
+  delayedPackages: number;
+  conditionalAwards: number;
+  lowPerformanceEvaluations: number;
+  packagesWithCompetitiveCoverage: number;
+  totalEstimatedValue: number;
+  totalAwardedValue: number;
+  competitionCoveragePercentage: number;
+  averageSupplierPerformance: number;
+  maximumAwardDelayDays: number;
+  procurementScore: number;
+  procurementRisk: ProcurementRiskLevel;
+  explanation: string;
+}
+
+export interface ProcurementControl {
+  project: Project;
+  intelligence: ProcurementIntelligence;
+  costCodes: CostCode[];
+  suppliers: Supplier[];
+  packages: ProcurementPackage[];
+  bids: ProcurementBid[];
+  evaluations: SupplierPerformanceEvaluation[];
+}
+
+export interface CreateSupplierInput {
+  code: string;
+  name: string;
+  supplierType: SupplierType;
+  trade: string;
+  country: string;
+  contactPerson: string;
+  email: string;
+  qualificationStatus: SupplierQualificationStatus;
+}
+
+export interface UpdateSupplierInput {
+  version: number;
+  name: string;
+  supplierType: SupplierType;
+  trade: string;
+  country: string;
+  contactPerson: string;
+  email: string;
+  qualificationStatus: SupplierQualificationStatus;
+}
+
+export interface CreateProcurementPackageInput {
+  costCodeId: string;
+  reference: string;
+  title: string;
+  description: string;
+  estimatedValue: number;
+  plannedIssueDate: string;
+  bidDueDate: string;
+  awardDueDate: string;
+  forecastAwardDate: string | null;
+  requiredOnSiteDate: string;
+}
+
+export interface UpdateProcurementPackageInput {
+  version: number;
+  title: string;
+  description: string;
+  estimatedValue: number;
+  plannedIssueDate: string;
+  bidDueDate: string;
+  awardDueDate: string;
+  forecastAwardDate: string;
+  requiredOnSiteDate: string;
+  status: ProcurementPackageStatus;
+}
+
+export interface CreateProcurementBidInput {
+  supplierId: string;
+  bidAmount: number;
+  submittedDate: string;
+  technicalScore: number;
+  commercialScore: number;
+  deliveryDays: number;
+  notes: string;
+}
+
+export interface UpdateProcurementBidInput {
+  version: number;
+  bidAmount: number;
+  submittedDate: string;
+  technicalScore: number;
+  commercialScore: number;
+  deliveryDays: number;
+  status: ProcurementBidStatus;
+  notes: string;
+}
+
+export interface AwardProcurementPackageInput {
+  version: number;
+  selectedBidId: string;
+  awardedValue: number;
+  awardDate: string;
+}
+
+export interface CreateSupplierPerformanceEvaluationInput {
+  supplierId: string;
+  procurementPackageId: string | null;
+  evaluationDate: string;
+  qualityScore: number;
+  deliveryScore: number;
+  safetyScore: number;
+  commercialScore: number;
+  comments: string;
 }

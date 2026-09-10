@@ -6,6 +6,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import com.buildsight.platform.cost.api.CostIntelligenceResponse;
+import com.buildsight.platform.procurement.api.ProcurementIntelligenceResponse;
 import com.buildsight.platform.project.api.ProjectHealthBand;
 import com.buildsight.platform.project.api.ProjectHealthScoreResponse;
 import com.buildsight.platform.project.api.ScheduleRiskLevel;
@@ -20,32 +21,38 @@ public class ProjectHealthScoreService {
 
     private static final double
             SCHEDULE_WEIGHT =
-            0.30;
+            0.25;
 
     private static final double
             PROGRESS_WEIGHT =
-            0.25;
-
-    private static final double
-            MILESTONE_WEIGHT =
             0.20;
 
     private static final double
+            MILESTONE_WEIGHT =
+            0.15;
+
+    private static final double
             COST_WEIGHT =
-            0.25;
+            0.20;
+
+    private static final double
+            PROCUREMENT_WEIGHT =
+            0.20;
 
     private final Clock clock;
 
     public ProjectHealthScoreService(
             Clock clock) {
 
-        this.clock = clock;
+        this.clock =
+                clock;
     }
 
     public ProjectHealthScoreResponse calculate(
             Project project,
             List<ProjectMilestone> milestones,
-            CostIntelligenceResponse cost) {
+            CostIntelligenceResponse cost,
+            ProcurementIntelligenceResponse procurement) {
 
         LocalDate today =
                 LocalDate.now(
@@ -71,7 +78,7 @@ public class ProjectHealthScoreService {
                         .getPhysicalProgressPercentage()
                         .doubleValue();
 
-        double progressVariancePoints =
+        double progressVariance =
                 actualProgress
                         - expectedProgress;
 
@@ -88,8 +95,7 @@ public class ProjectHealthScoreService {
                                                 != MilestoneStatus.COMPLETED)
                         .filter(
                                 milestone ->
-                                        milestone
-                                                .getForecastDate()
+                                        milestone.getForecastDate()
                                                 .isBefore(
                                                         today))
                         .count();
@@ -108,41 +114,41 @@ public class ProjectHealthScoreService {
                         overdueMilestones,
                         blockedMilestones);
 
-        double costScore =
-                cost.costScore();
-
-        double weightedScore =
+        double overall =
                 scheduleScore
                                 * SCHEDULE_WEIGHT
                         + progressScore
                                 * PROGRESS_WEIGHT
                         + milestoneScore
                                 * MILESTONE_WEIGHT
-                        + costScore
-                                * COST_WEIGHT;
+                        + cost.costScore()
+                                * COST_WEIGHT
+                        + procurement.procurementScore()
+                                * PROCUREMENT_WEIGHT;
 
-        int overallScore =
+        int score =
                 (int) Math.round(
                         clamp(
-                                weightedScore,
+                                overall,
                                 0,
                                 100));
 
         return new ProjectHealthScoreResponse(
                 today,
-                overallScore,
+                score,
                 healthBand(
-                        overallScore),
+                        score),
                 scheduleRisk(
                         scheduleVarianceDays),
                 cost.costRisk(),
+                procurement.procurementRisk(),
                 scheduleVarianceDays,
                 roundOne(
                         expectedProgress),
                 roundOne(
                         actualProgress),
                 roundOne(
-                        progressVariancePoints),
+                        progressVariance),
                 overdueMilestones,
                 blockedMilestones,
                 roundOne(
@@ -152,8 +158,10 @@ public class ProjectHealthScoreService {
                 roundOne(
                         milestoneScore),
                 roundOne(
-                        costScore),
-                "Health Score v2 combines schedule performance (30%), physical progress (25%), milestone execution (20%), and cost performance (25%). Each dimension remains separately visible so the overall score stays explainable.");
+                        cost.costScore()),
+                roundOne(
+                        procurement.procurementScore()),
+                "Health Score v3 combines schedule performance (25%), physical progress (20%), milestone execution (15%), cost performance (20%), and procurement performance (20%). Each dimension remains independently visible and explainable.");
     }
 
     private double calculateScheduleScore(

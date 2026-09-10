@@ -6,6 +6,8 @@ import java.util.UUID;
 import com.buildsight.platform.common.exception.ResourceNotFoundException;
 import com.buildsight.platform.cost.api.CostIntelligenceResponse;
 import com.buildsight.platform.cost.service.CostControlService;
+import com.buildsight.platform.procurement.api.ProcurementIntelligenceResponse;
+import com.buildsight.platform.procurement.service.ProcurementControlService;
 import com.buildsight.platform.project.api.MilestoneResponse;
 import com.buildsight.platform.project.api.ProgressUpdateResponse;
 import com.buildsight.platform.project.api.ProjectCommandCenterResponse;
@@ -45,6 +47,9 @@ public class ProjectCommandCenterService {
     private final CostControlService
             costControlService;
 
+    private final ProcurementControlService
+            procurementControlService;
+
     public ProjectCommandCenterService(
             ProjectRepository projectRepository,
             ProjectMilestoneRepository milestoneRepository,
@@ -53,7 +58,8 @@ public class ProjectCommandCenterService {
             MilestoneMapper milestoneMapper,
             ProgressUpdateMapper progressUpdateMapper,
             ProjectHealthScoreService healthScoreService,
-            CostControlService costControlService) {
+            CostControlService costControlService,
+            ProcurementControlService procurementControlService) {
 
         this.projectRepository =
                 projectRepository;
@@ -78,6 +84,9 @@ public class ProjectCommandCenterService {
 
         this.costControlService =
                 costControlService;
+
+        this.procurementControlService =
+                procurementControlService;
     }
 
     @Transactional(readOnly = true)
@@ -100,15 +109,13 @@ public class ProjectCommandCenterService {
                         .findByProjectIdOrderBySortOrderAscPlannedDateAsc(
                                 projectId);
 
-        List<MilestoneResponse>
-                milestoneResponses =
+        List<MilestoneResponse> milestoneResponses =
                 milestones.stream()
                         .map(
                                 milestoneMapper::toResponse)
                         .toList();
 
-        List<ProgressUpdateResponse>
-                progressUpdates =
+        List<ProgressUpdateResponse> progressUpdates =
                 progressUpdateRepository
                         .findTop20ByProjectIdOrderByUpdateDateDescCreatedAtDesc(
                                 projectId)
@@ -123,6 +130,11 @@ public class ProjectCommandCenterService {
                                 projectId)
                         .intelligence();
 
+        ProcurementIntelligenceResponse procurement =
+                procurementControlService
+                        .intelligence(
+                                projectId);
+
         return new ProjectCommandCenterResponse(
                 projectMapper.toResponse(
                         project),
@@ -130,7 +142,8 @@ public class ProjectCommandCenterService {
                 healthScoreService.calculate(
                         project,
                         milestones,
-                        cost),
+                        cost,
+                        procurement),
 
                 milestoneResponses,
                 progressUpdates);
