@@ -134,6 +134,7 @@ export interface ProjectHealthScore {
   procurementRisk: ProcurementRiskLevel;
   riskLevel: RiskIntelligenceLevel;
   productionRisk: ProductionRiskLevel;
+  informationRisk: InformationRiskLevel;
   scheduleVarianceDays: number;
   expectedProgressPercentage: number;
   actualProgressPercentage: number;
@@ -147,6 +148,7 @@ export interface ProjectHealthScore {
   procurementScore: number;
   riskScore: number;
   productionScore: number;
+  informationScore: number;
   explanation: string;
 }
 
@@ -994,4 +996,198 @@ export interface UpdateProductionEntryInput {
   equipmentHours: number;
   crewSize: number;
   notes: string;
+}
+
+export type DocumentType =
+  | "DRAWING"
+  | "SPECIFICATION"
+  | "REPORT"
+  | "CONTRACT"
+  | "PROCEDURE"
+  | "SCHEDULE"
+  | "OTHER";
+
+export type DocumentDiscipline =
+  | "ARCHITECTURAL"
+  | "STRUCTURAL"
+  | "CIVIL"
+  | "MEP"
+  | "COMMERCIAL"
+  | "PLANNING"
+  | "HSE"
+  | "QUALITY"
+  | "GENERAL";
+
+export type DocumentRevisionStatus =
+  | "DRAFT"
+  | "FOR_REVIEW"
+  | "ISSUED"
+  | "APPROVED"
+  | "SUPERSEDED";
+
+export type RfiPriority =
+  | "LOW"
+  | "MEDIUM"
+  | "HIGH"
+  | "CRITICAL";
+
+export type RfiStatus =
+  | "OPEN"
+  | "ANSWERED"
+  | "CLOSED"
+  | "VOID";
+
+export type TransmittalStatus =
+  | "DRAFT"
+  | "ISSUED";
+
+export type InformationRiskLevel =
+  | "NO_DATA"
+  | "ON_TRACK"
+  | "WATCH"
+  | "AT_RISK";
+
+export interface ProjectDocument {
+  id: string;
+  projectId: string;
+  documentNumber: string;
+  title: string;
+  documentType: DocumentType;
+  discipline: DocumentDiscipline;
+  ownerName: string | null;
+  revisionCount: number;
+  latestRevisionCode: string | null;
+  latestRevisionStatus: string | null;
+  version: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface DocumentRevision {
+  id: string;
+  documentId: string;
+  documentNumber: string;
+  documentTitle: string;
+  revisionCode: string;
+  revisionStatus: DocumentRevisionStatus;
+  issuedDate: string;
+  fileName: string;
+  contentType: string | null;
+  fileSize: number;
+  sha256: string;
+  extractedCharacterCount: number;
+  version: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ProjectRfi {
+  id: string;
+  projectId: string;
+  reference: string;
+  subject: string;
+  question: string;
+  response: string | null;
+  raisedBy: string | null;
+  assignedTo: string | null;
+  raisedDate: string;
+  dueDate: string;
+  respondedDate: string | null;
+  priority: RfiPriority;
+  status: RfiStatus;
+  overdue: boolean;
+  version: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ProjectTransmittal {
+  id: string;
+  projectId: string;
+  reference: string;
+  recipient: string;
+  purpose: string;
+  transmittalDate: string;
+  issuedDate: string | null;
+  notes: string | null;
+  status: TransmittalStatus;
+  revisionIds: string[];
+  revisionReferences: string[];
+  version: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface DocumentSearchResult {
+  resultType: "DOCUMENT" | "RFI";
+  entityId: string;
+  parentId: string;
+  reference: string;
+  title: string;
+  snippet: string;
+  score: number;
+}
+
+export interface DocumentIntelligence {
+  totalDocuments: number;
+  totalRevisions: number;
+  drawingDocuments: number;
+  extractedTextRevisions: number;
+  openRfis: number;
+  overdueRfis: number;
+  criticalOpenRfis: number;
+  draftTransmittals: number;
+  staleDraftTransmittals: number;
+  issuedTransmittals: number;
+  informationScore: number;
+  informationRisk: InformationRiskLevel;
+  explanation: string;
+}
+
+export interface DocumentControl {
+  project: Project;
+  intelligence: DocumentIntelligence;
+  documents: ProjectDocument[];
+  revisions: DocumentRevision[];
+  rfis: ProjectRfi[];
+  transmittals: ProjectTransmittal[];
+}
+
+export interface CreateDocumentInput {
+  documentNumber: string;
+  title: string;
+  documentType: DocumentType;
+  discipline: DocumentDiscipline;
+  ownerName: string;
+}
+
+export interface CreateRfiInput {
+  reference: string;
+  subject: string;
+  question: string;
+  raisedBy: string;
+  assignedTo: string;
+  raisedDate: string;
+  dueDate: string;
+  priority: RfiPriority;
+}
+
+export interface UpdateRfiInput {
+  version: number;
+  subject: string;
+  question: string;
+  response: string;
+  assignedTo: string;
+  dueDate: string;
+  priority: RfiPriority;
+  status: RfiStatus;
+}
+
+export interface CreateTransmittalInput {
+  reference: string;
+  recipient: string;
+  purpose: string;
+  transmittalDate: string;
+  notes: string;
+  revisionIds: string[];
 }

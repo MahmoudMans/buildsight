@@ -6,6 +6,8 @@ import java.util.UUID;
 import com.buildsight.platform.common.exception.ResourceNotFoundException;
 import com.buildsight.platform.cost.api.CostIntelligenceResponse;
 import com.buildsight.platform.cost.service.CostControlService;
+import com.buildsight.platform.document.api.DocumentIntelligenceResponse;
+import com.buildsight.platform.document.service.DocumentControlService;
 import com.buildsight.platform.procurement.api.ProcurementIntelligenceResponse;
 import com.buildsight.platform.procurement.service.ProcurementControlService;
 import com.buildsight.platform.production.api.ProductionIntelligenceResponse;
@@ -60,6 +62,9 @@ public class ProjectCommandCenterService {
     private final ProductionControlService
             productionControlService;
 
+    private final DocumentControlService
+            documentControlService;
+
     public ProjectCommandCenterService(
             ProjectRepository projectRepository,
             ProjectMilestoneRepository milestoneRepository,
@@ -71,7 +76,8 @@ public class ProjectCommandCenterService {
             CostControlService costControlService,
             ProcurementControlService procurementControlService,
             RiskControlService riskControlService,
-            ProductionControlService productionControlService) {
+            ProductionControlService productionControlService,
+            DocumentControlService documentControlService) {
 
         this.projectRepository =
                 projectRepository;
@@ -105,6 +111,9 @@ public class ProjectCommandCenterService {
 
         this.productionControlService =
                 productionControlService;
+
+        this.documentControlService =
+                documentControlService;
     }
 
     @Transactional(readOnly = true)
@@ -163,6 +172,11 @@ public class ProjectCommandCenterService {
                         .intelligence(
                                 projectId);
 
+        DocumentIntelligenceResponse information =
+                documentControlService
+                        .intelligence(
+                                projectId);
+
         return new ProjectCommandCenterResponse(
                 projectMapper.toResponse(
                         project),
@@ -173,7 +187,8 @@ public class ProjectCommandCenterService {
                         cost,
                         procurement,
                         risk,
-                        production),
+                        production,
+                        information),
 
                 milestoneResponses,
                 progressUpdates);

@@ -9,6 +9,11 @@ spring:
   lifecycle:
     timeout-per-shutdown-phase: 20s
 
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5435/buildsight}
     username: ${SPRING_DATASOURCE_USERNAME:buildsight}
@@ -52,6 +57,7 @@ buildsight:
 
   storage:
     s3-endpoint: ${BUILDSIGHT_STORAGE_S3_ENDPOINT:http://localhost:8333}
+    filer-base-url: ${BUILDSIGHT_STORAGE_FILER_BASE_URL:http://localhost:8888}
 
   ai:
     ollama-base-url: ${BUILDSIGHT_OLLAMA_BASE_URL:http://localhost:11434}

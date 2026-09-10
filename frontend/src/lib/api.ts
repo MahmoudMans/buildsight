@@ -700,3 +700,217 @@ export async function updateProductionEntry(
     },
   );
 }
+
+export async function getProjectDocuments(
+  projectId: string,
+): Promise<
+  import("@/types/project").DocumentControl
+> {
+  return request<
+    import("@/types/project").DocumentControl
+  >(
+    `/projects/${projectId}/documents`,
+  );
+}
+
+export async function createProjectDocument(
+  projectId: string,
+  input: import("@/types/project").CreateDocumentInput,
+): Promise<
+  import("@/types/project").ProjectDocument
+> {
+  return request<
+    import("@/types/project").ProjectDocument
+  >(
+    `/projects/${projectId}/documents`,
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function uploadProjectDocumentRevision(
+  projectId: string,
+  documentId: string,
+  revisionCode: string,
+  status: import("@/types/project").DocumentRevisionStatus,
+  issuedDate: string,
+  file: File,
+): Promise<
+  import("@/types/project").DocumentRevision
+> {
+  const formData =
+    new FormData();
+
+  formData.append(
+    "revisionCode",
+    revisionCode,
+  );
+
+  formData.append(
+    "status",
+    status,
+  );
+
+  formData.append(
+    "issuedDate",
+    issuedDate,
+  );
+
+  formData.append(
+    "file",
+    file,
+  );
+
+  const response =
+    await fetch(
+      `${API_BASE_URL}/projects/${projectId}/documents/${documentId}/revisions`,
+      {
+        method: "POST",
+        body: formData,
+      },
+    );
+
+  if (!response.ok) {
+    let body: ApiErrorBody =
+      {};
+
+    try {
+      body =
+        (await response.json()) as ApiErrorBody;
+    } catch {
+      body = {};
+    }
+
+    throw new BuildSightApiError(
+      response.status,
+      body.message ??
+        `Upload failed with status ${response.status}.`,
+      body.fieldErrors ??
+        {},
+    );
+  }
+
+  return (
+    await response.json()
+  ) as import("@/types/project").DocumentRevision;
+}
+
+export async function updateProjectDocumentRevisionStatus(
+  projectId: string,
+  documentId: string,
+  revisionId: string,
+  version: number,
+  status: import("@/types/project").DocumentRevisionStatus,
+): Promise<
+  import("@/types/project").DocumentRevision
+> {
+  return request<
+    import("@/types/project").DocumentRevision
+  >(
+    `/projects/${projectId}/documents/${documentId}/revisions/${revisionId}/status`,
+    {
+      method: "PUT",
+      body: JSON.stringify({
+        version,
+        status,
+      }),
+    },
+  );
+}
+
+export function projectDocumentDownloadUrl(
+  projectId: string,
+  documentId: string,
+  revisionId: string,
+): string {
+  return `${API_BASE_URL}/projects/${projectId}/documents/${documentId}/revisions/${revisionId}/content`;
+}
+
+export async function createProjectRfi(
+  projectId: string,
+  input: import("@/types/project").CreateRfiInput,
+): Promise<
+  import("@/types/project").ProjectRfi
+> {
+  return request<
+    import("@/types/project").ProjectRfi
+  >(
+    `/projects/${projectId}/documents/rfis`,
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function updateProjectRfi(
+  projectId: string,
+  rfiId: string,
+  input: import("@/types/project").UpdateRfiInput,
+): Promise<
+  import("@/types/project").ProjectRfi
+> {
+  return request<
+    import("@/types/project").ProjectRfi
+  >(
+    `/projects/${projectId}/documents/rfis/${rfiId}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function createProjectTransmittal(
+  projectId: string,
+  input: import("@/types/project").CreateTransmittalInput,
+): Promise<
+  import("@/types/project").ProjectTransmittal
+> {
+  return request<
+    import("@/types/project").ProjectTransmittal
+  >(
+    `/projects/${projectId}/documents/transmittals`,
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function issueProjectTransmittal(
+  projectId: string,
+  transmittalId: string,
+  version: number,
+): Promise<
+  import("@/types/project").ProjectTransmittal
+> {
+  return request<
+    import("@/types/project").ProjectTransmittal
+  >(
+    `/projects/${projectId}/documents/transmittals/${transmittalId}/issue`,
+    {
+      method: "POST",
+      body: JSON.stringify({
+        version,
+      }),
+    },
+  );
+}
+
+export async function searchProjectDocuments(
+  projectId: string,
+  query: string,
+): Promise<
+  import("@/types/project").DocumentSearchResult[]
+> {
+  return request<
+    import("@/types/project").DocumentSearchResult[]
+  >(
+    `/projects/${projectId}/documents/search?q=${encodeURIComponent(
+      query,
+    )}`,
+  );
+}

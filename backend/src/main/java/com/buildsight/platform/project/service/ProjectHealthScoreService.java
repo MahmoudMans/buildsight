@@ -6,6 +6,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import com.buildsight.platform.cost.api.CostIntelligenceResponse;
+import com.buildsight.platform.document.api.DocumentIntelligenceResponse;
 import com.buildsight.platform.procurement.api.ProcurementIntelligenceResponse;
 import com.buildsight.platform.production.api.ProductionIntelligenceResponse;
 import com.buildsight.platform.project.api.ProjectHealthBand;
@@ -21,33 +22,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class ProjectHealthScoreService {
 
-    private static final double
-            SCHEDULE_WEIGHT =
-            0.20;
-
-    private static final double
-            PROGRESS_WEIGHT =
-            0.10;
-
-    private static final double
-            MILESTONE_WEIGHT =
-            0.10;
-
-    private static final double
-            COST_WEIGHT =
-            0.20;
-
-    private static final double
-            PROCUREMENT_WEIGHT =
-            0.15;
-
-    private static final double
-            RISK_WEIGHT =
-            0.10;
-
-    private static final double
-            PRODUCTION_WEIGHT =
-            0.15;
+    private static final double SCHEDULE_WEIGHT = 0.18;
+    private static final double PROGRESS_WEIGHT = 0.08;
+    private static final double MILESTONE_WEIGHT = 0.08;
+    private static final double COST_WEIGHT = 0.18;
+    private static final double PROCUREMENT_WEIGHT = 0.13;
+    private static final double RISK_WEIGHT = 0.10;
+    private static final double PRODUCTION_WEIGHT = 0.15;
+    private static final double INFORMATION_WEIGHT = 0.10;
 
     private final Clock clock;
 
@@ -64,7 +46,8 @@ public class ProjectHealthScoreService {
             CostIntelligenceResponse cost,
             ProcurementIntelligenceResponse procurement,
             RiskIntelligenceResponse risk,
-            ProductionIntelligenceResponse production) {
+            ProductionIntelligenceResponse production,
+            DocumentIntelligenceResponse information) {
 
         LocalDate today =
                 LocalDate.now(
@@ -140,7 +123,9 @@ public class ProjectHealthScoreService {
                         + risk.riskScore()
                                 * RISK_WEIGHT
                         + production.productionScore()
-                                * PRODUCTION_WEIGHT;
+                                * PRODUCTION_WEIGHT
+                        + information.informationScore()
+                                * INFORMATION_WEIGHT;
 
         int score =
                 (int) Math.round(
@@ -160,6 +145,7 @@ public class ProjectHealthScoreService {
                 procurement.procurementRisk(),
                 risk.riskLevel(),
                 production.productionRisk(),
+                information.informationRisk(),
                 scheduleVarianceDays,
                 roundOne(
                         expectedProgress),
@@ -183,7 +169,9 @@ public class ProjectHealthScoreService {
                         risk.riskScore()),
                 roundOne(
                         production.productionScore()),
-                "Health Score v5 combines schedule performance (20%), physical progress (10%), milestone execution (10%), cost performance (20%), procurement performance (15%), risk-control performance (10%), and site-production performance (15%).");
+                roundOne(
+                        information.informationScore()),
+                "Health Score v6 combines schedule (18%), physical progress (8%), milestones (8%), cost (18%), procurement (13%), risk control (10%), site production (15%), and information/document control (10%).");
     }
 
     private double calculateScheduleScore(
@@ -245,13 +233,11 @@ public class ProjectHealthScoreService {
 
         if (today.isBefore(
                 start)) {
-
             return 0;
         }
 
         if (!today.isBefore(
                 forecastEnd)) {
-
             return 100;
         }
 

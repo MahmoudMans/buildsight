@@ -3,6 +3,7 @@ package com.buildsight.platform.project.api;
 import java.time.LocalDate;
 
 import com.buildsight.platform.cost.api.CostRiskLevel;
+import com.buildsight.platform.document.api.InformationRiskLevel;
 import com.buildsight.platform.procurement.api.ProcurementRiskLevel;
 import com.buildsight.platform.production.api.ProductionRiskLevel;
 import com.buildsight.platform.risk.api.RiskIntelligenceLevel;
@@ -16,6 +17,7 @@ public record ProjectHealthScoreResponse(
         ProcurementRiskLevel procurementRisk,
         RiskIntelligenceLevel riskLevel,
         ProductionRiskLevel productionRisk,
+        InformationRiskLevel informationRisk,
         long scheduleVarianceDays,
         double expectedProgressPercentage,
         double actualProgressPercentage,
@@ -29,5 +31,6 @@ public record ProjectHealthScoreResponse(
         double procurementScore,
         double riskScore,
         double productionScore,
+        double informationScore,
         String explanation) {
 }

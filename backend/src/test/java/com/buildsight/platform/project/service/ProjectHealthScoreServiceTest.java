@@ -13,6 +13,8 @@ import java.util.UUID;
 
 import com.buildsight.platform.cost.api.CostIntelligenceResponse;
 import com.buildsight.platform.cost.api.CostRiskLevel;
+import com.buildsight.platform.document.api.DocumentIntelligenceResponse;
+import com.buildsight.platform.document.api.InformationRiskLevel;
 import com.buildsight.platform.procurement.api.ProcurementIntelligenceResponse;
 import com.buildsight.platform.procurement.api.ProcurementRiskLevel;
 import com.buildsight.platform.production.api.ProductionIntelligenceResponse;
@@ -35,42 +37,7 @@ class ProjectHealthScoreServiceTest {
                     ZoneOffset.UTC);
 
     @Test
-    void healthScoreV5IncludesProductionPerformance() {
-
-        Project project =
-                project();
-
-        ProjectHealthScoreResponse result =
-                new ProjectHealthScoreService(
-                        CLOCK)
-                        .calculate(
-                                project,
-                                List.of(),
-                                cost(
-                                        90),
-                                procurement(
-                                        90),
-                                risk(
-                                        90),
-                                production(
-                                        45,
-                                        ProductionRiskLevel.AT_RISK));
-
-        assertEquals(
-                45.0,
-                result.productionScore());
-
-        assertEquals(
-                ProductionRiskLevel.AT_RISK,
-                result.productionRisk());
-
-        assertTrue(
-                result.score()
-                        < 90);
-    }
-
-    @Test
-    void healthySevenDimensionProjectRemainsHealthy() {
+    void healthScoreV6IncludesInformationPerformance() {
 
         ProjectHealthScoreResponse result =
                 new ProjectHealthScoreService(
@@ -78,15 +45,43 @@ class ProjectHealthScoreServiceTest {
                         .calculate(
                                 project(),
                                 List.of(),
-                                cost(
-                                        100),
-                                procurement(
-                                        95),
-                                risk(
-                                        95),
-                                production(
+                                cost(90),
+                                procurement(90),
+                                risk(90),
+                                production(90),
+                                information(
+                                        45,
+                                        InformationRiskLevel.AT_RISK));
+
+        assertEquals(
+                45.0,
+                result.informationScore());
+
+        assertEquals(
+                InformationRiskLevel.AT_RISK,
+                result.informationRisk());
+
+        assertTrue(
+                result.score()
+                        < 90);
+    }
+
+    @Test
+    void healthyEightDimensionProjectRemainsHealthy() {
+
+        ProjectHealthScoreResponse result =
+                new ProjectHealthScoreService(
+                        CLOCK)
+                        .calculate(
+                                project(),
+                                List.of(),
+                                cost(100),
+                                procurement(95),
+                                risk(95),
+                                production(95),
+                                information(
                                         95,
-                                        ProductionRiskLevel.ON_TRACK));
+                                        InformationRiskLevel.ON_TRACK));
 
         assertEquals(
                 ProjectHealthBand.HEALTHY,
@@ -101,7 +96,7 @@ class ProjectHealthScoreServiceTest {
 
         return Project.create(
                 UUID.randomUUID(),
-                "BS-H-V5",
+                "BS-H-V6",
                 "Health Test",
                 "Health",
                 "Client",
@@ -192,8 +187,7 @@ class ProjectHealthScoreServiceTest {
     }
 
     private ProductionIntelligenceResponse production(
-            double score,
-            ProductionRiskLevel risk) {
+            double score) {
 
         return new ProductionIntelligenceResponse(
                 3,
@@ -215,6 +209,26 @@ class ProjectHealthScoreServiceTest {
                 BigDecimal.ZERO,
                 1.0,
                 10,
+                score,
+                ProductionRiskLevel.ON_TRACK,
+                "Test");
+    }
+
+    private DocumentIntelligenceResponse information(
+            double score,
+            InformationRiskLevel risk) {
+
+        return new DocumentIntelligenceResponse(
+                2,
+                3,
+                1,
+                3,
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
                 score,
                 risk,
                 "Test");
