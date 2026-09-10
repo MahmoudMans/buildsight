@@ -132,6 +132,7 @@ export interface ProjectHealthScore {
   scheduleRisk: ScheduleRiskLevel;
   costRisk: CostRiskLevel;
   procurementRisk: ProcurementRiskLevel;
+  riskLevel: RiskIntelligenceLevel;
   scheduleVarianceDays: number;
   expectedProgressPercentage: number;
   actualProgressPercentage: number;
@@ -143,6 +144,7 @@ export interface ProjectHealthScore {
   milestoneScore: number;
   costScore: number;
   procurementScore: number;
+  riskScore: number;
   explanation: string;
 }
 
@@ -545,4 +547,270 @@ export interface CreateSupplierPerformanceEvaluationInput {
   safetyScore: number;
   commercialScore: number;
   comments: string;
+}
+
+export type RiskCategory =
+  | "COST"
+  | "SCHEDULE"
+  | "TECHNICAL"
+  | "COMMERCIAL"
+  | "PROCUREMENT"
+  | "SAFETY"
+  | "QUALITY"
+  | "OTHER";
+
+export type RiskStatus =
+  | "OPEN"
+  | "MITIGATING"
+  | "ACCEPTED"
+  | "CLOSED";
+
+export type RiskExposureBand =
+  | "LOW"
+  | "MODERATE"
+  | "HIGH"
+  | "CRITICAL";
+
+export type RiskIntelligenceLevel =
+  | "NO_DATA"
+  | "ON_TRACK"
+  | "WATCH"
+  | "AT_RISK";
+
+export type IssueSeverity =
+  | "LOW"
+  | "MEDIUM"
+  | "HIGH"
+  | "CRITICAL";
+
+export type IssueStatus =
+  | "OPEN"
+  | "IN_PROGRESS"
+  | "RESOLVED"
+  | "CLOSED";
+
+export type ChangeEventStatus =
+  | "DRAFT"
+  | "UNDER_REVIEW"
+  | "APPROVED"
+  | "REJECTED"
+  | "IMPLEMENTED";
+
+export type DelayCause =
+  | "CLIENT"
+  | "DESIGN"
+  | "PROCUREMENT"
+  | "SUBCONTRACTOR"
+  | "WEATHER"
+  | "SITE_CONDITION"
+  | "REGULATORY"
+  | "OTHER";
+
+export type DelayStatus =
+  | "OPEN"
+  | "MITIGATING"
+  | "RESOLVED";
+
+export interface ProjectRisk {
+  id: string;
+  projectId: string;
+  reference: string;
+  title: string;
+  description: string | null;
+  category: RiskCategory;
+  ownerName: string | null;
+  probability: number;
+  impact: number;
+  inherentScore: number;
+  residualProbability: number;
+  residualImpact: number;
+  residualScore: number;
+  exposureBand: RiskExposureBand;
+  mitigationPlan: string | null;
+  mitigationDueDate: string;
+  status: RiskStatus;
+  version: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ProjectIssue {
+  id: string;
+  projectId: string;
+  sourceRiskId: string | null;
+  sourceRiskReference: string | null;
+  reference: string;
+  title: string;
+  description: string | null;
+  severity: IssueSeverity;
+  ownerName: string | null;
+  targetResolutionDate: string;
+  status: IssueStatus;
+  version: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ProjectChangeEvent {
+  id: string;
+  projectId: string;
+  reference: string;
+  title: string;
+  description: string | null;
+  originator: string | null;
+  requestedDate: string;
+  decisionDate: string | null;
+  costImpact: number;
+  scheduleImpactDays: number;
+  status: ChangeEventStatus;
+  version: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ProjectDelayEvent {
+  id: string;
+  projectId: string;
+  reference: string;
+  title: string;
+  description: string | null;
+  cause: DelayCause;
+  ownerName: string | null;
+  startDate: string;
+  endDate: string | null;
+  forecastDelayDays: number;
+  excusable: boolean;
+  compensable: boolean;
+  status: DelayStatus;
+  version: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface RiskIntelligence {
+  totalRisks: number;
+  openRisks: number;
+  highExposureRisks: number;
+  overdueMitigations: number;
+  maximumResidualExposure: number;
+  averageResidualExposure: number;
+  openIssues: number;
+  criticalOpenIssues: number;
+  overdueIssues: number;
+  pendingChanges: number;
+  approvedChanges: number;
+  approvedChangeCostImpact: number;
+  approvedChangeScheduleImpactDays: number;
+  activeDelays: number;
+  forecastDelayDays: number;
+  riskScore: number;
+  riskLevel: RiskIntelligenceLevel;
+  explanation: string;
+}
+
+export interface RiskControl {
+  project: Project;
+  intelligence: RiskIntelligence;
+  risks: ProjectRisk[];
+  issues: ProjectIssue[];
+  changes: ProjectChangeEvent[];
+  delays: ProjectDelayEvent[];
+}
+
+export interface CreateRiskInput {
+  reference: string;
+  title: string;
+  description: string;
+  category: RiskCategory;
+  ownerName: string;
+  probability: number;
+  impact: number;
+  residualProbability: number;
+  residualImpact: number;
+  mitigationPlan: string;
+  mitigationDueDate: string;
+}
+
+export interface UpdateRiskInput {
+  version: number;
+  title: string;
+  description: string;
+  category: RiskCategory;
+  ownerName: string;
+  probability: number;
+  impact: number;
+  residualProbability: number;
+  residualImpact: number;
+  mitigationPlan: string;
+  mitigationDueDate: string;
+  status: RiskStatus;
+}
+
+export interface CreateIssueInput {
+  sourceRiskId: string | null;
+  reference: string;
+  title: string;
+  description: string;
+  severity: IssueSeverity;
+  ownerName: string;
+  targetResolutionDate: string;
+}
+
+export interface UpdateIssueInput {
+  version: number;
+  sourceRiskId: string | null;
+  title: string;
+  description: string;
+  severity: IssueSeverity;
+  ownerName: string;
+  targetResolutionDate: string;
+  status: IssueStatus;
+}
+
+export interface CreateChangeEventInput {
+  reference: string;
+  title: string;
+  description: string;
+  originator: string;
+  requestedDate: string;
+  costImpact: number;
+  scheduleImpactDays: number;
+}
+
+export interface UpdateChangeEventInput {
+  version: number;
+  title: string;
+  description: string;
+  originator: string;
+  requestedDate: string;
+  decisionDate: string | null;
+  costImpact: number;
+  scheduleImpactDays: number;
+  status: ChangeEventStatus;
+}
+
+export interface CreateDelayEventInput {
+  reference: string;
+  title: string;
+  description: string;
+  cause: DelayCause;
+  ownerName: string;
+  startDate: string;
+  forecastDelayDays: number;
+  excusable: boolean;
+  compensable: boolean;
+}
+
+export interface UpdateDelayEventInput {
+  version: number;
+  title: string;
+  description: string;
+  cause: DelayCause;
+  ownerName: string;
+  startDate: string;
+  endDate: string | null;
+  forecastDelayDays: number;
+  excusable: boolean;
+  compensable: boolean;
+  status: DelayStatus;
 }

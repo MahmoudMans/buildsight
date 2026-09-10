@@ -429,3 +429,155 @@ export async function createSupplierPerformanceEvaluation(
     },
   );
 }
+
+export async function getProjectRiskControl(
+  projectId: string,
+): Promise<
+  import("@/types/project").RiskControl
+> {
+  return request<
+    import("@/types/project").RiskControl
+  >(
+    `/projects/${projectId}/risk-control`,
+  );
+}
+
+export async function createProjectRisk(
+  projectId: string,
+  input: import("@/types/project").CreateRiskInput,
+): Promise<
+  import("@/types/project").ProjectRisk
+> {
+  return request<
+    import("@/types/project").ProjectRisk
+  >(
+    `/projects/${projectId}/risk-control/risks`,
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function updateProjectRisk(
+  projectId: string,
+  riskId: string,
+  input: import("@/types/project").UpdateRiskInput,
+): Promise<
+  import("@/types/project").ProjectRisk
+> {
+  return request<
+    import("@/types/project").ProjectRisk
+  >(
+    `/projects/${projectId}/risk-control/risks/${riskId}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function createProjectIssue(
+  projectId: string,
+  input: import("@/types/project").CreateIssueInput,
+): Promise<
+  import("@/types/project").ProjectIssue
+> {
+  return request<
+    import("@/types/project").ProjectIssue
+  >(
+    `/projects/${projectId}/risk-control/issues`,
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function updateProjectIssue(
+  projectId: string,
+  issueId: string,
+  input: import("@/types/project").UpdateIssueInput,
+): Promise<
+  import("@/types/project").ProjectIssue
+> {
+  return request<
+    import("@/types/project").ProjectIssue
+  >(
+    `/projects/${projectId}/risk-control/issues/${issueId}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function createProjectChangeEvent(
+  projectId: string,
+  input: import("@/types/project").CreateChangeEventInput,
+): Promise<
+  import("@/types/project").ProjectChangeEvent
+> {
+  return request<
+    import("@/types/project").ProjectChangeEvent
+  >(
+    `/projects/${projectId}/risk-control/changes`,
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function updateProjectChangeEvent(
+  projectId: string,
+  changeId: string,
+  input: import("@/types/project").UpdateChangeEventInput,
+): Promise<
+  import("@/types/project").ProjectChangeEvent
+> {
+  return request<
+    import("@/types/project").ProjectChangeEvent
+  >(
+    `/projects/${projectId}/risk-control/changes/${changeId}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function createProjectDelayEvent(
+  projectId: string,
+  input: import("@/types/project").CreateDelayEventInput,
+): Promise<
+  import("@/types/project").ProjectDelayEvent
+> {
+  return request<
+    import("@/types/project").ProjectDelayEvent
+  >(
+    `/projects/${projectId}/risk-control/delays`,
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function updateProjectDelayEvent(
+  projectId: string,
+  delayId: string,
+  input: import("@/types/project").UpdateDelayEventInput,
+): Promise<
+  import("@/types/project").ProjectDelayEvent
+> {
+  return request<
+    import("@/types/project").ProjectDelayEvent
+  >(
+    `/projects/${projectId}/risk-control/delays/${delayId}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(input),
+    },
+  );
+}

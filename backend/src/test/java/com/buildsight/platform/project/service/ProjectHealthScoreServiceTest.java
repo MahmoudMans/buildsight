@@ -17,9 +17,10 @@ import com.buildsight.platform.procurement.api.ProcurementIntelligenceResponse;
 import com.buildsight.platform.procurement.api.ProcurementRiskLevel;
 import com.buildsight.platform.project.api.ProjectHealthBand;
 import com.buildsight.platform.project.api.ProjectHealthScoreResponse;
-import com.buildsight.platform.project.api.ScheduleRiskLevel;
 import com.buildsight.platform.project.domain.Project;
 import com.buildsight.platform.project.domain.ProjectStatus;
+import com.buildsight.platform.risk.api.RiskIntelligenceLevel;
+import com.buildsight.platform.risk.api.RiskIntelligenceResponse;
 
 import org.junit.jupiter.api.Test;
 
@@ -32,25 +33,31 @@ class ProjectHealthScoreServiceTest {
                     ZoneOffset.UTC);
 
     @Test
-    void projectHealthV3IncludesProcurementRisk() {
+    void projectHealthV4IncludesRiskControlPerformance() {
 
         Project project =
-                project(
-                        "50.00");
-
-        project.updateDetails(
-                project.getName(),
-                project.getDescription(),
-                project.getClientName(),
-                project.getLocation(),
-                project.getContractValue(),
-                project.getApprovedBudget(),
-                project.getPlannedStartDate(),
-                project.getPlannedEndDate(),
-                LocalDate.of(
-                        2027,
-                        1,
-                        20));
+                Project.create(
+                        UUID.randomUUID(),
+                        "BS-H-V4-001",
+                        "Health Test",
+                        "Health",
+                        "Client",
+                        "Paris",
+                        new BigDecimal(
+                                "1000000.00"),
+                        new BigDecimal(
+                                "900000.00"),
+                        LocalDate.of(
+                                2026,
+                                1,
+                                1),
+                        LocalDate.of(
+                                2026,
+                                12,
+                                31),
+                        ProjectStatus.ACTIVE,
+                        new BigDecimal(
+                                "50.00"));
 
         ProjectHealthScoreResponse result =
                 new ProjectHealthScoreService(
@@ -59,40 +66,39 @@ class ProjectHealthScoreServiceTest {
                                 project,
                                 List.of(),
                                 cost(
-                                        75.0,
-                                        CostRiskLevel.WATCH),
+                                        90,
+                                        CostRiskLevel.ON_TRACK),
                                 procurement(
-                                        55.0,
-                                        ProcurementRiskLevel.AT_RISK));
+                                        85,
+                                        ProcurementRiskLevel.ON_TRACK),
+                                risk(
+                                        40,
+                                        RiskIntelligenceLevel.AT_RISK));
 
         assertEquals(
-                ProcurementRiskLevel.AT_RISK,
-                result.procurementRisk());
+                RiskIntelligenceLevel.AT_RISK,
+                result.riskLevel());
 
         assertEquals(
-                55.0,
-                result.procurementScore());
-
-        assertEquals(
-                ScheduleRiskLevel.AT_RISK,
-                result.scheduleRisk());
+                40.0,
+                result.riskScore());
 
         assertTrue(
                 result.score()
-                        < 80);
+                        < 90);
     }
 
     @Test
-    void healthyFiveDimensionProjectScoresHealthy() {
+    void healthySixDimensionProjectRemainsHealthy() {
 
         Project project =
                 Project.create(
                         UUID.randomUUID(),
-                        "BS-H-V3",
+                        "BS-H-V4-002",
                         "Healthy",
                         "Healthy project",
                         "Client",
-                        "Paris",
+                        "Tunis",
                         new BigDecimal(
                                 "1000000.00"),
                         new BigDecimal(
@@ -116,50 +122,22 @@ class ProjectHealthScoreServiceTest {
                                 project,
                                 List.of(),
                                 cost(
-                                        100.0,
+                                        100,
                                         CostRiskLevel.ON_TRACK),
                                 procurement(
-                                        95.0,
-                                        ProcurementRiskLevel.ON_TRACK));
+                                        95,
+                                        ProcurementRiskLevel.ON_TRACK),
+                                risk(
+                                        95,
+                                        RiskIntelligenceLevel.ON_TRACK));
 
         assertEquals(
                 ProjectHealthBand.HEALTHY,
                 result.healthBand());
 
-        assertEquals(
-                ProcurementRiskLevel.ON_TRACK,
-                result.procurementRisk());
-
         assertTrue(
                 result.score()
                         >= 80);
-    }
-
-    private Project project(
-            String progress) {
-
-        return Project.create(
-                UUID.randomUUID(),
-                "BS-H-TEST",
-                "Health Test",
-                "Health",
-                "Client",
-                "Paris",
-                new BigDecimal(
-                        "1000000.00"),
-                new BigDecimal(
-                        "900000.00"),
-                LocalDate.of(
-                        2026,
-                        1,
-                        1),
-                LocalDate.of(
-                        2026,
-                        12,
-                        31),
-                ProjectStatus.ACTIVE,
-                new BigDecimal(
-                        progress));
     }
 
     private CostIntelligenceResponse cost(
@@ -205,6 +183,31 @@ class ProjectHealthScoreServiceTest {
                 0,
                 score,
                 risk,
+                "Test");
+    }
+
+    private RiskIntelligenceResponse risk(
+            double score,
+            RiskIntelligenceLevel level) {
+
+        return new RiskIntelligenceResponse(
+                1,
+                1,
+                0,
+                0,
+                5,
+                5,
+                0,
+                0,
+                0,
+                0,
+                0,
+                BigDecimal.ZERO,
+                0,
+                0,
+                0,
+                score,
+                level,
                 "Test");
     }
 }

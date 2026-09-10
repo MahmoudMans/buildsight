@@ -712,8 +712,16 @@ export function ProjectCommandCenterView({
             <span>Procurement</span>
           </Link>
 
-          <div className="command-nav-item muted">
+          <Link
+            href={`/projects/${projectId}/risk-control`}
+            className="command-nav-item"
+          >
             07
+            <span>Risk control</span>
+          </Link>
+
+          <div className="command-nav-item muted">
+            08
             <span>Documents</span>
             <small>Later</small>
           </div>
@@ -1438,7 +1446,7 @@ export function ProjectCommandCenterView({
               </div>
 
               <h2>
-                Project Health Score v3
+                Project Health Score v4
               </h2>
             </div>
 
@@ -1466,7 +1474,7 @@ export function ProjectCommandCenterView({
             <div className="health-components">
               <HealthComponent
                 label="Schedule performance"
-                weight="25%"
+                weight="20%"
                 value={
                   health.scheduleScore
                 }
@@ -1474,7 +1482,7 @@ export function ProjectCommandCenterView({
 
               <HealthComponent
                 label="Physical progress"
-                weight="20%"
+                weight="15%"
                 value={
                   health.progressScore
                 }
@@ -1482,7 +1490,7 @@ export function ProjectCommandCenterView({
 
               <HealthComponent
                 label="Milestone execution"
-                weight="15%"
+                weight="10%"
                 value={
                   health.milestoneScore
                 }
@@ -1498,9 +1506,17 @@ export function ProjectCommandCenterView({
 
               <HealthComponent
                 label="Procurement performance"
-                weight="20%"
+                weight="15%"
                 value={
                   health.procurementScore
+                }
+              />
+
+              <HealthComponent
+                label="Risk control"
+                weight="20%"
+                value={
+                  health.riskScore
                 }
               />
             </div>

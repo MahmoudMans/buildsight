@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import com.buildsight.platform.cost.api.CostRiskLevel;
 import com.buildsight.platform.procurement.api.ProcurementRiskLevel;
+import com.buildsight.platform.risk.api.RiskIntelligenceLevel;
 
 public record ProjectHealthScoreResponse(
         LocalDate calculationDate,
@@ -12,6 +13,7 @@ public record ProjectHealthScoreResponse(
         ScheduleRiskLevel scheduleRisk,
         CostRiskLevel costRisk,
         ProcurementRiskLevel procurementRisk,
+        RiskIntelligenceLevel riskLevel,
         long scheduleVarianceDays,
         double expectedProgressPercentage,
         double actualProgressPercentage,
@@ -23,5 +25,6 @@ public record ProjectHealthScoreResponse(
         double milestoneScore,
         double costScore,
         double procurementScore,
+        double riskScore,
         String explanation) {
 }

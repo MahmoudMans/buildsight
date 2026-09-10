@@ -541,16 +541,6 @@ export function ProjectProcurementView({
       ],
     );
 
-  const selectedPackage =
-    data?.packages.find(
-      (
-        packageItem,
-      ) =>
-        packageItem.id
-        ===
-        selectedPackageId,
-    );
-
   const awardPackage =
     data?.packages.find(
       (
