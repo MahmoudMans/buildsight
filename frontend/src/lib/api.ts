@@ -1842,3 +1842,89 @@ export async function approveScheduleBaseline(
     },
   );
 }
+
+export async function getProjectForecast(
+  projectId: string,
+): Promise<
+  import("@/types/project").ForecastControl
+> {
+  return request<
+    import("@/types/project").ForecastControl
+  >(
+    `/projects/${projectId}/forecast`,
+  );
+}
+
+export async function captureEvmSnapshot(
+  projectId: string,
+): Promise<
+  import("@/types/project").EvmSnapshot
+> {
+  return request<
+    import("@/types/project").EvmSnapshot
+  >(
+    `/projects/${projectId}/forecast/snapshots`,
+    {
+      method: "POST",
+    },
+  );
+}
+
+export async function createForecastScenario(
+  projectId: string,
+  input: import("@/types/project").CreateForecastScenarioInput,
+): Promise<
+  import("@/types/project").ForecastScenario
+> {
+  return request<
+    import("@/types/project").ForecastScenario
+  >(
+    `/projects/${projectId}/forecast/scenarios`,
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function approveForecastScenario(
+  projectId: string,
+  scenarioId: string,
+): Promise<
+  import("@/types/project").ForecastScenario
+> {
+  return request<
+    import("@/types/project").ForecastScenario
+  >(
+    `/projects/${projectId}/forecast/scenarios/${scenarioId}/approve`,
+    {
+      method: "POST",
+    },
+  );
+}
+
+export async function archiveForecastScenario(
+  projectId: string,
+  scenarioId: string,
+): Promise<
+  import("@/types/project").ForecastScenario
+> {
+  return request<
+    import("@/types/project").ForecastScenario
+  >(
+    `/projects/${projectId}/forecast/scenarios/${scenarioId}/archive`,
+    {
+      method: "POST",
+    },
+  );
+}
+
+export async function getPortfolioForecast(): Promise<
+  import("@/types/project").PortfolioForecast
+> {
+  return request<
+    import("@/types/project").PortfolioForecast
+  >(
+    "/portfolio/forecast",
+  );
+}

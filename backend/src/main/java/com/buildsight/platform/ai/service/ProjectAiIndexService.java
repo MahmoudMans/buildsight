@@ -41,6 +41,8 @@ import com.buildsight.platform.risk.service.RiskControlService;
 
 import com.buildsight.platform.schedule.api.ScheduleModels.ScheduleIntelligenceResponse;
 import com.buildsight.platform.schedule.service.ScheduleControlService;
+import com.buildsight.platform.forecast.api.ForecastModels.ForecastIntelligenceResponse;
+import com.buildsight.platform.forecast.service.ForecastControlService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -71,6 +73,9 @@ public class ProjectAiIndexService {
 
     private final ScheduleControlService
             scheduleControlService;
+
+    private final ForecastControlService
+            forecastControlService;
 
     private final CostControlService
             costControlService;
@@ -116,6 +121,7 @@ public class ProjectAiIndexService {
             CommercialControlService commercialControlService,
             ResourceControlService resourceControlService,
             ScheduleControlService scheduleControlService,
+            ForecastControlService forecastControlService,
             CostControlService costControlService,
             ProcurementControlService procurementControlService,
             RiskControlService riskControlService,
@@ -155,6 +161,9 @@ public class ProjectAiIndexService {
 
         this.scheduleControlService =
                 scheduleControlService;
+
+        this.forecastControlService =
+                forecastControlService;
 
         this.costControlService =
                 costControlService;
@@ -441,6 +450,11 @@ public class ProjectAiIndexService {
                         .intelligence(
                                 project.getId());
 
+        ForecastIntelligenceResponse forecast =
+                forecastControlService
+                        .intelligence(
+                                project.getId());
+
         CostIntelligenceResponse cost =
                 costControlService
                         .get(
@@ -590,6 +604,28 @@ public class ProjectAiIndexService {
                 Schedule Score: %s
                 Schedule Risk: %s
                 Critical Activity Codes: %s
+
+                Predictive Forecast
+                BAC: %s
+                Planned Value: %s
+                Earned Value: %s
+                Actual Cost: %s
+                Cost Variance: %s
+                Schedule Variance: %s
+                CPI: %s
+                SPI: %s
+                EAC: %s
+                ETC: %s
+                VAC: %s
+                TCPI: %s
+                Cost Forecast Lower: %s
+                Expected Forecast Cost: %s
+                Cost Forecast Upper: %s
+                Expected Forecast Finish: %s
+                Schedule Variance Days: %s
+                Predictive Score: %s
+                Predictive Risk: %s
+                Forecast Trend: %s
 """
                 .formatted(
                         project.getCode(),
@@ -699,7 +735,28 @@ public class ProjectAiIndexService {
                         schedule.projectFinishVarianceDays(),
                         schedule.scheduleScore(),
                         schedule.scheduleRisk(),
-                        schedule.criticalPathActivityCodes());
+                        schedule.criticalPathActivityCodes(),
+
+                        forecast.bac(),
+                        forecast.plannedValue(),
+                        forecast.earnedValue(),
+                        forecast.actualCost(),
+                        forecast.costVariance(),
+                        forecast.scheduleVariance(),
+                        forecast.cpi(),
+                        forecast.spi(),
+                        forecast.estimateAtCompletion(),
+                        forecast.estimateToComplete(),
+                        forecast.varianceAtCompletion(),
+                        forecast.tcpi(),
+                        forecast.costForecastLower(),
+                        forecast.expectedForecastCost(),
+                        forecast.costForecastUpper(),
+                        forecast.expectedForecastFinishDate(),
+                        forecast.scheduleVarianceDays(),
+                        forecast.predictiveScore(),
+                        forecast.predictiveRisk(),
+                        forecast.trend());
         return new AiSourceDraft(
                 AiSourceType.PROJECT_FACT,
                 project.getId(),

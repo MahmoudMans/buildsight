@@ -2606,3 +2606,209 @@ export interface CreateScheduleConstraintInput {
   ownerName: string;
   dueDate: string;
 }
+
+export type ForecastRiskLevel =
+  | "ON_TRACK"
+  | "WATCH"
+  | "AT_RISK";
+
+export type ForecastTrend =
+  | "IMPROVING"
+  | "STABLE"
+  | "DETERIORATING"
+  | "NO_HISTORY";
+
+export type ForecastScenarioType =
+  | "BASE"
+  | "OPTIMISTIC"
+  | "PESSIMISTIC"
+  | "CUSTOM";
+
+export type ForecastScenarioStatus =
+  | "DRAFT"
+  | "APPROVED"
+  | "ARCHIVED";
+
+export interface ForecastIntelligence {
+  dataDate: string;
+
+  bac: number;
+  plannedValue: number;
+  earnedValue: number;
+  actualCost: number;
+
+  costVariance: number;
+  scheduleVariance: number;
+
+  cpi: number;
+  spi: number;
+
+  estimateAtCompletion: number;
+  estimateToComplete: number;
+  varianceAtCompletion: number;
+  tcpi: number;
+
+  plannedProgressPercentage: number;
+  earnedProgressPercentage: number;
+
+  costForecastLower: number;
+  expectedForecastCost: number;
+  costForecastUpper: number;
+
+  earliestForecastFinishDate: string;
+  expectedForecastFinishDate: string;
+  latestForecastFinishDate: string;
+
+  scheduleVarianceDays: number;
+
+  predictiveScore: number;
+  predictiveRisk: ForecastRiskLevel;
+  trend: ForecastTrend;
+
+  snapshotCount: number;
+  latestSnapshotDate: string | null;
+
+  explanation: string;
+}
+
+export interface ForecastScenarioEvaluation {
+  expectedCost: number;
+  lowerCost: number;
+  upperCost: number;
+  costImpactVsCurrent: number;
+
+  expectedFinishDate: string;
+  earliestFinishDate: string;
+  latestFinishDate: string;
+
+  finishImpactDays: number;
+
+  scenarioScore: number;
+  scenarioRisk: ForecastRiskLevel;
+}
+
+export interface ForecastScenario {
+  id: string;
+  projectId: string;
+
+  name: string;
+  scenarioType: ForecastScenarioType;
+  status: ForecastScenarioStatus;
+
+  costAdjustmentPercentage: number;
+  scheduleAdjustmentDays: number;
+  productivityMultiplier: number;
+  procurementDelayDays: number;
+  commercialExposurePercentage: number;
+  riskContingencyPercentage: number;
+  resourceCapacityMultiplier: number;
+
+  notes: string | null;
+
+  approvedAt: string | null;
+  version: number;
+  createdAt: string;
+  updatedAt: string;
+
+  evaluation: ForecastScenarioEvaluation;
+}
+
+export interface EvmSnapshot {
+  id: string;
+  projectId: string;
+  dataDate: string;
+
+  bac: number;
+  plannedValue: number;
+  earnedValue: number;
+  actualCost: number;
+
+  costVariance: number;
+  scheduleVariance: number;
+
+  cpi: number;
+  spi: number;
+
+  estimateAtCompletion: number;
+  estimateToComplete: number;
+  varianceAtCompletion: number;
+  tcpi: number;
+
+  forecastFinishDate: string;
+  scheduleVarianceDays: number;
+
+  predictiveScore: number;
+  predictiveRisk: ForecastRiskLevel;
+
+  createdAt: string;
+}
+
+export interface ForecastControl {
+  project: Project;
+  intelligence: ForecastIntelligence;
+  scenarios: ForecastScenario[];
+  history: EvmSnapshot[];
+}
+
+export interface CreateForecastScenarioInput {
+  name: string;
+  scenarioType: ForecastScenarioType;
+
+  costAdjustmentPercentage: number;
+  scheduleAdjustmentDays: number;
+
+  productivityMultiplier: number;
+  procurementDelayDays: number;
+
+  commercialExposurePercentage: number;
+  riskContingencyPercentage: number;
+
+  resourceCapacityMultiplier: number;
+
+  notes: string;
+}
+
+export interface PortfolioForecastProject {
+  projectId: string;
+  projectCode: string;
+  projectName: string;
+
+  bac: number;
+  plannedValue: number;
+  earnedValue: number;
+  actualCost: number;
+  expectedForecastCost: number;
+  varianceAtCompletion: number;
+
+  cpi: number;
+  spi: number;
+
+  expectedForecastFinishDate: string;
+  scheduleVarianceDays: number;
+
+  predictiveScore: number;
+  predictiveRisk: ForecastRiskLevel;
+  trend: ForecastTrend;
+}
+
+export interface PortfolioForecast {
+  dataDate: string;
+
+  projectCount: number;
+  onTrackProjects: number;
+  watchProjects: number;
+  atRiskProjects: number;
+  deterioratingProjects: number;
+
+  portfolioBac: number;
+  portfolioPlannedValue: number;
+  portfolioEarnedValue: number;
+  portfolioActualCost: number;
+  portfolioExpectedForecastCost: number;
+  portfolioVarianceAtCompletion: number;
+
+  weightedCpi: number;
+  weightedSpi: number;
+
+  projects: PortfolioForecastProject[];
+}

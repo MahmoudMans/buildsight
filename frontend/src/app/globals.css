@@ -8666,3 +8666,509 @@ h2 {
     grid-column: span 1;
   }
 }
+
+
+/* ==========================================================================
+   BUILDSIGHT STEP 15 — PREDICTIVE PROJECT CONTROLS
+   ========================================================================== */
+
+.forecast-shell {
+  min-height: 100vh;
+}
+
+.forecast-sidebar {
+  background: #121917;
+  bottom: 0;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  left: 0;
+  padding: 26px 21px 20px;
+  position: fixed;
+  top: 0;
+  width: 250px;
+  z-index: 30;
+}
+
+.forecast-main {
+  margin-left: 250px;
+  min-height: 100vh;
+  padding: 30px 35px 48px;
+}
+
+.forecast-header {
+  align-items: flex-end;
+  display: flex;
+  gap: 30px;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.forecast-header h1,
+.portfolio-forecast-header h1 {
+  font-size: 29px;
+}
+
+.forecast-header p,
+.portfolio-forecast-header p {
+  color: #818b86;
+  font-size: 10px;
+  line-height: 1.55;
+  margin: 7px 0 0;
+  max-width: 720px;
+}
+
+.forecast-score {
+  align-items: flex-end;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.forecast-score > span {
+  color: #89928e;
+  font-size: 7px;
+  font-weight: 850;
+  letter-spacing: 0.1em;
+}
+
+.forecast-score > strong {
+  font-size: 24px;
+}
+
+.forecast-score > small {
+  color: #89928e;
+  font-size: 7px;
+}
+
+.forecast-risk {
+  border-radius: 999px;
+  display: inline-block;
+  font-size: 7px;
+  font-style: normal;
+  font-weight: 850;
+  padding: 5px 8px;
+}
+
+.forecast-risk-on-track {
+  background: #e2f3e9;
+  color: #2e7354;
+}
+
+.forecast-risk-watch {
+  background: #fff1d4;
+  color: #90691c;
+}
+
+.forecast-risk-at-risk {
+  background: #fbe4e0;
+  color: #9c493f;
+}
+
+.forecast-health-note {
+  background: #f6f8f5;
+  border: 1px solid #e1e6df;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  font-size: 8px;
+  gap: 4px;
+  line-height: 1.55;
+  margin-bottom: 18px;
+  padding: 12px 14px;
+}
+
+.forecast-health-note strong {
+  color: #3d4843;
+}
+
+.forecast-health-note span {
+  color: #7c8782;
+}
+
+.forecast-kpis,
+.portfolio-forecast-kpis {
+  display: grid;
+  gap: 12px;
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+  margin-bottom: 18px;
+}
+
+.forecast-kpi {
+  background: white;
+  border: 1px solid #e1e5e0;
+  border-radius: 12px;
+  min-height: 135px;
+  padding: 17px;
+}
+
+.forecast-kpi > span,
+.forecast-kpi > strong,
+.forecast-kpi > small {
+  display: block;
+}
+
+.forecast-kpi > span {
+  color: #858f8a;
+  font-size: 7px;
+  font-weight: 850;
+  letter-spacing: 0.09em;
+}
+
+.forecast-kpi > strong {
+  font-size: 20px;
+  letter-spacing: -0.04em;
+  margin-top: 20px;
+}
+
+.forecast-kpi > small {
+  color: #929b97;
+  font-size: 8px;
+  margin-top: 8px;
+}
+
+.forecast-kpi-dark {
+  background: #121917;
+  border-color: #121917;
+}
+
+.forecast-kpi-dark > strong {
+  color: #d7ff45;
+}
+
+.forecast-kpi-dark > span,
+.forecast-kpi-dark > small {
+  color: #7d8a85;
+}
+
+.forecast-card {
+  background: white;
+  border: 1px solid #e1e5e0;
+  border-radius: 13px;
+  margin-bottom: 18px;
+  overflow: hidden;
+}
+
+.forecast-card-header {
+  align-items: center;
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
+  padding: 19px 20px;
+}
+
+.forecast-card-header h2 {
+  font-size: 18px;
+}
+
+.forecast-card-header > strong {
+  color: #69736e;
+  font-size: 9px;
+}
+
+.evm-grid {
+  border-top: 1px solid #e8ebe7;
+  display: grid;
+  gap: 10px;
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+  padding: 18px 20px;
+}
+
+.forecast-metric {
+  background: #f8f9f7;
+  border: 1px solid #e6e9e5;
+  border-radius: 9px;
+  padding: 13px;
+}
+
+.forecast-metric span,
+.forecast-metric strong {
+  display: block;
+}
+
+.forecast-metric span {
+  color: #87918c;
+  font-size: 7px;
+}
+
+.forecast-metric strong {
+  font-size: 10px;
+  margin-top: 6px;
+}
+
+.forecast-negative {
+  color: #a44b41 !important;
+}
+
+.forecast-explanation {
+  border-top: 1px solid #eceeeb;
+  color: #858f8a;
+  font-size: 8px;
+  line-height: 1.6;
+  margin: 0 20px;
+  padding: 14px 0 18px;
+}
+
+.forecast-actions {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.forecast-actions button {
+  background: white;
+  border: 1px solid #dce1dc;
+  border-radius: 8px;
+  color: #4a5550;
+  font-size: 9px;
+  font-weight: 750;
+  padding: 10px 13px;
+}
+
+.forecast-form {
+  border-top: 1px solid #e7eae6;
+  display: grid;
+  gap: 15px;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  margin: 0 20px;
+  padding: 18px 0;
+}
+
+.forecast-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.forecast-form label > span {
+  color: #69736f;
+  font-size: 9px;
+  font-weight: 750;
+}
+
+.forecast-form input,
+.forecast-form textarea,
+.forecast-form select {
+  background: #fbfcfa;
+  border: 1px solid #dce1dc;
+  border-radius: 8px;
+  color: #252c29;
+  outline: none;
+  padding: 10px 11px;
+  width: 100%;
+}
+
+.scenario-grid {
+  border-top: 1px solid #e8ebe7;
+  display: grid;
+  gap: 12px;
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+  padding: 18px 20px 20px;
+}
+
+.scenario-card {
+  border: 1px solid #e1e5e0;
+  border-radius: 11px;
+  padding: 15px;
+}
+
+.scenario-approved {
+  border-color: #bcd590;
+  box-shadow:
+    inset 0 3px 0 #b0cd71;
+}
+
+.scenario-archived {
+  opacity: 0.65;
+}
+
+.scenario-card-header {
+  align-items: flex-start;
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+.scenario-card-header span {
+  color: #89928d;
+  font-size: 6px;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+}
+
+.scenario-card-header h3 {
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.scenario-card-header i {
+  background: #f0f2ef;
+  border-radius: 999px;
+  color: #67716c;
+  font-size: 6px;
+  font-style: normal;
+  font-weight: 850;
+  padding: 5px 7px;
+}
+
+.scenario-values {
+  display: grid;
+  gap: 7px;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  margin-top: 14px;
+}
+
+.scenario-score {
+  align-items: center;
+  border-top: 1px solid #eceeeb;
+  display: grid;
+  gap: 8px;
+  grid-template-columns:
+    1fr auto auto;
+  margin-top: 13px;
+  padding-top: 12px;
+}
+
+.scenario-score > span {
+  color: #7f8984;
+  font-size: 7px;
+}
+
+.scenario-score > strong {
+  font-size: 17px;
+}
+
+.scenario-assumptions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 12px;
+}
+
+.scenario-assumptions span {
+  background: #f5f7f4;
+  border-radius: 999px;
+  color: #7d8782;
+  font-size: 6px;
+  padding: 5px 7px;
+}
+
+.scenario-actions {
+  display: flex;
+  gap: 7px;
+  margin-top: 13px;
+}
+
+.scenario-actions button {
+  background: white;
+  border: 1px solid #dce1dc;
+  border-radius: 7px;
+  color: #59645f;
+  font-size: 7px;
+  font-weight: 800;
+  padding: 7px 9px;
+}
+
+.portfolio-forecast-page {
+  min-height: 100vh;
+  padding: 32px 36px 48px;
+}
+
+.portfolio-forecast-header {
+  align-items: flex-end;
+  display: flex;
+  gap: 30px;
+  justify-content: space-between;
+  margin-bottom: 22px;
+}
+
+.portfolio-forecast-header > div:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  text-align: right;
+}
+
+.portfolio-forecast-header > div:last-child span {
+  color: #8b9490;
+  font-size: 7px;
+  font-weight: 850;
+}
+
+.portfolio-forecast-header > div:last-child strong {
+  font-size: 12px;
+}
+
+.forecast-project-link {
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  text-decoration: none;
+}
+
+.forecast-project-link strong {
+  color: #313936;
+}
+
+.forecast-project-link span {
+  color: #88918d;
+  font-size: 7px;
+}
+
+@media (max-width: 1180px) {
+  .forecast-kpis,
+  .portfolio-forecast-kpis,
+  .evm-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .scenario-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .forecast-sidebar {
+    display: none;
+  }
+
+  .forecast-main {
+    margin-left: 0;
+    padding: 24px 18px 40px;
+  }
+
+  .scenario-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 680px) {
+  .forecast-header,
+  .portfolio-forecast-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .forecast-score {
+    align-items: flex-start;
+  }
+
+  .forecast-kpis,
+  .portfolio-forecast-kpis,
+  .evm-grid,
+  .forecast-form {
+    grid-template-columns: 1fr;
+  }
+
+  .portfolio-forecast-page {
+    padding: 24px 18px 40px;
+  }
+}
