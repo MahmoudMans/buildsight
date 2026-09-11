@@ -45,6 +45,8 @@ import com.buildsight.platform.forecast.api.ForecastModels.ForecastIntelligenceR
 import com.buildsight.platform.forecast.service.ForecastControlService;
 import com.buildsight.platform.governance.api.GovernanceModels.GovernanceIntelligenceResponse;
 import com.buildsight.platform.governance.service.GovernanceControlService;
+import com.buildsight.platform.recovery.api.RecoveryModels.ChangeImpactIntelligenceResponse;
+import com.buildsight.platform.recovery.service.ChangeImpactControlService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -81,6 +83,9 @@ public class ProjectAiIndexService {
 
     private final GovernanceControlService
             governanceControlService;
+
+    private final ChangeImpactControlService
+            changeImpactControlService;
 
     private final CostControlService
             costControlService;
@@ -128,6 +133,7 @@ public class ProjectAiIndexService {
             ScheduleControlService scheduleControlService,
             ForecastControlService forecastControlService,
             GovernanceControlService governanceControlService,
+            ChangeImpactControlService changeImpactControlService,
             CostControlService costControlService,
             ProcurementControlService procurementControlService,
             RiskControlService riskControlService,
@@ -173,6 +179,9 @@ public class ProjectAiIndexService {
 
         this.governanceControlService =
                 governanceControlService;
+
+        this.changeImpactControlService =
+                changeImpactControlService;
 
         this.costControlService =
                 costControlService;
@@ -469,6 +478,11 @@ public class ProjectAiIndexService {
                         .intelligence(
                                 project.getId());
 
+        ChangeImpactIntelligenceResponse recovery =
+                changeImpactControlService
+                        .intelligence(
+                                project.getId());
+
         CostIntelligenceResponse cost =
                 costControlService
                         .get(
@@ -654,6 +668,22 @@ public class ProjectAiIndexService {
                 Decision Closure Rate: %s
                 Governance Score: %s
                 Governance Risk: %s
+
+                Change & Recovery Intelligence
+                Simulation Count: %s
+                Active Simulation: %s
+                Simulation Status: %s
+                Baseline Forecast Cost: %s
+                Impacted Forecast Cost: %s
+                Change Cost Exposure: %s
+                Impacted Forecast Finish: %s
+                Schedule Impact Days: %s
+                Recommended Recovery Option: %s
+                Recovery Cost: %s
+                Recoverable Days: %s
+                Residual Delay Days: %s
+                Recovery Score: %s
+                Recovery Risk: %s
 """
                 .formatted(
                         project.getCode(),
@@ -797,7 +827,22 @@ public class ProjectAiIndexService {
                         governance.actionClosureRate(),
                         governance.decisionClosureRate(),
                         governance.governanceScore(),
-                        governance.governanceRisk());
+                        governance.governanceRisk(),
+
+                        recovery.simulationCount(),
+                        recovery.activeSimulationNumber(),
+                        recovery.simulationStatus(),
+                        recovery.baselineForecastCost(),
+                        recovery.impactedForecastCost(),
+                        recovery.changeCostExposure(),
+                        recovery.impactedForecastFinishDate(),
+                        recovery.scheduleImpactDays(),
+                        recovery.recommendedRecoveryOptionNumber(),
+                        recovery.recoveryCost(),
+                        recovery.recoverableDays(),
+                        recovery.residualDelayDays(),
+                        recovery.recoveryScore(),
+                        recovery.recoveryRisk());
         return new AiSourceDraft(
                 AiSourceType.PROJECT_FACT,
                 project.getId(),

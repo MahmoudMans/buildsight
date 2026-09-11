@@ -431,6 +431,16 @@ export function ProjectForecastControlView({
               Governance
             </span>
           </Link>
+
+          <Link
+            href={`/projects/${projectId}/recovery`}
+            className="command-nav-item"
+          >
+            09
+            <span>
+              Recovery
+            </span>
+          </Link>
         </nav>
 
         <div className="command-sidebar-footer">

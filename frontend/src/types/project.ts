@@ -3117,3 +3117,290 @@ export interface CreateGovernanceActionInput {
   priority: GovernanceActionPriority;
   dueDate: string;
 }
+
+export type ChangeSimulationStatus =
+  | "DRAFT"
+  | "APPROVED"
+  | "ARCHIVED";
+
+export type RecoveryStrategyType =
+  | "ACCELERATION"
+  | "RESEQUENCING"
+  | "OVERTIME"
+  | "ADDITIONAL_RESOURCES"
+  | "ALTERNATE_SUPPLIER"
+  | "SCOPE_OPTIMIZATION"
+  | "COMBINED";
+
+export type RecoveryOptionStatus =
+  | "DRAFT"
+  | "SELECTED"
+  | "REJECTED";
+
+export type RecoveryRiskLevel =
+  | "ON_TRACK"
+  | "WATCH"
+  | "AT_RISK";
+
+export interface ChangeImpactEvaluation {
+  baselineForecastCost: number;
+
+  directCostImpact: number;
+  productivityCostImpact: number;
+  resourceCostImpact: number;
+  extensionCostImpact: number;
+  contingencyCostImpact: number;
+
+  totalChangeCostExposure: number;
+
+  impactedForecastCost: number;
+
+  baselineForecastFinishDate: string;
+  impactedForecastFinishDate: string;
+
+  scheduleImpactDays: number;
+
+  impactScore: number;
+  impactRisk: RecoveryRiskLevel;
+}
+
+export interface RecoveryOptionEvaluation {
+  recoveredForecastCost: number;
+  recoveryCostVsImpacted: number;
+
+  recoveredForecastFinishDate: string;
+
+  recoverableDays: number;
+  residualDelayDays: number;
+
+  costPerDayRecovered: number;
+
+  recoveryScore: number;
+  recoveryRisk: RecoveryRiskLevel;
+}
+
+export interface RecoveryOption {
+  id: string;
+  projectId: string;
+  simulationId: string;
+
+  optionNumber: string;
+  name: string;
+
+  strategyType: RecoveryStrategyType;
+  status: RecoveryOptionStatus;
+
+  scheduleRecoveryDays: number;
+  incrementalCost: number;
+
+  productivityImprovementPercentage: number;
+  procurementRecoveryDays: number;
+  resourceCapacityImprovementPercentage: number;
+  residualRiskPercentage: number;
+
+  notes: string | null;
+
+  recommended: boolean;
+
+  selectedAt: string | null;
+
+  version: number;
+
+  createdAt: string;
+  updatedAt: string;
+
+  evaluation: RecoveryOptionEvaluation;
+}
+
+export interface ChangeSimulation {
+  id: string;
+  projectId: string;
+
+  simulationNumber: string;
+  title: string;
+  sourceChangeReference: string;
+  description: string | null;
+
+  status: ChangeSimulationStatus;
+
+  directCostImpact: number;
+  delayDays: number;
+  productivityChangePercentage: number;
+  procurementDelayDays: number;
+  resourceCapacityChangePercentage: number;
+  riskContingencyPercentage: number;
+
+  notes: string | null;
+
+  approvedAt: string | null;
+
+  version: number;
+
+  createdAt: string;
+  updatedAt: string;
+
+  impact: ChangeImpactEvaluation;
+
+  options: RecoveryOption[];
+}
+
+export interface RecoveryPlanSnapshot {
+  id: string;
+  projectId: string;
+  simulationId: string;
+  recoveryOptionId: string;
+
+  selectedAt: string;
+
+  baselineForecastCost: number;
+  impactedForecastCost: number;
+  recoveredForecastCost: number;
+
+  baselineForecastFinishDate: string;
+  impactedForecastFinishDate: string;
+  recoveredForecastFinishDate: string;
+
+  changeCostExposure: number;
+  recoveryCost: number;
+
+  impactDelayDays: number;
+  recoveredDays: number;
+  residualDelayDays: number;
+
+  costPerDayRecovered: number;
+
+  recoveryScore: number;
+  recoveryRisk: RecoveryRiskLevel;
+
+  createdAt: string;
+}
+
+export interface ChangeImpactIntelligence {
+  dataDate: string;
+
+  simulationCount: number;
+
+  activeSimulationNumber: string | null;
+  activeSimulationTitle: string | null;
+  simulationStatus: string | null;
+
+  baselineForecastCost: number;
+  impactedForecastCost: number;
+  changeCostExposure: number;
+
+  baselineForecastFinishDate: string;
+  impactedForecastFinishDate: string;
+
+  scheduleImpactDays: number;
+
+  recommendedRecoveryOptionNumber: string | null;
+  recommendedRecoveryOptionName: string | null;
+
+  recoveryCost: number;
+
+  recoverableDays: number;
+  residualDelayDays: number;
+
+  recoveredForecastCost: number;
+  recoveredForecastFinishDate: string;
+
+  costPerDayRecovered: number;
+
+  recoveryScore: number;
+  recoveryRisk: RecoveryRiskLevel;
+
+  explanation: string;
+}
+
+export interface ChangeImpactControl {
+  project: Project;
+
+  baselineForecast: ForecastIntelligence;
+
+  intelligence: ChangeImpactIntelligence;
+
+  simulations: ChangeSimulation[];
+
+  selectedPlanHistory: RecoveryPlanSnapshot[];
+}
+
+export interface CreateChangeSimulationInput {
+  simulationNumber: string;
+  title: string;
+  sourceChangeReference: string;
+  description: string;
+
+  directCostImpact: number;
+  delayDays: number;
+  productivityChangePercentage: number;
+  procurementDelayDays: number;
+  resourceCapacityChangePercentage: number;
+  riskContingencyPercentage: number;
+
+  notes: string;
+}
+
+export interface CreateRecoveryOptionInput {
+  optionNumber: string;
+  name: string;
+
+  strategyType: RecoveryStrategyType;
+
+  scheduleRecoveryDays: number;
+  incrementalCost: number;
+
+  productivityImprovementPercentage: number;
+  procurementRecoveryDays: number;
+  resourceCapacityImprovementPercentage: number;
+  residualRiskPercentage: number;
+
+  notes: string;
+}
+
+export interface PortfolioRecoveryProject {
+  projectId: string;
+  projectCode: string;
+  projectName: string;
+
+  simulationCount: number;
+
+  activeSimulationNumber: string | null;
+
+  changeCostExposure: number;
+
+  scheduleImpactDays: number;
+
+  recommendedRecoveryOptionNumber: string | null;
+
+  recoveryCost: number;
+
+  recoverableDays: number;
+  residualDelayDays: number;
+
+  recoveryScore: number;
+  recoveryRisk: RecoveryRiskLevel;
+}
+
+export interface PortfolioRecovery {
+  dataDate: string;
+
+  projectCount: number;
+  projectsWithActiveSimulations: number;
+
+  onTrackProjects: number;
+  watchProjects: number;
+  atRiskProjects: number;
+
+  totalChangeCostExposure: number;
+
+  totalScheduleImpactDays: number;
+
+  totalRecoveryCost: number;
+
+  totalRecoverableDays: number;
+  totalResidualDelayDays: number;
+
+  averageRecoveryScore: number;
+
+  projects: PortfolioRecoveryProject[];
+}

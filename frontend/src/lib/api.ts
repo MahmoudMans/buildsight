@@ -2070,3 +2070,109 @@ export async function getPortfolioGovernance(): Promise<
     "/portfolio/governance",
   );
 }
+
+export async function getProjectRecovery(
+  projectId: string,
+): Promise<
+  import("@/types/project").ChangeImpactControl
+> {
+  return request<
+    import("@/types/project").ChangeImpactControl
+  >(
+    `/projects/${projectId}/recovery`,
+  );
+}
+
+export async function createChangeSimulation(
+  projectId: string,
+  input: import("@/types/project").CreateChangeSimulationInput,
+): Promise<
+  import("@/types/project").ChangeSimulation
+> {
+  return request<
+    import("@/types/project").ChangeSimulation
+  >(
+    `/projects/${projectId}/recovery/simulations`,
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function approveChangeSimulation(
+  projectId: string,
+  simulationId: string,
+): Promise<
+  import("@/types/project").ChangeSimulation
+> {
+  return request<
+    import("@/types/project").ChangeSimulation
+  >(
+    `/projects/${projectId}/recovery/simulations/${simulationId}/approve`,
+    {
+      method: "POST",
+    },
+  );
+}
+
+export async function archiveChangeSimulation(
+  projectId: string,
+  simulationId: string,
+): Promise<
+  import("@/types/project").ChangeSimulation
+> {
+  return request<
+    import("@/types/project").ChangeSimulation
+  >(
+    `/projects/${projectId}/recovery/simulations/${simulationId}/archive`,
+    {
+      method: "POST",
+    },
+  );
+}
+
+export async function createRecoveryOption(
+  projectId: string,
+  simulationId: string,
+  input: import("@/types/project").CreateRecoveryOptionInput,
+): Promise<
+  import("@/types/project").RecoveryOption
+> {
+  return request<
+    import("@/types/project").RecoveryOption
+  >(
+    `/projects/${projectId}/recovery/simulations/${simulationId}/options`,
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function selectRecoveryOption(
+  projectId: string,
+  simulationId: string,
+  optionId: string,
+): Promise<
+  import("@/types/project").RecoveryPlanSnapshot
+> {
+  return request<
+    import("@/types/project").RecoveryPlanSnapshot
+  >(
+    `/projects/${projectId}/recovery/simulations/${simulationId}/options/${optionId}/select`,
+    {
+      method: "POST",
+    },
+  );
+}
+
+export async function getPortfolioRecovery(): Promise<
+  import("@/types/project").PortfolioRecovery
+> {
+  return request<
+    import("@/types/project").PortfolioRecovery
+  >(
+    "/portfolio/recovery",
+  );
+}

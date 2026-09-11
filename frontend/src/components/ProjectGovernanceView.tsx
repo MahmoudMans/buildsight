@@ -800,6 +800,16 @@ export function ProjectGovernanceView({
               Portfolio governance
             </span>
           </Link>
+
+          <Link
+            href={`/projects/${projectId}/recovery`}
+            className="command-nav-item"
+          >
+            10
+            <span>
+              Recovery
+            </span>
+          </Link>
         </nav>
 
         <div className="command-sidebar-footer">
