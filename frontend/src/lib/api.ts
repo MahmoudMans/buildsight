@@ -1928,3 +1928,145 @@ export async function getPortfolioForecast(): Promise<
     "/portfolio/forecast",
   );
 }
+
+export async function getProjectGovernance(
+  projectId: string,
+): Promise<
+  import("@/types/project").GovernanceControl
+> {
+  return request<
+    import("@/types/project").GovernanceControl
+  >(
+    `/projects/${projectId}/governance`,
+  );
+}
+
+export async function createGovernanceMeeting(
+  projectId: string,
+  input: import("@/types/project").CreateGovernanceMeetingInput,
+): Promise<
+  import("@/types/project").GovernanceMeeting
+> {
+  return request<
+    import("@/types/project").GovernanceMeeting
+  >(
+    `/projects/${projectId}/governance/meetings`,
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function updateGovernanceMeeting(
+  projectId: string,
+  meetingId: string,
+  input: Record<string, unknown>,
+): Promise<
+  import("@/types/project").GovernanceMeeting
+> {
+  return request<
+    import("@/types/project").GovernanceMeeting
+  >(
+    `/projects/${projectId}/governance/meetings/${meetingId}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function createGovernanceDecision(
+  projectId: string,
+  input: import("@/types/project").CreateGovernanceDecisionInput,
+): Promise<
+  import("@/types/project").GovernanceDecision
+> {
+  return request<
+    import("@/types/project").GovernanceDecision
+  >(
+    `/projects/${projectId}/governance/decisions`,
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function updateGovernanceDecision(
+  projectId: string,
+  decisionId: string,
+  input: Record<string, unknown>,
+): Promise<
+  import("@/types/project").GovernanceDecision
+> {
+  return request<
+    import("@/types/project").GovernanceDecision
+  >(
+    `/projects/${projectId}/governance/decisions/${decisionId}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function createGovernanceAction(
+  projectId: string,
+  input: import("@/types/project").CreateGovernanceActionInput,
+): Promise<
+  import("@/types/project").GovernanceAction
+> {
+  return request<
+    import("@/types/project").GovernanceAction
+  >(
+    `/projects/${projectId}/governance/actions`,
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function updateGovernanceAction(
+  projectId: string,
+  actionId: string,
+  input: Record<string, unknown>,
+): Promise<
+  import("@/types/project").GovernanceAction
+> {
+  return request<
+    import("@/types/project").GovernanceAction
+  >(
+    `/projects/${projectId}/governance/actions/${actionId}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function captureExecutiveReportSnapshot(
+  projectId: string,
+): Promise<
+  import("@/types/project").ExecutiveReportSnapshot
+> {
+  return request<
+    import("@/types/project").ExecutiveReportSnapshot
+  >(
+    `/projects/${projectId}/governance/executive-report/snapshots`,
+    {
+      method: "POST",
+    },
+  );
+}
+
+export async function getPortfolioGovernance(): Promise<
+  import("@/types/project").PortfolioGovernance
+> {
+  return request<
+    import("@/types/project").PortfolioGovernance
+  >(
+    "/portfolio/governance",
+  );
+}

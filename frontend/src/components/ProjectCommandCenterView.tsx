@@ -785,10 +785,18 @@ export function ProjectCommandCenterView({
           </Link>
 
           <Link
-            href={`/projects/${projectId}/copilot`}
+            href={`/projects/${projectId}/governance`}
             className="command-nav-item"
           >
             16
+            <span>Governance</span>
+          </Link>
+
+          <Link
+            href={`/projects/${projectId}/copilot`}
+            className="command-nav-item"
+          >
+            17
             <span>AI Copilot</span>
           </Link>
 

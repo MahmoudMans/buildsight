@@ -9172,3 +9172,429 @@ h2 {
     padding: 24px 18px 40px;
   }
 }
+
+
+/* ==========================================================================
+   BUILDSIGHT STEP 16 — GOVERNANCE + EXECUTIVE REPORTING
+   ========================================================================== */
+
+.governance-shell {
+  min-height: 100vh;
+}
+
+.governance-sidebar {
+  background: #121917;
+  bottom: 0;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  left: 0;
+  padding: 26px 21px 20px;
+  position: fixed;
+  top: 0;
+  width: 250px;
+  z-index: 30;
+}
+
+.governance-main {
+  margin-left: 250px;
+  min-height: 100vh;
+  padding: 30px 35px 48px;
+}
+
+.governance-header,
+.portfolio-governance-header {
+  align-items: flex-end;
+  display: flex;
+  gap: 30px;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.governance-header h1,
+.portfolio-governance-header h1 {
+  font-size: 29px;
+}
+
+.governance-header p,
+.portfolio-governance-header p {
+  color: #818b86;
+  font-size: 10px;
+  line-height: 1.55;
+  margin: 7px 0 0;
+  max-width: 720px;
+}
+
+.governance-score,
+.portfolio-governance-score {
+  align-items: flex-end;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.governance-score > span,
+.portfolio-governance-score > span {
+  color: #89928e;
+  font-size: 7px;
+  font-weight: 850;
+  letter-spacing: 0.1em;
+}
+
+.governance-score > strong,
+.portfolio-governance-score > strong {
+  font-size: 24px;
+}
+
+.governance-risk {
+  border-radius: 999px;
+  display: inline-block;
+  font-size: 7px;
+  font-style: normal;
+  font-weight: 850;
+  padding: 5px 8px;
+}
+
+.governance-risk-on-track {
+  background: #e2f3e9;
+  color: #2e7354;
+}
+
+.governance-risk-watch {
+  background: #fff1d4;
+  color: #90691c;
+}
+
+.governance-risk-at-risk {
+  background: #fbe4e0;
+  color: #9c493f;
+}
+
+.governance-kpis {
+  display: grid;
+  gap: 12px;
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+  margin-bottom: 18px;
+}
+
+.governance-kpi {
+  background: white;
+  border: 1px solid #e1e5e0;
+  border-radius: 12px;
+  min-height: 128px;
+  padding: 17px;
+}
+
+.governance-kpi span,
+.governance-kpi strong,
+.governance-kpi small {
+  display: block;
+}
+
+.governance-kpi span {
+  color: #858f8a;
+  font-size: 7px;
+  font-weight: 850;
+  letter-spacing: 0.09em;
+}
+
+.governance-kpi strong {
+  font-size: 22px;
+  margin-top: 18px;
+}
+
+.governance-kpi small {
+  color: #929b97;
+  font-size: 8px;
+  margin-top: 8px;
+}
+
+.governance-kpi-dark {
+  background: #121917;
+  border-color: #121917;
+}
+
+.governance-kpi-dark strong {
+  color: #d7ff45;
+}
+
+.governance-kpi-dark span,
+.governance-kpi-dark small {
+  color: #7d8a85;
+}
+
+.governance-card,
+.governance-executive-card {
+  background: white;
+  border: 1px solid #e1e5e0;
+  border-radius: 13px;
+  margin-bottom: 18px;
+  overflow: hidden;
+}
+
+.governance-card-header {
+  align-items: center;
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
+  padding: 19px 20px;
+}
+
+.governance-card-header h2 {
+  font-size: 18px;
+}
+
+.governance-card-header > strong {
+  color: #69736e;
+  font-size: 9px;
+}
+
+.governance-card-header > button {
+  background: #121917;
+  border: 0;
+  border-radius: 8px;
+  color: #d7ff45;
+  font-size: 8px;
+  font-weight: 800;
+  padding: 9px 11px;
+}
+
+.executive-score-grid {
+  border-top: 1px solid #e8ebe7;
+  display: grid;
+  gap: 9px;
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+  padding: 18px 20px;
+}
+
+.governance-metric {
+  background: #f8f9f7;
+  border: 1px solid #e6e9e5;
+  border-radius: 9px;
+  padding: 13px;
+}
+
+.governance-metric span,
+.governance-metric strong {
+  display: block;
+}
+
+.governance-metric span {
+  color: #87918c;
+  font-size: 7px;
+}
+
+.governance-metric strong {
+  font-size: 10px;
+  margin-top: 6px;
+}
+
+.executive-summary {
+  border-top: 1px solid #eceeeb;
+  color: #68736e;
+  font-size: 9px;
+  line-height: 1.7;
+  margin: 0 20px;
+  padding: 15px 0;
+}
+
+.attention-list {
+  border-top: 1px solid #eceeeb;
+  padding: 16px 20px 20px;
+}
+
+.attention-list > .eyebrow {
+  margin-bottom: 10px;
+}
+
+.attention-item {
+  align-items: center;
+  border: 1px solid #e5e8e4;
+  border-left-width: 4px;
+  border-radius: 9px;
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
+  margin-top: 7px;
+  padding: 11px 12px;
+}
+
+.attention-critical {
+  border-left-color: #a74b41;
+}
+
+.attention-high {
+  border-left-color: #cf8042;
+}
+
+.attention-medium {
+  border-left-color: #d9b74b;
+}
+
+.attention-item > div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.attention-item > div:last-child {
+  align-items: flex-end;
+  flex-shrink: 0;
+}
+
+.attention-item span {
+  color: #88918d;
+  font-size: 6px;
+  font-weight: 850;
+}
+
+.attention-item strong {
+  color: #3d4642;
+  font-size: 9px;
+}
+
+.attention-item small {
+  color: #818b86;
+  font-size: 7px;
+  line-height: 1.5;
+}
+
+.governance-actions-toolbar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.governance-actions-toolbar button {
+  background: white;
+  border: 1px solid #dce1dc;
+  border-radius: 8px;
+  color: #4a5550;
+  font-size: 9px;
+  font-weight: 750;
+  padding: 10px 13px;
+}
+
+.governance-form {
+  border-top: 1px solid #e7eae6;
+  display: grid;
+  gap: 15px;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  margin: 0 20px;
+  padding: 18px 0;
+}
+
+.governance-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.governance-form label > span {
+  color: #69736f;
+  font-size: 9px;
+  font-weight: 750;
+}
+
+.governance-form input,
+.governance-form textarea,
+.governance-form select {
+  background: #fbfcfa;
+  border: 1px solid #dce1dc;
+  border-radius: 8px;
+  color: #252c29;
+  outline: none;
+  padding: 10px 11px;
+  width: 100%;
+}
+
+.governance-overdue-row {
+  background: #fff7f5;
+}
+
+.governance-priority {
+  border-radius: 999px;
+  display: inline-block;
+  font-size: 6px;
+  font-weight: 850;
+  padding: 5px 7px;
+}
+
+.governance-priority-low {
+  background: #eef1ee;
+  color: #69736f;
+}
+
+.governance-priority-medium {
+  background: #edf3df;
+  color: #647b2d;
+}
+
+.governance-priority-high {
+  background: #fff0cf;
+  color: #8b641e;
+}
+
+.governance-priority-critical {
+  background: #f9dfdb;
+  color: #98443c;
+}
+
+.portfolio-governance-page {
+  min-height: 100vh;
+  padding: 32px 36px 48px;
+}
+
+@media (max-width: 1180px) {
+  .governance-kpis,
+  .executive-score-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .governance-sidebar {
+    display: none;
+  }
+
+  .governance-main {
+    margin-left: 0;
+    padding: 24px 18px 40px;
+  }
+}
+
+@media (max-width: 680px) {
+  .governance-header,
+  .portfolio-governance-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .governance-score,
+  .portfolio-governance-score {
+    align-items: flex-start;
+  }
+
+  .governance-kpis,
+  .executive-score-grid,
+  .governance-form {
+    grid-template-columns: 1fr;
+  }
+
+  .portfolio-governance-page {
+    padding: 24px 18px 40px;
+  }
+
+  .attention-item {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .attention-item > div:last-child {
+    align-items: flex-start;
+  }
+}

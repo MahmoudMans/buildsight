@@ -421,6 +421,16 @@ export function ProjectForecastControlView({
               Portfolio forecast
             </span>
           </Link>
+
+          <Link
+            href={`/projects/${projectId}/governance`}
+            className="command-nav-item"
+          >
+            08
+            <span>
+              Governance
+            </span>
+          </Link>
         </nav>
 
         <div className="command-sidebar-footer">

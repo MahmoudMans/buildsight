@@ -2812,3 +2812,308 @@ export interface PortfolioForecast {
 
   projects: PortfolioForecastProject[];
 }
+
+export type GovernanceMeetingType =
+  | "PROGRESS"
+  | "COORDINATION"
+  | "DESIGN"
+  | "COMMERCIAL"
+  | "HSE"
+  | "QUALITY"
+  | "EXECUTIVE"
+  | "OTHER";
+
+export type GovernanceMeetingStatus =
+  | "PLANNED"
+  | "HELD"
+  | "CANCELLED";
+
+export type GovernanceDecisionStatus =
+  | "PROPOSED"
+  | "APPROVED"
+  | "REJECTED"
+  | "IMPLEMENTED"
+  | "SUPERSEDED";
+
+export type GovernanceDecisionImpactArea =
+  | "SCHEDULE"
+  | "COST"
+  | "QUALITY"
+  | "HSE"
+  | "COMMERCIAL"
+  | "TECHNICAL"
+  | "PROCUREMENT"
+  | "RESOURCE"
+  | "OTHER";
+
+export type GovernanceActionPriority =
+  | "LOW"
+  | "MEDIUM"
+  | "HIGH"
+  | "CRITICAL";
+
+export type GovernanceActionStatus =
+  | "OPEN"
+  | "IN_PROGRESS"
+  | "BLOCKED"
+  | "DONE"
+  | "VOID";
+
+export type GovernanceRiskLevel =
+  | "ON_TRACK"
+  | "WATCH"
+  | "AT_RISK";
+
+export interface GovernanceMeeting {
+  id: string;
+  projectId: string;
+  meetingNumber: string;
+  title: string;
+  meetingType: GovernanceMeetingType;
+  scheduledAt: string;
+  heldAt: string | null;
+  status: GovernanceMeetingStatus;
+  chairName: string | null;
+  minutes: string | null;
+  nextMeetingAt: string | null;
+  missingMinutes: boolean;
+  version: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface GovernanceDecision {
+  id: string;
+  projectId: string;
+  meetingId: string | null;
+  decisionNumber: string;
+  title: string;
+  description: string | null;
+  decisionDate: string;
+  ownerName: string | null;
+  dueDate: string | null;
+  impactArea: GovernanceDecisionImpactArea;
+  rationale: string | null;
+  status: GovernanceDecisionStatus;
+  overdue: boolean;
+  version: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface GovernanceAction {
+  id: string;
+  projectId: string;
+  meetingId: string | null;
+  decisionId: string | null;
+  actionNumber: string;
+  title: string;
+  description: string | null;
+  ownerName: string | null;
+  priority: GovernanceActionPriority;
+  dueDate: string;
+  status: GovernanceActionStatus;
+  blockerReason: string | null;
+  completedAt: string | null;
+  overdue: boolean;
+  version: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface GovernanceIntelligence {
+  dataDate: string;
+
+  meetingCount: number;
+  plannedMeetings: number;
+  heldMeetings: number;
+  meetingsWithoutMinutes: number;
+
+  decisionCount: number;
+  pendingDecisions: number;
+  overdueDecisions: number;
+  implementedDecisions: number;
+
+  actionCount: number;
+  openActions: number;
+  overdueActions: number;
+  criticalOpenActions: number;
+  blockedActions: number;
+  actionsDueNext14Days: number;
+  completedActions: number;
+
+  actionClosureRate: number;
+  decisionClosureRate: number;
+
+  governanceScore: number;
+  governanceRisk: GovernanceRiskLevel;
+
+  explanation: string;
+}
+
+export interface ExecutiveAttentionItem {
+  type: string;
+  severity: string;
+  reference: string;
+  title: string;
+  owner: string | null;
+  dueDate: string | null;
+  detail: string;
+}
+
+export interface ExecutiveReport {
+  project: Project;
+
+  reportDate: string;
+
+  physicalProgressPercentage: number;
+
+  scheduleScore: number;
+  scheduleRisk: string;
+
+  predictiveScore: number;
+  predictiveRisk: string;
+  forecastTrend: string;
+
+  cpi: number;
+  spi: number;
+
+  expectedForecastCost: number;
+  expectedForecastFinishDate: string;
+
+  governanceScore: number;
+  governanceRisk: GovernanceRiskLevel;
+
+  openActions: number;
+  overdueActions: number;
+  blockedActions: number;
+
+  pendingDecisions: number;
+  overdueDecisions: number;
+
+  meetingsWithoutMinutes: number;
+
+  executiveSummary: string;
+
+  attentionItems: ExecutiveAttentionItem[];
+}
+
+export interface ExecutiveReportSnapshot {
+  id: string;
+  projectId: string;
+  reportDate: string;
+
+  physicalProgressPercentage: number;
+
+  scheduleScore: number;
+  scheduleRisk: string;
+
+  predictiveScore: number;
+  predictiveRisk: string;
+
+  governanceScore: number;
+  governanceRisk: GovernanceRiskLevel;
+
+  cpi: number;
+  spi: number;
+
+  expectedForecastCost: number;
+  expectedForecastFinishDate: string;
+
+  openActions: number;
+  overdueActions: number;
+  blockedActions: number;
+
+  pendingDecisions: number;
+  overdueDecisions: number;
+
+  meetingsWithoutMinutes: number;
+
+  executiveSummary: string;
+  attentionItems: string | null;
+
+  createdAt: string;
+}
+
+export interface GovernanceControl {
+  project: Project;
+  intelligence: GovernanceIntelligence;
+  executiveReport: ExecutiveReport;
+  meetings: GovernanceMeeting[];
+  decisions: GovernanceDecision[];
+  actions: GovernanceAction[];
+  reportHistory: ExecutiveReportSnapshot[];
+}
+
+export interface PortfolioGovernanceProject {
+  projectId: string;
+  projectCode: string;
+  projectName: string;
+
+  governanceScore: number;
+  governanceRisk: GovernanceRiskLevel;
+
+  openActions: number;
+  overdueActions: number;
+  criticalOpenActions: number;
+  blockedActions: number;
+
+  pendingDecisions: number;
+  overdueDecisions: number;
+
+  meetingsWithoutMinutes: number;
+}
+
+export interface PortfolioGovernance {
+  dataDate: string;
+
+  projectCount: number;
+  onTrackProjects: number;
+  watchProjects: number;
+  atRiskProjects: number;
+
+  openActions: number;
+  overdueActions: number;
+  criticalOpenActions: number;
+  blockedActions: number;
+
+  pendingDecisions: number;
+  overdueDecisions: number;
+
+  meetingsWithoutMinutes: number;
+
+  averageGovernanceScore: number;
+
+  projects: PortfolioGovernanceProject[];
+}
+
+export interface CreateGovernanceMeetingInput {
+  meetingNumber: string;
+  title: string;
+  meetingType: GovernanceMeetingType;
+  scheduledAt: string;
+  chairName: string;
+}
+
+export interface CreateGovernanceDecisionInput {
+  meetingId: string | null;
+  decisionNumber: string;
+  title: string;
+  description: string;
+  decisionDate: string;
+  ownerName: string;
+  dueDate: string | null;
+  impactArea: GovernanceDecisionImpactArea;
+  rationale: string;
+}
+
+export interface CreateGovernanceActionInput {
+  meetingId: string | null;
+  decisionId: string | null;
+  actionNumber: string;
+  title: string;
+  description: string;
+  ownerName: string;
+  priority: GovernanceActionPriority;
+  dueDate: string;
+}

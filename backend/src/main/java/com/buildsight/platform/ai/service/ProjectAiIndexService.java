@@ -43,6 +43,8 @@ import com.buildsight.platform.schedule.api.ScheduleModels.ScheduleIntelligenceR
 import com.buildsight.platform.schedule.service.ScheduleControlService;
 import com.buildsight.platform.forecast.api.ForecastModels.ForecastIntelligenceResponse;
 import com.buildsight.platform.forecast.service.ForecastControlService;
+import com.buildsight.platform.governance.api.GovernanceModels.GovernanceIntelligenceResponse;
+import com.buildsight.platform.governance.service.GovernanceControlService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -76,6 +78,9 @@ public class ProjectAiIndexService {
 
     private final ForecastControlService
             forecastControlService;
+
+    private final GovernanceControlService
+            governanceControlService;
 
     private final CostControlService
             costControlService;
@@ -122,6 +127,7 @@ public class ProjectAiIndexService {
             ResourceControlService resourceControlService,
             ScheduleControlService scheduleControlService,
             ForecastControlService forecastControlService,
+            GovernanceControlService governanceControlService,
             CostControlService costControlService,
             ProcurementControlService procurementControlService,
             RiskControlService riskControlService,
@@ -164,6 +170,9 @@ public class ProjectAiIndexService {
 
         this.forecastControlService =
                 forecastControlService;
+
+        this.governanceControlService =
+                governanceControlService;
 
         this.costControlService =
                 costControlService;
@@ -455,6 +464,11 @@ public class ProjectAiIndexService {
                         .intelligence(
                                 project.getId());
 
+        GovernanceIntelligenceResponse governance =
+                governanceControlService
+                        .intelligence(
+                                project.getId());
+
         CostIntelligenceResponse cost =
                 costControlService
                         .get(
@@ -626,6 +640,20 @@ public class ProjectAiIndexService {
                 Predictive Score: %s
                 Predictive Risk: %s
                 Forecast Trend: %s
+
+                Governance Intelligence
+                Open Actions: %s
+                Overdue Actions: %s
+                Critical Open Actions: %s
+                Blocked Actions: %s
+                Actions Due Next 14 Days: %s
+                Pending Decisions: %s
+                Overdue Decisions: %s
+                Meetings Without Minutes: %s
+                Action Closure Rate: %s
+                Decision Closure Rate: %s
+                Governance Score: %s
+                Governance Risk: %s
 """
                 .formatted(
                         project.getCode(),
@@ -756,7 +784,20 @@ public class ProjectAiIndexService {
                         forecast.scheduleVarianceDays(),
                         forecast.predictiveScore(),
                         forecast.predictiveRisk(),
-                        forecast.trend());
+                        forecast.trend(),
+
+                        governance.openActions(),
+                        governance.overdueActions(),
+                        governance.criticalOpenActions(),
+                        governance.blockedActions(),
+                        governance.actionsDueNext14Days(),
+                        governance.pendingDecisions(),
+                        governance.overdueDecisions(),
+                        governance.meetingsWithoutMinutes(),
+                        governance.actionClosureRate(),
+                        governance.decisionClosureRate(),
+                        governance.governanceScore(),
+                        governance.governanceRisk());
         return new AiSourceDraft(
                 AiSourceType.PROJECT_FACT,
                 project.getId(),
