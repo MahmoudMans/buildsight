@@ -1867,7 +1867,7 @@ export function ProjectCommercialControlView({
                         >
                           {changeStatuses(
                             item.status,
-                          ).map(
+                          ).filter((status, index, statuses) => statuses.indexOf(status) === index).map(
                             (
                               status,
                             ) => (
@@ -2004,7 +2004,7 @@ export function ProjectCommercialControlView({
                         >
                           {claimStatuses(
                             item.status,
-                          ).map(
+                          ).filter((status, index, statuses) => statuses.indexOf(status) === index).map(
                             (
                               status,
                             ) => (
@@ -2169,7 +2169,7 @@ export function ProjectCommercialControlView({
                         >
                           {certificateStatuses(
                             item.status,
-                          ).map(
+                          ).filter((status, index, statuses) => statuses.indexOf(status) === index).map(
                             (
                               status,
                             ) => (
