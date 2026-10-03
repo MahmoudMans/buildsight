@@ -177,3 +177,28 @@
     transition: none;
   }
 }
+
+/* ==========================================================================
+   BUILDSIGHT — PROJECT SIDEBAR VIEWPORT OWNERSHIP V1
+   ========================================================================== */
+
+.sidebar {
+  height: 100vh;
+  max-height: 100vh;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.navigation {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+}
+
+.footer {
+  flex: 0 0 auto;
+  position: relative;
+  z-index: 2;
+}

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import costRefinement from "./ProjectCostControlRefinement.module.css";
 import { ProjectWorkspaceSidebar } from "./ProjectWorkspaceSidebar";
 
 import {
@@ -800,7 +801,7 @@ export function ProjectCostControlView({
         ]}
       />
 
-      <main className="cost-main">
+      <main className={`cost-main ${costRefinement.root}`}>
         <header className="cost-topbar">
           <div>
             <Link
@@ -825,6 +826,21 @@ export function ProjectCostControlView({
               actual expenditure and
               forecast-at-completion.
             </p>
+            <div className={costRefinement.reportingContext}>
+              <span>
+                REPORTING CONTEXT
+              </span>
+
+              <strong>
+                Live cost position
+              </strong>
+
+              <Link
+                href={`/projects/${projectId}/period-control`}
+              >
+                Open reporting periods
+              </Link>
+            </div>
           </div>
 
           <div className="cost-header-risk">
@@ -915,7 +931,7 @@ export function ProjectCostControlView({
                 intelligence.forecastAtCompletion,
               ),
             )}
-            detail={`Variance ${money(
+            detail={`Forecast variance ${money(
               Number(
                 intelligence.varianceAtCompletion,
               ),
@@ -925,34 +941,20 @@ export function ProjectCostControlView({
         </section>
 
         <section className="cost-intelligence-panel">
-          <div className="cost-score-block">
+          <div className={costRefinement.intelligenceIntro}>
             <span>
-              COST PERFORMANCE SCORE
+              COST INTELLIGENCE
             </span>
 
             <strong>
-              {intelligence.costScore.toFixed(
-                0,
-              )}
+              Cost exposure explained
             </strong>
 
-            <small>
-              /100
-            </small>
-
-            <i
-              className={
-                riskClass(
-                  intelligence.costRisk,
-                )
-              }
-            >
-              {
-                riskLabels[
-                  intelligence.costRisk
-                ]
-              }
-            </i>
+            <p>
+              Use the control metrics beside this panel to read
+              allocation, commitment coverage, forecast exposure
+              and variance at completion.
+            </p>
           </div>
 
           <div className="cost-intelligence-metrics">
@@ -1012,60 +1014,7 @@ export function ProjectCostControlView({
           </p>
         </section>
 
-        <section className="cost-actions">
-          <button
-            type="button"
-            onClick={() =>
-              setOpenForm(
-                "cost-code",
-              )
-            }
-          >
-            + Cost code
-          </button>
 
-          <button
-            type="button"
-            disabled={
-              costCodes.length
-              ===
-              0
-            }
-            onClick={
-              openBudgetForm
-            }
-          >
-            + Budget line
-          </button>
-
-          <button
-            type="button"
-            disabled={
-              costCodes.length
-              ===
-              0
-            }
-            onClick={
-              openCommitmentForm
-            }
-          >
-            + Commitment
-          </button>
-
-          <button
-            type="button"
-            disabled={
-              costCodes.length
-              ===
-              0
-            }
-            onClick={
-              openActualForm
-            }
-          >
-            + Actual cost
-          </button>
-        </section>
 
         {openForm ===
           "cost-code" && (
@@ -1861,6 +1810,32 @@ export function ProjectCostControlView({
               }{" "}
               lines
             </span>
+
+            <div className={costRefinement.sectionActions}>
+              <button
+                          type="button"
+                          onClick={() =>
+                            setOpenForm(
+                              "cost-code",
+                            )
+                          }
+                        >
+                          + Cost code
+                        </button>
+              <button
+                          type="button"
+                          disabled={
+                            costCodes.length
+                            ===
+                            0
+                          }
+                          onClick={
+                            openBudgetForm
+                          }
+                        >
+                          + Budget line
+                        </button>
+            </div>
           </div>
 
           <div className="cost-table-wrapper">
@@ -2035,7 +2010,7 @@ export function ProjectCostControlView({
           <div className="cost-card-header">
             <div>
               <div className="eyebrow">
-                PROCUREMENT EXPOSURE
+                COMMITMENT EXPOSURE
               </div>
 
               <h2>
@@ -2050,6 +2025,22 @@ export function ProjectCostControlView({
                 ),
               )}
             </strong>
+
+            <div className={costRefinement.sectionActions}>
+              <button
+                          type="button"
+                          disabled={
+                            costCodes.length
+                            ===
+                            0
+                          }
+                          onClick={
+                            openCommitmentForm
+                          }
+                        >
+                          + Commitment
+                        </button>
+            </div>
           </div>
 
           <div className="cost-table-wrapper">
@@ -2213,6 +2204,22 @@ export function ProjectCostControlView({
                 ),
               )}
             </strong>
+
+            <div className={costRefinement.sectionActions}>
+              <button
+                          type="button"
+                          disabled={
+                            costCodes.length
+                            ===
+                            0
+                          }
+                          onClick={
+                            openActualForm
+                          }
+                        >
+                          + Actual cost
+                        </button>
+            </div>
           </div>
 
           <div className="cost-table-wrapper">

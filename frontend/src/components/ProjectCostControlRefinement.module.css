@@ -1,0 +1,253 @@
+.root {
+  font-variant-numeric: tabular-nums;
+}
+
+.reportingContext {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  margin-top: 13px;
+}
+
+.reportingContext > span {
+  color: #75807a;
+  font-size: 7px;
+  font-weight: 850;
+  letter-spacing: 0.09em;
+}
+
+.reportingContext > strong {
+  color: #39433f;
+  font-size: 8.5px;
+  font-weight: 750;
+}
+
+.reportingContext > a {
+  align-items: center;
+  color: #42504a;
+  display: inline-flex;
+  font-size: 8px;
+  font-weight: 800;
+  gap: 5px;
+  text-decoration: none;
+}
+
+.reportingContext > a::after {
+  color: #879400;
+  content: "↗";
+}
+
+.reportingContext > a:hover {
+  color: #141b18;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.reportingContext > a:focus-visible {
+  border-radius: 4px;
+  outline: 2px solid #829000;
+  outline-offset: 3px;
+}
+
+.sectionActions {
+  align-items: center;
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  gap: 7px;
+  justify-content: flex-end;
+  margin-left: auto;
+}
+
+.sectionActions :global(button) {
+  background: #ffffff;
+  border: 1px solid #d9dfda;
+  border-radius: 8px;
+  color: #46514c;
+  cursor: pointer;
+  font-size: 8px;
+  font-weight: 800;
+  min-height: 32px;
+  padding: 0 12px;
+  transition:
+    background 120ms ease,
+    border-color 120ms ease,
+    color 120ms ease;
+}
+
+.sectionActions :global(button:hover) {
+  background: #f4f6f2;
+  border-color: #bfc7c1;
+}
+
+.sectionActions :global(button:last-child) {
+  background: #111916;
+  border-color: #111916;
+  color: #ffffff;
+}
+
+.sectionActions :global(button:last-child:hover) {
+  background: #1b2622;
+  border-color: #1b2622;
+}
+
+.sectionActions :global(button:focus-visible) {
+  outline: 2px solid #859300;
+  outline-offset: 2px;
+}
+
+.sectionActions :global(button:disabled) {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.intelligenceIntro {
+  align-self: stretch;
+  background:
+    linear-gradient(
+      145deg,
+      #121a17 0%,
+      #0f1714 100%
+    );
+  border: 1px solid #1f2a25;
+  border-radius: 12px;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 145px;
+  padding: 19px 18px;
+}
+
+.intelligenceIntro > span {
+  color: #c9ed24;
+  font-size: 7px;
+  font-weight: 850;
+  letter-spacing: 0.11em;
+}
+
+.intelligenceIntro > strong {
+  display: block;
+  font-size: 17px;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  margin-top: 12px;
+}
+
+.intelligenceIntro > p {
+  color: #a8b3ad;
+  font-size: 8.5px;
+  line-height: 1.6;
+  margin: 9px 0 0;
+  max-width: 230px;
+}
+
+.root :global(.eyebrow) {
+  color: #66716c;
+}
+
+.root :global(h1),
+.root :global(h2),
+.root :global(strong) {
+  text-wrap: balance;
+}
+
+.root :global(table) {
+  font-variant-numeric: tabular-nums;
+}
+
+.root :global(th) {
+  color: #6b7670;
+  font-size: 7px;
+  font-weight: 850;
+  letter-spacing: 0.1em;
+}
+
+.root :global(td) {
+  vertical-align: middle;
+}
+
+.root :global(td input[type="number"]),
+.root :global(td input[inputmode="decimal"]) {
+  font-variant-numeric: tabular-nums;
+  min-width: 108px;
+  text-align: right;
+}
+
+.root :global(.card-description),
+.root :global(.cost-description),
+.root :global(.cost-explanation) {
+  color: #69736e;
+  line-height: 1.6;
+}
+
+.root :global(.cost-kpi-grid) {
+  gap: 12px;
+}
+
+.root :global(.cost-kpi) {
+  min-height: 138px;
+}
+
+.root :global(table thead) {
+  background: #fafbf9;
+}
+
+.root :global(table tbody tr) {
+  transition: background 100ms ease;
+}
+
+.root :global(table tbody tr:hover) {
+  background: #fafcf8;
+}
+
+.root :global(.cost-card),
+.root :global(.cost-section) {
+  scroll-margin-top: 18px;
+}
+
+.root :global(.cost-card-header),
+.root :global(.cost-section-header) {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  justify-content: space-between;
+}
+
+@media (max-width: 900px) {
+  .reportingContext {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .sectionActions {
+    justify-content: flex-start;
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .intelligenceIntro > p {
+    max-width: none;
+  }
+}
+
+@media (max-width: 620px) {
+  .sectionActions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .sectionActions :global(button) {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sectionActions :global(button),
+  .root :global(table tbody tr) {
+    transition: none;
+  }
+}
