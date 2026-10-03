@@ -45,6 +45,36 @@ const statusLabels: Record<ProjectStatus, string> = {
   CANCELLED: "Cancelled",
 };
 
+// BUILDSIGHT_SIDEBAR_NAVIGATION_V1
+const sidebarProjectSections = [
+  {
+    index: "03",
+    label: "Budgets",
+    segment: "costs",
+  },
+  {
+    index: "04",
+    label: "Work packages",
+    segment: "production",
+  },
+  {
+    index: "05",
+    label: "Procurement",
+    segment: "procurement",
+  },
+  {
+    index: "06",
+    label: "Risks",
+    segment: "risk-control",
+  },
+  {
+    index: "07",
+    label: "Documents",
+    segment: "documents",
+  },
+] as const;
+
+
 function currency(value: number): string {
   return new Intl.NumberFormat("en-GB", {
     style: "currency",
@@ -98,6 +128,9 @@ export function BuildSightDashboard() {
   const [loading, setLoading] = useState(true);
   const [apiOnline, setApiOnline] = useState(true);
   const [showCreatePanel, setShowCreatePanel] = useState(false);
+
+  const [sidebarProjectMenu, setSidebarProjectMenu] =
+    useState<string | null>(null);
 
   const [form, setForm] =
     useState<CreateProjectInput>(initialForm);
@@ -281,50 +314,114 @@ export function BuildSightDashboard() {
 
         <div className="workspace-label">WORKSPACE</div>
 
-        <nav className="navigation">
-          <button
+        <nav
+          aria-label="Workspace"
+          className="navigation"
+        >
+          <Link
             aria-current="page"
             className="nav-item active"
-            type="button"
+            href="/"
+            onClick={() => setSidebarProjectMenu(null)}
           >
             <span className="nav-icon">01</span>
-            Portfolio
-          </button>
+            <span>Portfolio</span>
+          </Link>
 
-          <button className="nav-item" type="button">
+          <Link
+            className="nav-item"
+            href="/#projects"
+            onClick={() => setSidebarProjectMenu(null)}
+          >
             <span className="nav-icon">02</span>
-            Projects
-          </button>
+            <span>Projects</span>
+          </Link>
 
-          <button className="nav-item" type="button">
-            <span className="nav-icon">03</span>
-            Budgets
-          </button>
+          {sidebarProjectSections.map((item) => {
+            const expanded =
+              sidebarProjectMenu === item.segment;
 
-          <button className="nav-item" type="button">
-            <span className="nav-icon">04</span>
-            Work packages
-          </button>
+            return (
+              <div
+                className="sidebar-project-nav"
+                key={item.segment}
+              >
+                <button
+                  aria-controls={`sidebar-projects-${item.segment}`}
+                  aria-expanded={expanded}
+                  className={
+                    expanded
+                      ? "nav-item sidebar-nav-trigger sidebar-nav-expanded"
+                      : "nav-item sidebar-nav-trigger"
+                  }
+                  type="button"
+                  onClick={() =>
+                    setSidebarProjectMenu((current) =>
+                      current === item.segment
+                        ? null
+                        : item.segment,
+                    )
+                  }
+                >
+                  <span className="nav-icon">
+                    {item.index}
+                  </span>
 
-          <button className="nav-item" type="button">
-            <span className="nav-icon">05</span>
-            Procurement
-          </button>
+                  <span>{item.label}</span>
 
-          <button className="nav-item" type="button">
-            <span className="nav-icon">06</span>
-            Risks
-          </button>
+                  <span
+                    aria-hidden="true"
+                    className="sidebar-nav-chevron"
+                  >
+                    ›
+                  </span>
+                </button>
 
-          <button className="nav-item" type="button">
-            <span className="nav-icon">07</span>
-            Documents
-          </button>
+                {expanded && (
+                  <div
+                    aria-label={`${item.label} projects`}
+                    className="sidebar-project-options"
+                    id={`sidebar-projects-${item.segment}`}
+                  >
+                    {loading ? (
+                      <span className="sidebar-project-state">
+                        Loading projects...
+                      </span>
+                    ) : projects.length === 0 ? (
+                      <span className="sidebar-project-state">
+                        {apiOnline
+                          ? "No projects available."
+                          : "Backend unavailable."}
+                      </span>
+                    ) : (
+                      projects.map((project) => (
+                        <Link
+                          className="sidebar-project-option"
+                          href={`/projects/${project.id}/${item.segment}`}
+                          key={project.id}
+                          onClick={() =>
+                            setSidebarProjectMenu(null)
+                          }
+                        >
+                          <span>{project.name}</span>
+                          <small>{project.code}</small>
+                        </Link>
+                      ))
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })}
 
-          <button className="nav-item" type="button">
+          <Link
+            className="nav-item"
+            href="/#intelligence"
+            onClick={() => setSidebarProjectMenu(null)}
+          >
             <span className="nav-icon">08</span>
-            Intelligence
-          </button>
+            <span>Intelligence</span>
+          </Link>
         </nav>
 
         <div className="sidebar-footer">
@@ -722,7 +819,7 @@ export function BuildSightDashboard() {
           </section>
         )}
 
-        <section className="portfolio-section">
+        <section className="portfolio-section" id="projects">
           <div className="section-heading">
             <div>
               <div className="eyebrow">
@@ -877,7 +974,7 @@ export function BuildSightDashboard() {
           </div>
         </section>
 
-        <section className="intelligence-preview intelligence-operational">
+        <section className="intelligence-preview intelligence-operational" id="intelligence">
           <div className="intelligence-copy">
             <div className="eyebrow">
               BUILDSIGHT INTELLIGENCE
