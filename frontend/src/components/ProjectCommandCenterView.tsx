@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { ProjectFeatureHub } from "./ProjectFeatureHub";
 
 import {
   type FormEvent,
@@ -1371,6 +1372,8 @@ export function ProjectCommandCenterView({
           </article>
         </section>
 
+        <ProjectFeatureHub projectId={projectId} />
+
         <section className="command-two-column">
           <article className="command-card">
             <div className="command-card-header">
@@ -1380,9 +1383,16 @@ export function ProjectCommandCenterView({
                 </div>
 
                 <h2>
-                  Schedule control
+                  Schedule snapshot
                 </h2>
               </div>
+
+              <Link
+                href={`/projects/${projectId}/schedule`}
+                className="secondary-link-button"
+              >
+                Open full schedule control
+              </Link>
             </div>
 
             <div className="schedule-list">
@@ -2099,21 +2109,29 @@ export function ProjectCommandCenterView({
             <div className="command-card-header">
               <div>
                 <div className="eyebrow">
-                  SITE REPORTING
+                  PROJECT PROGRESS
                 </div>
 
                 <h2>
-                  Record progress
+                  Record project progress
                 </h2>
               </div>
             </div>
 
             <p className="card-description">
-              Physical progress cannot
-              decrease. Each update is
-              stored as an auditable
-              historical record.
+              Record the official project-level physical
+              progress used by project health and executive
+              reporting. Work-package quantities, daily site
+              activity and production evidence remain in the
+              dedicated Production workspace.
             </p>
+
+            <Link
+              href={`/projects/${projectId}/production`}
+              className="secondary-link-button"
+            >
+              Open work-package & site reporting
+            </Link>
 
             <form
               className="progress-form"

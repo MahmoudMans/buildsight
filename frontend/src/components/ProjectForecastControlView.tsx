@@ -1149,7 +1149,7 @@ export function ProjectForecastControlView({
         >
           <Header
             eyebrow="FORECAST HISTORY"
-            title="EVM snapshots"
+            title="Predictive EVM snapshots"
             value={`${history.length} snapshots`}
           />
 

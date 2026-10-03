@@ -2303,7 +2303,7 @@ export function ProjectResourceControlView({
         >
           <CardHeader
             eyebrow="FORWARD CAPACITY"
-            title="Resource-demand forecast"
+            title="Forward resource capacity"
             value={`${intelligence.openResourceForecasts} open`}
           />
 

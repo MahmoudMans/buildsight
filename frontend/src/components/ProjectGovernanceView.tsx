@@ -2148,7 +2148,7 @@ export function ProjectGovernanceView({
         <section className="governance-card">
           <Header
             eyebrow="EXECUTIVE REPORT HISTORY"
-            title="Report snapshots"
+            title="Governance report snapshots"
             value={`${reportHistory.length} snapshots`}
           />
 

@@ -1777,7 +1777,7 @@ export function ProjectProductionView({
               </div>
 
               <h2>
-                Production packages
+                Work packages
               </h2>
             </div>
 

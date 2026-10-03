@@ -1882,7 +1882,7 @@ export function ProjectCommercialControlView({
         >
           <CardHeader
             eyebrow="CONTRACT CHANGE"
-            title="Commercial change orders"
+            title="Contract change orders"
             value={`${intelligence.pendingChangeOrders} pending`}
           />
 

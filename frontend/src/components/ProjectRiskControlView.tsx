@@ -2610,7 +2610,7 @@ export function ProjectRiskControlView({
               </div>
 
               <h2>
-                Change events
+                Change-control events
               </h2>
             </div>
 
