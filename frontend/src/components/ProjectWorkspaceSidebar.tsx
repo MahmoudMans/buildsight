@@ -5,6 +5,12 @@ import { usePathname } from "next/navigation";
 
 import { ProjectRouteWarmup } from "./ProjectRouteWarmup";
 
+import {
+  ProjectWorkspaceDataWarmup,
+  type ProjectWorkspaceDataSegment,
+  warmProjectWorkspaceData,
+} from "./ProjectWorkspaceDataPrefetch";
+
 import styles from "./ProjectWorkspaceSidebar.module.css";
 
 export interface ProjectWorkspaceLocalLink {
@@ -207,6 +213,42 @@ function WorkspaceLink({
         projectId,
         item.segment,
       )}
+      onFocus={() => {
+        void warmProjectWorkspaceData(
+          projectId,
+          (
+            item.segment
+            ?? "overview"
+          ) as ProjectWorkspaceDataSegment,
+        );
+      }}
+      onMouseEnter={() => {
+        void warmProjectWorkspaceData(
+          projectId,
+          (
+            item.segment
+            ?? "overview"
+          ) as ProjectWorkspaceDataSegment,
+        );
+      }}
+      onPointerDown={() => {
+        void warmProjectWorkspaceData(
+          projectId,
+          (
+            item.segment
+            ?? "overview"
+          ) as ProjectWorkspaceDataSegment,
+        );
+      }}
+      onTouchStart={() => {
+        void warmProjectWorkspaceData(
+          projectId,
+          (
+            item.segment
+            ?? "overview"
+          ) as ProjectWorkspaceDataSegment,
+        );
+      }}
       prefetch={true}
     >
       <span className={styles.index}>
@@ -263,6 +305,10 @@ export function ProjectWorkspaceSidebar({
     <aside
       className={sidebarClassName}
     >
+
+      <ProjectWorkspaceDataWarmup
+        projectId={projectId}
+      />
 
       <ProjectRouteWarmup
         projectId={projectId}

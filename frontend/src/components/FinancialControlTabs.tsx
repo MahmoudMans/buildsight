@@ -3,6 +3,10 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import {
+  warmProjectWorkspaceData,
+} from "./ProjectWorkspaceDataPrefetch";
+
 import styles from "./FinancialControlTabs.module.css";
 
 interface FinancialControlTabsProps {
@@ -94,6 +98,31 @@ export function FinancialControlTabs({
                   .filter(Boolean)
                   .join(" ")}
                 href={`/projects/${projectId}/${capability.key}`}
+                prefetch={true}
+                onFocus={() => {
+                  void warmProjectWorkspaceData(
+                    projectId,
+                    capability.key,
+                  );
+                }}
+                onMouseEnter={() => {
+                  void warmProjectWorkspaceData(
+                    projectId,
+                    capability.key,
+                  );
+                }}
+                onPointerDown={() => {
+                  void warmProjectWorkspaceData(
+                    projectId,
+                    capability.key,
+                  );
+                }}
+                onTouchStart={() => {
+                  void warmProjectWorkspaceData(
+                    projectId,
+                    capability.key,
+                  );
+                }}
                 key={capability.key}
               >
                 <span

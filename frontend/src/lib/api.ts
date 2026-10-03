@@ -36,41 +36,322 @@ export class BuildSightApiError extends Error {
   }
 }
 
-async function request<T>(
+const BUILDSIGHT_GET_CACHE_TTL_MS = 30_000;
+const BUILDSIGHT_GET_CACHE_MAX_ENTRIES = 160;
+
+interface BuildSightGetCacheEntry {
+  expiresAt: number;
+  promise: Promise<unknown>;
+}
+
+const buildsightGetCache =
+  new Map<
+    string,
+    BuildSightGetCacheEntry
+  >();
+
+function cacheableGet(
+  init?: RequestInit,
+): boolean {
+  const method =
+    (
+      init?.method
+      ?? "GET"
+    ).toUpperCase();
+
+  return (
+    method === "GET"
+    && init?.cache
+      !== "no-store"
+    && !init?.signal
+  );
+}
+
+function pruneBuildSightGetCache(): void {
+  const now =
+    Date.now();
+
+  for (
+    const [
+      key,
+      entry,
+    ]
+    of buildsightGetCache.entries()
+  ) {
+    if (
+      entry.expiresAt
+      <= now
+    ) {
+      buildsightGetCache.delete(
+        key,
+      );
+    }
+  }
+
+  while (
+    buildsightGetCache.size
+    > BUILDSIGHT_GET_CACHE_MAX_ENTRIES
+  ) {
+    const oldest =
+      buildsightGetCache.keys()
+        .next()
+        .value as
+          | string
+          | undefined;
+
+    if (!oldest) {
+      break;
+    }
+
+    buildsightGetCache.delete(
+      oldest,
+    );
+  }
+}
+
+function projectPrefix(
+  path: string,
+): string | null {
+  const match = path.match(
+    /^\/projects\/([^/?]+)/,
+  );
+
+  if (!match) {
+    return null;
+  }
+
+  return `/projects/${match[1]}`;
+}
+
+function invalidateCachedGets(
+  mutationPath: string,
+): void {
+  const prefix =
+    projectPrefix(
+      mutationPath,
+    );
+
+  if (!prefix) {
+    buildsightGetCache.clear();
+    return;
+  }
+
+  for (
+    const key
+    of buildsightGetCache.keys()
+  ) {
+    if (
+      key.startsWith(
+        prefix,
+      )
+    ) {
+      buildsightGetCache.delete(
+        key,
+      );
+    }
+  }
+}
+
+export function clearProjectApiCache(
+  projectId?: string,
+): void {
+  if (!projectId) {
+    buildsightGetCache.clear();
+    return;
+  }
+
+  const prefix =
+    `/projects/${projectId}`;
+
+  for (
+    const key
+    of buildsightGetCache.keys()
+  ) {
+    if (
+      key.startsWith(
+        prefix,
+      )
+    ) {
+      buildsightGetCache.delete(
+        key,
+      );
+    }
+  }
+}
+
+async function executeRequest<T>(
   path: string,
   init?: RequestInit,
 ): Promise<T> {
-  const response = await fetch(
-    `${API_BASE_URL}${path}`,
-    {
-      ...init,
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        ...init?.headers,
+  const headers =
+    new Headers(
+      init?.headers,
+    );
+
+  /*
+   * Accept is CORS-safelisted.
+   *
+   * Do NOT send Content-Type: application/json on
+   * bodyless GET requests. The frontend and backend
+   * run on different localhost ports, so an unnecessary
+   * JSON Content-Type can force an OPTIONS preflight.
+   */
+  if (
+    !headers.has(
+      "Accept",
+    )
+  ) {
+    headers.set(
+      "Accept",
+      "application/json",
+    );
+  }
+
+  if (
+    init?.body
+    && !headers.has(
+      "Content-Type",
+    )
+  ) {
+    headers.set(
+      "Content-Type",
+      "application/json",
+    );
+  }
+
+  const response =
+    await fetch(
+      `${API_BASE_URL}${path}`,
+      {
+        ...init,
+        headers,
       },
-    },
-  );
+    );
 
   if (!response.ok) {
-    let body: ApiErrorBody = {};
+    let body:
+      ApiErrorBody = {};
 
     try {
       body =
-        (await response.json()) as ApiErrorBody;
+        (
+          await response.json()
+        ) as ApiErrorBody;
     } catch {
       body = {};
     }
 
     throw new BuildSightApiError(
       response.status,
-      body.message ??
-        `Request failed with status ${response.status}.`,
-      body.fieldErrors ?? {},
+      body.message
+      ?? `Request failed with status ${response.status}.`,
+      body.fieldErrors
+      ?? {},
     );
   }
 
-  return (await response.json()) as T;
+  if (
+    response.status === 204
+  ) {
+    return undefined as T;
+  }
+
+  return (
+    await response.json()
+  ) as T;
+}
+
+async function request<T>(
+  path: string,
+  init?: RequestInit,
+): Promise<T> {
+  const method =
+    (
+      init?.method
+      ?? "GET"
+    ).toUpperCase();
+
+  if (
+    cacheableGet(
+      init,
+    )
+  ) {
+    pruneBuildSightGetCache();
+
+    const now =
+      Date.now();
+
+    const existing =
+      buildsightGetCache.get(
+        path,
+      );
+
+    if (
+      existing
+      && existing.expiresAt
+        > now
+    ) {
+      return existing.promise as Promise<T>;
+    }
+
+    if (existing) {
+      buildsightGetCache.delete(
+        path,
+      );
+    }
+
+    const promise =
+      executeRequest<T>(
+        path,
+        init,
+      );
+
+    buildsightGetCache.set(
+      path,
+      {
+        expiresAt:
+          now
+          + BUILDSIGHT_GET_CACHE_TTL_MS,
+        promise,
+      },
+    );
+
+    void promise.catch(
+      () => {
+        const current =
+          buildsightGetCache.get(
+            path,
+          );
+
+        if (
+          current?.promise
+          === promise
+        ) {
+          buildsightGetCache.delete(
+            path,
+          );
+        }
+      },
+    );
+
+    return promise;
+  }
+
+  const result =
+    await executeRequest<T>(
+      path,
+      init,
+    );
+
+  if (
+    method !== "GET"
+  ) {
+    invalidateCachedGets(
+      path,
+    );
+  }
+
+  return result;
 }
 
 export async function getProjects(): Promise<
