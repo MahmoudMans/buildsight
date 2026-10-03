@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { ProjectWorkspaceSidebar } from "./ProjectWorkspaceSidebar";
 
 import {
   type FormEvent,
@@ -943,114 +944,17 @@ export function ProjectProcurementView({
 
   return (
     <div className="procurement-shell">
-      <aside className="procurement-sidebar">
-        <Link
-          href="/"
-          className="command-brand"
-        >
-          <div className="brand-mark">
-            B
-          </div>
-
-          <div>
-            <strong>
-              BuildSight
-            </strong>
-
-            <span>
-              Construction Intelligence
-            </span>
-          </div>
-        </Link>
-
-        <div className="command-nav-label">
-          PROCUREMENT CONTROL
-        </div>
-
-        <nav className="command-navigation">
-          <Link
-            href={`/projects/${projectId}`}
-            className="command-nav-item"
-          >
-            01
-            <span>
-              Command center
-            </span>
-          </Link>
-
-          <Link
-            href={`/projects/${projectId}/costs`}
-            className="command-nav-item"
-          >
-            02
-            <span>
-              Cost control
-            </span>
-          </Link>
-
-          <div className="command-nav-item active">
-            03
-            <span>
-              Procurement
-            </span>
-          </div>
-
-          <a
-            href="#packages"
-            className="command-nav-item"
-          >
-            04
-            <span>
-              Packages
-            </span>
-          </a>
-
-          <a
-            href="#bids"
-            className="command-nav-item"
-          >
-            05
-            <span>
-              Bids
-            </span>
-          </a>
-
-          <a
-            href="#suppliers"
-            className="command-nav-item"
-          >
-            06
-            <span>
-              Suppliers
-            </span>
-          </a>
-
-          <a
-            href="#performance"
-            className="command-nav-item"
-          >
-            07
-            <span>
-              Performance
-            </span>
-          </a>
-        </nav>
-
-        <div className="command-sidebar-footer">
-          <span>
-            PROCUREMENT PROJECT
-          </span>
-
-          <strong>
-            {project.code}
-          </strong>
-
-          <small>
-            Tendering, awards, qualification
-            and subcontractor performance.
-          </small>
-        </div>
-      </aside>
+      <ProjectWorkspaceSidebar
+        projectId={projectId}
+        projectCode={project.code}
+        className="procurement-sidebar"
+        localLinks={[
+          { href: "#packages", label: "Packages" },
+          { href: "#bids", label: "Bids" },
+          { href: "#suppliers", label: "Suppliers" },
+          { href: "#performance", label: "Performance" },
+        ]}
+      />
 
       <main className="procurement-main">
         <header className="procurement-topbar">

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { ProjectWorkspaceSidebar } from "./ProjectWorkspaceSidebar";
 
 import {
   type FormEvent,
@@ -330,134 +331,16 @@ export function ProjectForecastControlView({
 
   return (
     <div className="forecast-shell">
-      <aside className="forecast-sidebar">
-        <Link
-          href="/"
-          className="command-brand"
-        >
-          <div className="brand-mark">
-            B
-          </div>
-
-          <div>
-            <strong>
-              BuildSight
-            </strong>
-
-            <span>
-              Construction Intelligence
-            </span>
-          </div>
-        </Link>
-
-        <div className="command-nav-label">
-          PROJECT CONTROLS
-        </div>
-
-        <nav className="command-navigation">
-          <Link
-            href={`/projects/${projectId}`}
-            className="command-nav-item"
-          >
-            01
-            <span>
-              Command center
-            </span>
-          </Link>
-
-          <Link
-            href={`/projects/${projectId}/schedule`}
-            className="command-nav-item"
-          >
-            02
-            <span>
-              Schedule
-            </span>
-          </Link>
-
-          <div className="command-nav-item active">
-            03
-            <span>
-              Forecast
-            </span>
-          </div>
-
-          <a
-            href="#evm"
-            className="command-nav-item"
-          >
-            04
-            <span>
-              Earned value
-            </span>
-          </a>
-
-          <a
-            href="#scenarios"
-            className="command-nav-item"
-          >
-            05
-            <span>
-              Scenarios
-            </span>
-          </a>
-
-          <a
-            href="#history"
-            className="command-nav-item"
-          >
-            06
-            <span>
-              History
-            </span>
-          </a>
-
-          <Link
-            href="/portfolio/forecast"
-            className="command-nav-item"
-          >
-            07
-            <span>
-              Portfolio forecast
-            </span>
-          </Link>
-
-          <Link
-            href={`/projects/${projectId}/governance`}
-            className="command-nav-item"
-          >
-            08
-            <span>
-              Governance
-            </span>
-          </Link>
-
-          <Link
-            href={`/projects/${projectId}/recovery`}
-            className="command-nav-item"
-          >
-            09
-            <span>
-              Recovery
-            </span>
-          </Link>
-        </nav>
-
-        <div className="command-sidebar-footer">
-          <span>
-            PREDICTIVE CONTROL
-          </span>
-
-          <strong>
-            {project.code}
-          </strong>
-
-          <small>
-            EVM, scenario planning and
-            forecast deterioration.
-          </small>
-        </div>
-      </aside>
+      <ProjectWorkspaceSidebar
+        projectId={projectId}
+        projectCode={project.code}
+        className="forecast-sidebar"
+        localLinks={[
+          { href: "#evm", label: "Earned value" },
+          { href: "#scenarios", label: "Scenarios" },
+          { href: "#history", label: "History" },
+        ]}
+      />
 
       <main className="forecast-main">
         <header className="forecast-header">

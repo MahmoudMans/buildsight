@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { ProjectWorkspaceSidebar } from "./ProjectWorkspaceSidebar";
 
 import {
   type FormEvent,
@@ -954,144 +955,17 @@ export function ProjectQualityControlView({
 
   return (
     <div className="quality-shell">
-      <aside className="quality-sidebar">
-        <Link
-          href="/"
-          className="command-brand"
-        >
-          <div className="brand-mark">
-            B
-          </div>
-
-          <div>
-            <strong>
-              BuildSight
-            </strong>
-
-            <span>
-              Construction Intelligence
-            </span>
-          </div>
-        </Link>
-
-        <div className="command-nav-label">
-          QUALITY & HANDOVER
-        </div>
-
-        <nav className="command-navigation">
-          <Link
-            href={`/projects/${projectId}`}
-            className="command-nav-item"
-          >
-            01
-            <span>
-              Command center
-            </span>
-          </Link>
-
-          <Link
-            href={`/projects/${projectId}/production`}
-            className="command-nav-item"
-          >
-            02
-            <span>
-              Production
-            </span>
-          </Link>
-
-          <Link
-            href={`/projects/${projectId}/documents`}
-            className="command-nav-item"
-          >
-            03
-            <span>
-              Documents
-            </span>
-          </Link>
-
-          <div className="command-nav-item active">
-            04
-            <span>
-              Quality
-            </span>
-          </div>
-
-          <a
-            href="#inspections"
-            className="command-nav-item"
-          >
-            05
-            <span>
-              Inspections
-            </span>
-          </a>
-
-          <a
-            href="#ncrs"
-            className="command-nav-item"
-          >
-            06
-            <span>
-              NCRs
-            </span>
-          </a>
-
-          <a
-            href="#punch"
-            className="command-nav-item"
-          >
-            07
-            <span>
-              Punch list
-            </span>
-          </a>
-
-          <a
-            href="#handover"
-            className="command-nav-item"
-          >
-            08
-            <span>
-              Handover
-            </span>
-          </a>
-
-          <Link
-            href={`/projects/${projectId}/safety`}
-            className="command-nav-item"
-          >
-            HSE
-            <span>
-              Safety control
-            </span>
-          </Link>
-
-          <Link
-            href={`/projects/${projectId}/copilot`}
-            className="command-nav-item"
-          >
-            AI
-            <span>
-              Project Copilot
-            </span>
-          </Link>
-        </nav>
-
-        <div className="command-sidebar-footer">
-          <span>
-            QUALITY PROJECT
-          </span>
-
-          <strong>
-            {project.code}
-          </strong>
-
-          <small>
-            Inspection, defects, close-out
-            and handover readiness.
-          </small>
-        </div>
-      </aside>
+      <ProjectWorkspaceSidebar
+        projectId={projectId}
+        projectCode={project.code}
+        className="quality-sidebar"
+        localLinks={[
+          { href: "#inspections", label: "Inspections" },
+          { href: "#ncrs", label: "NCRs" },
+          { href: "#punch", label: "Punch list" },
+          { href: "#handover", label: "Handover" },
+        ]}
+      />
 
       <main className="quality-main">
         <header className="quality-topbar">

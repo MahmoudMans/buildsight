@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { ProjectWorkspaceSidebar } from "./ProjectWorkspaceSidebar";
 
 import {
   type FormEvent,
@@ -788,94 +789,16 @@ export function ProjectCostControlView({
 
   return (
     <div className="cost-shell">
-      <aside className="cost-sidebar">
-        <Link
-          href="/"
-          className="command-brand"
-        >
-          <div className="brand-mark">
-            B
-          </div>
-
-          <div>
-            <strong>
-              BuildSight
-            </strong>
-
-            <span>
-              Construction Intelligence
-            </span>
-          </div>
-        </Link>
-
-        <div className="command-nav-label">
-          PROJECT CONTROL
-        </div>
-
-        <nav className="command-navigation">
-          <Link
-            href={`/projects/${projectId}`}
-            className="command-nav-item"
-          >
-            01
-            <span>
-              Command center
-            </span>
-          </Link>
-
-          <div className="command-nav-item active">
-            02
-            <span>
-              Cost control
-            </span>
-          </div>
-
-          <a
-            href="#budget"
-            className="command-nav-item"
-          >
-            03
-            <span>
-              Budget plan
-            </span>
-          </a>
-
-          <a
-            href="#commitments"
-            className="command-nav-item"
-          >
-            04
-            <span>
-              Commitments
-            </span>
-          </a>
-
-          <a
-            href="#actuals"
-            className="command-nav-item"
-          >
-            05
-            <span>
-              Actual costs
-            </span>
-          </a>
-        </nav>
-
-        <div className="command-sidebar-footer">
-          <span>
-            COST CONTROL
-          </span>
-
-          <strong>
-            {project.code}
-          </strong>
-
-          <small>
-            Local budget, commitments,
-            actuals and cost forecasting.
-          </small>
-        </div>
-      </aside>
+      <ProjectWorkspaceSidebar
+        projectId={projectId}
+        projectCode={project.code}
+        className="cost-sidebar"
+        localLinks={[
+          { href: "#budget", label: "Budget plan" },
+          { href: "#commitments", label: "Commitments" },
+          { href: "#actuals", label: "Actual costs" },
+        ]}
+      />
 
       <main className="cost-main">
         <header className="cost-topbar">

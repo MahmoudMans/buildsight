@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { ProjectWorkspaceSidebar } from "./ProjectWorkspaceSidebar";
 
 import {
   type FormEvent,
@@ -912,134 +913,17 @@ export function ProjectSafetyControlView({
 
   return (
     <div className="safety-shell">
-      <aside className="safety-sidebar">
-        <Link
-          href="/"
-          className="command-brand"
-        >
-          <div className="brand-mark">
-            B
-          </div>
-
-          <div>
-            <strong>
-              BuildSight
-            </strong>
-
-            <span>
-              Construction Intelligence
-            </span>
-          </div>
-        </Link>
-
-        <div className="command-nav-label">
-          HSE CONTROL
-        </div>
-
-        <nav className="command-navigation">
-          <Link
-            href={`/projects/${projectId}`}
-            className="command-nav-item"
-          >
-            01
-            <span>
-              Command center
-            </span>
-          </Link>
-
-          <Link
-            href={`/projects/${projectId}/production`}
-            className="command-nav-item"
-          >
-            02
-            <span>
-              Production
-            </span>
-          </Link>
-
-          <Link
-            href={`/projects/${projectId}/quality`}
-            className="command-nav-item"
-          >
-            03
-            <span>
-              Quality
-            </span>
-          </Link>
-
-          <div className="command-nav-item active">
-            04
-            <span>
-              Safety / HSE
-            </span>
-          </div>
-
-          <a
-            href="#incidents"
-            className="command-nav-item"
-          >
-            05
-            <span>
-              Incidents
-            </span>
-          </a>
-
-          <a
-            href="#observations"
-            className="command-nav-item"
-          >
-            06
-            <span>
-              Observations
-            </span>
-          </a>
-
-          <a
-            href="#actions"
-            className="command-nav-item"
-          >
-            07
-            <span>
-              HSE actions
-            </span>
-          </a>
-
-          <a
-            href="#permits"
-            className="command-nav-item"
-          >
-            08
-            <span>
-              Work permits
-            </span>
-          </a>
-
-          <Link
-            href={`/projects/${projectId}/commercial`}
-            className="command-nav-item"
-          >
-            09
-            <span>
-              Commercial
-            </span>
-          </Link>
-        </nav>
-
-        <div className="command-sidebar-footer">
-          <span>
-            PROJECT HSE
-          </span>
-
-          <strong>
-            {project.code}
-          </strong>
-
-          <small>
-            Leading and lagging safety
-            intelligence.
-          </small>
-        </div>
-      </aside>
+      <ProjectWorkspaceSidebar
+        projectId={projectId}
+        projectCode={project.code}
+        className="safety-sidebar"
+        localLinks={[
+          { href: "#incidents", label: "Incidents" },
+          { href: "#observations", label: "Observations" },
+          { href: "#actions", label: "HSE actions" },
+          { href: "#permits", label: "Work permits" },
+        ]}
+      />
 
       <main className="safety-main">
         <header className="safety-topbar">

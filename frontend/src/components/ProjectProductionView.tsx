@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { ProjectWorkspaceSidebar } from "./ProjectWorkspaceSidebar";
 
 import {
   type FormEvent,
@@ -781,125 +782,16 @@ export function ProjectProductionView({
 
   return (
     <div className="production-shell">
-      <aside className="production-sidebar">
-        <Link
-          href="/"
-          className="command-brand"
-        >
-          <div className="brand-mark">
-            B
-          </div>
-
-          <div>
-            <strong>
-              BuildSight
-            </strong>
-
-            <span>
-              Construction Intelligence
-            </span>
-          </div>
-        </Link>
-
-        <div className="command-nav-label">
-          SITE PRODUCTION
-        </div>
-
-        <nav className="command-navigation">
-          <Link
-            href={`/projects/${projectId}`}
-            className="command-nav-item"
-          >
-            01
-            <span>
-              Command center
-            </span>
-          </Link>
-
-          <Link
-            href={`/projects/${projectId}/costs`}
-            className="command-nav-item"
-          >
-            02
-            <span>
-              Cost control
-            </span>
-          </Link>
-
-          <Link
-            href={`/projects/${projectId}/procurement`}
-            className="command-nav-item"
-          >
-            03
-            <span>
-              Procurement
-            </span>
-          </Link>
-
-          <Link
-            href={`/projects/${projectId}/risk-control`}
-            className="command-nav-item"
-          >
-            04
-            <span>
-              Risk control
-            </span>
-          </Link>
-
-          <div className="command-nav-item active">
-            05
-            <span>
-              Production
-            </span>
-          </div>
-
-          <a
-            href="#packages"
-            className="command-nav-item"
-          >
-            06
-            <span>
-              Work packages
-            </span>
-          </a>
-
-          <a
-            href="#reports"
-            className="command-nav-item"
-          >
-            07
-            <span>
-              Site reports
-            </span>
-          </a>
-
-          <a
-            href="#entries"
-            className="command-nav-item"
-          >
-            08
-            <span>
-              Daily production
-            </span>
-          </a>
-        </nav>
-
-        <div className="command-sidebar-footer">
-          <span>
-            PRODUCTION PROJECT
-          </span>
-
-          <strong>
-            {project.code}
-          </strong>
-
-          <small>
-            Quantities, labor, equipment
-            and productivity are calculated
-            from accepted site reports.
-          </small>
-        </div>
-      </aside>
+      <ProjectWorkspaceSidebar
+        projectId={projectId}
+        projectCode={project.code}
+        className="production-sidebar"
+        localLinks={[
+          { href: "#packages", label: "Work packages" },
+          { href: "#reports", label: "Site reports" },
+          { href: "#entries", label: "Daily production" },
+        ]}
+      />
 
       <main className="production-main">
         <header className="production-topbar">

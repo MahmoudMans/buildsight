@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { ProjectWorkspaceSidebar } from "./ProjectWorkspaceSidebar";
 
 import {
   type FormEvent,
@@ -737,144 +738,17 @@ export function ProjectResourceControlView({
 
   return (
     <div className="resource-shell">
-      <aside className="resource-sidebar">
-        <Link
-          href="/"
-          className="command-brand"
-        >
-          <div className="brand-mark">
-            B
-          </div>
-
-          <div>
-            <strong>
-              BuildSight
-            </strong>
-
-            <span>
-              Construction Intelligence
-            </span>
-          </div>
-        </Link>
-
-        <div className="command-nav-label">
-          RESOURCE CONTROL
-        </div>
-
-        <nav className="command-navigation">
-          <Link
-            href={`/projects/${projectId}`}
-            className="command-nav-item"
-          >
-            01
-            <span>
-              Command center
-            </span>
-          </Link>
-
-          <Link
-            href={`/projects/${projectId}/production`}
-            className="command-nav-item"
-          >
-            02
-            <span>
-              Production
-            </span>
-          </Link>
-
-          <Link
-            href={`/projects/${projectId}/commercial`}
-            className="command-nav-item"
-          >
-            03
-            <span>
-              Commercial
-            </span>
-          </Link>
-
-          <div className="command-nav-item active">
-            04
-            <span>
-              Resources
-            </span>
-          </div>
-
-          <a
-            href="#workforce-plan"
-            className="command-nav-item"
-          >
-            05
-            <span>
-              Workforce plan
-            </span>
-          </a>
-
-          <a
-            href="#deployment"
-            className="command-nav-item"
-          >
-            06
-            <span>
-              Deployment
-            </span>
-          </a>
-
-          <a
-            href="#equipment"
-            className="command-nav-item"
-          >
-            07
-            <span>
-              Equipment
-            </span>
-          </a>
-
-          <a
-            href="#forecast"
-            className="command-nav-item"
-          >
-            08
-            <span>
-              Forecast
-            </span>
-          </a>
-
-          <Link
-            href={`/projects/${projectId}/schedule`}
-            className="command-nav-item"
-          >
-            09
-            <span>
-              Schedule
-            </span>
-          </Link>
-
-          <Link
-            href={`/projects/${projectId}/forecast`}
-            className="command-nav-item"
-          >
-            10
-            <span>
-              Forecast
-            </span>
-          </Link>
-        </nav>
-
-        <div className="command-sidebar-footer">
-          <span>
-            PROJECT RESOURCES
-          </span>
-
-          <strong>
-            {project.code}
-          </strong>
-
-          <small>
-            Labor, plant, productivity
-            and forward capacity.
-          </small>
-        </div>
-      </aside>
+      <ProjectWorkspaceSidebar
+        projectId={projectId}
+        projectCode={project.code}
+        className="resource-sidebar"
+        localLinks={[
+          { href: "#workforce-plan", label: "Workforce plan" },
+          { href: "#deployment", label: "Deployment" },
+          { href: "#equipment", label: "Equipment" },
+          { href: "#forecast", label: "Forecast" },
+        ]}
+      />
 
       <main className="resource-main">
         <header className="resource-topbar">

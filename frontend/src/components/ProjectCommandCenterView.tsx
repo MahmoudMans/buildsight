@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { ProjectWorkspaceSidebar } from "./ProjectWorkspaceSidebar";
 import { ProjectFeatureHub } from "./ProjectFeatureHub";
 
 import {
@@ -640,199 +641,17 @@ export function ProjectCommandCenterView({
 
   return (
     <div className="command-shell">
-      <aside className="command-sidebar">
-        <Link
-          href="/"
-          className="command-brand"
-        >
-          <div className="brand-mark">
-            B
-          </div>
-
-          <div>
-            <strong>
-              BuildSight
-            </strong>
-
-            <span>
-              Construction Intelligence
-            </span>
-          </div>
-        </Link>
-
-        <div className="command-nav-label">
-          PROJECT COMMAND CENTER
-        </div>
-
-        <nav className="command-navigation">
-          <a
-            href="#overview"
-            className="command-nav-item active"
-          >
-            01
-            <span>Overview</span>
-          </a>
-
-          <a
-            href="#health"
-            className="command-nav-item"
-          >
-            02
-            <span>Project health</span>
-          </a>
-
-          <a
-            href="#milestones"
-            className="command-nav-item"
-          >
-            03
-            <span>Milestones</span>
-          </a>
-
-          <a
-            href="#progress"
-            className="command-nav-item"
-          >
-            04
-            <span>Progress</span>
-          </a>
-
-          <Link
-            href={`/projects/${projectId}/costs`}
-            className="command-nav-item"
-          >
-            05
-            <span>Cost control</span>
-          </Link>
-
-          <Link
-            href={`/projects/${projectId}/procurement`}
-            className="command-nav-item"
-          >
-            06
-            <span>Procurement</span>
-          </Link>
-
-          <Link
-            href={`/projects/${projectId}/risk-control`}
-            className="command-nav-item"
-          >
-            07
-            <span>Risk control</span>
-          </Link>
-
-          <Link
-            href={`/projects/${projectId}/production`}
-            className="command-nav-item"
-          >
-            08
-            <span>Production</span>
-          </Link>
-
-          <Link
-            href={`/projects/${projectId}/documents`}
-            className="command-nav-item"
-          >
-            09
-            <span>Documents</span>
-          </Link>
-
-          <Link
-            href={`/projects/${projectId}/quality`}
-            className="command-nav-item"
-          >
-            10
-            <span>Quality & handover</span>
-          </Link>
-
-          <Link
-            href={`/projects/${projectId}/safety`}
-            className="command-nav-item"
-          >
-            11
-            <span>Safety / HSE</span>
-          </Link>
-
-          <Link
-            href={`/projects/${projectId}/commercial`}
-            className="command-nav-item"
-          >
-            12
-            <span>Commercial</span>
-          </Link>
-
-          <Link
-            href={`/projects/${projectId}/resources`}
-            className="command-nav-item"
-          >
-            13
-            <span>Resources</span>
-          </Link>
-
-          <Link
-            href={`/projects/${projectId}/schedule`}
-            className="command-nav-item"
-          >
-            14
-            <span>Schedule</span>
-          </Link>
-
-          <Link
-            href={`/projects/${projectId}/forecast`}
-            className="command-nav-item"
-          >
-            15
-            <span>Forecast</span>
-          </Link>
-
-          <Link
-            href={`/projects/${projectId}/governance`}
-            className="command-nav-item"
-          >
-            16
-            <span>Governance</span>
-          </Link>
-
-          <Link
-            href={`/projects/${projectId}/recovery`}
-            className="command-nav-item"
-          >
-            17
-            <span>Recovery</span>
-          </Link>
-
-          <Link
-            href={`/projects/${projectId}/copilot`}
-            className="command-nav-item"
-          >
-            18
-            <span>AI Copilot</span>
-          </Link>
-
-          <Link
-            href="/portfolio"
-            className="command-nav-item"
-          >
-            PX
-            <span>Executive portfolio</span>
-          </Link>
-        </nav>
-
-        <div className="command-sidebar-footer">
-          <span>
-            LOCAL PROJECT
-          </span>
-
-          <strong>
-            {project.code}
-          </strong>
-
-          <small>
-            All project intelligence
-            remains on your machine.
-          </small>
-        </div>
-      </aside>
+      <ProjectWorkspaceSidebar
+        projectId={projectId}
+        projectCode={project.code}
+        className="command-sidebar"
+        localLinks={[
+          { href: "#overview", label: "Overview" },
+          { href: "#health", label: "Project health" },
+          { href: "#milestones", label: "Milestones" },
+          { href: "#progress", label: "Progress" },
+        ]}
+      />
 
       <main className="command-main">
         <header className="command-topbar">

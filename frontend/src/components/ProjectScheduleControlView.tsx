@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { ProjectWorkspaceSidebar } from "./ProjectWorkspaceSidebar";
 
 import {
   type FormEvent,
@@ -761,134 +762,18 @@ export function ProjectScheduleControlView({
 
   return (
     <div className="schedule-shell">
-      <aside className="schedule-sidebar">
-        <Link
-          href="/"
-          className="command-brand"
-        >
-          <div className="brand-mark">
-            B
-          </div>
-
-          <div>
-            <strong>
-              BuildSight
-            </strong>
-
-            <span>
-              Construction Intelligence
-            </span>
-          </div>
-        </Link>
-
-        <div className="command-nav-label">
-          PLANNING CONTROL
-        </div>
-
-        <nav className="command-navigation">
-          <Link
-            href={`/projects/${projectId}`}
-            className="command-nav-item"
-          >
-            01
-            <span>
-              Command center
-            </span>
-          </Link>
-
-          <div className="command-nav-item active">
-            02
-            <span>
-              Schedule
-            </span>
-          </div>
-
-          <a
-            href="#activities"
-            className="command-nav-item"
-          >
-            03
-            <span>
-              Activities
-            </span>
-          </a>
-
-          <a
-            href="#critical-path"
-            className="command-nav-item"
-          >
-            04
-            <span>
-              Critical path
-            </span>
-          </a>
-
-          <a
-            href="#lookahead"
-            className="command-nav-item"
-          >
-            05
-            <span>
-              Lookahead
-            </span>
-          </a>
-
-          <a
-            href="#constraints"
-            className="command-nav-item"
-          >
-            06
-            <span>
-              Constraints
-            </span>
-          </a>
-
-          <a
-            href="#baselines"
-            className="command-nav-item"
-          >
-            07
-            <span>
-              Baselines
-            </span>
-          </a>
-
-          <Link
-            href={`/projects/${projectId}/resources`}
-            className="command-nav-item"
-          >
-            08
-            <span>
-              Resources
-            </span>
-          </Link>
-
-          <Link
-            href={`/projects/${projectId}/forecast`}
-            className="command-nav-item"
-          >
-            09
-            <span>
-              Forecast
-            </span>
-          </Link>
-        </nav>
-
-        <div className="command-sidebar-footer">
-          <span>
-            PROJECT SCHEDULE
-          </span>
-
-          <strong>
-            {project.code}
-          </strong>
-
-          <small>
-            CPM, float, baseline,
-            lookahead and constraints.
-          </small>
-        </div>
-      </aside>
+      <ProjectWorkspaceSidebar
+        projectId={projectId}
+        projectCode={project.code}
+        className="schedule-sidebar"
+        localLinks={[
+          { href: "#activities", label: "Activities" },
+          { href: "#critical-path", label: "Critical path" },
+          { href: "#lookahead", label: "Lookahead" },
+          { href: "#constraints", label: "Constraints" },
+          { href: "#baselines", label: "Baselines" },
+        ]}
+      />
 
       <main className="schedule-main">
         <header className="schedule-topbar">

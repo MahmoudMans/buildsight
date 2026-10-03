@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { ProjectWorkspaceSidebar } from "./ProjectWorkspaceSidebar";
 
 import {
   type FormEvent,
@@ -429,136 +430,16 @@ export function ProjectRecoveryView({
 
   return (
     <div className="recovery-shell">
-      <aside className="recovery-sidebar">
-        <Link
-          href="/"
-          className="command-brand"
-        >
-          <div className="brand-mark">
-            B
-          </div>
-
-          <div>
-            <strong>
-              BuildSight
-            </strong>
-
-            <span>
-              Construction Intelligence
-            </span>
-          </div>
-        </Link>
-
-        <div className="command-nav-label">
-          CHANGE & RECOVERY
-        </div>
-
-        <nav className="command-navigation">
-          <Link
-            href={`/projects/${projectId}`}
-            className="command-nav-item"
-          >
-            01
-            <span>
-              Command center
-            </span>
-          </Link>
-
-          <Link
-            href={`/projects/${projectId}/schedule`}
-            className="command-nav-item"
-          >
-            02
-            <span>
-              Schedule
-            </span>
-          </Link>
-
-          <Link
-            href={`/projects/${projectId}/forecast`}
-            className="command-nav-item"
-          >
-            03
-            <span>
-              Forecast
-            </span>
-          </Link>
-
-          <Link
-            href={`/projects/${projectId}/governance`}
-            className="command-nav-item"
-          >
-            04
-            <span>
-              Governance
-            </span>
-          </Link>
-
-          <div className="command-nav-item active">
-            05
-            <span>
-              Recovery
-            </span>
-          </div>
-
-          <a
-            href="#impact"
-            className="command-nav-item"
-          >
-            06
-            <span>
-              Impact
-            </span>
-          </a>
-
-          <a
-            href="#options"
-            className="command-nav-item"
-          >
-            07
-            <span>
-              Options
-            </span>
-          </a>
-
-          <a
-            href="#history"
-            className="command-nav-item"
-          >
-            08
-            <span>
-              Selected plans
-            </span>
-          </a>
-
-          <Link
-            href="/portfolio/recovery"
-            className="command-nav-item"
-          >
-            09
-            <span>
-              Portfolio recovery
-            </span>
-          </Link>
-        </nav>
-
-        <div className="command-sidebar-footer">
-          <span>
-            RECOVERY SCORE
-          </span>
-
-          <strong>
-            {intelligence.recoveryScore.toFixed(
-              0,
-            )}
-            /100
-          </strong>
-
-          <small>
-            Separate analytical control layer.
-          </small>
-        </div>
-      </aside>
+      <ProjectWorkspaceSidebar
+        projectId={projectId}
+        projectCode={project.code}
+        className="recovery-sidebar"
+        localLinks={[
+          { href: "#impact", label: "Impact" },
+          { href: "#options", label: "Options" },
+          { href: "#history", label: "Selected plans" },
+        ]}
+      />
 
       <main className="recovery-main">
         <header className="recovery-header">

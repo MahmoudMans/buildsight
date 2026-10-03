@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { ProjectWorkspaceSidebar } from "./ProjectWorkspaceSidebar";
 
 import {
   type FormEvent,
@@ -922,125 +923,17 @@ export function ProjectRiskControlView({
 
   return (
     <div className="risk-shell">
-      <aside className="risk-sidebar">
-        <Link
-          href="/"
-          className="command-brand"
-        >
-          <div className="brand-mark">
-            B
-          </div>
-
-          <div>
-            <strong>
-              BuildSight
-            </strong>
-
-            <span>
-              Construction Intelligence
-            </span>
-          </div>
-        </Link>
-
-        <div className="command-nav-label">
-          RISK CONTROL
-        </div>
-
-        <nav className="command-navigation">
-          <Link
-            href={`/projects/${projectId}`}
-            className="command-nav-item"
-          >
-            01
-            <span>
-              Command center
-            </span>
-          </Link>
-
-          <Link
-            href={`/projects/${projectId}/costs`}
-            className="command-nav-item"
-          >
-            02
-            <span>
-              Cost control
-            </span>
-          </Link>
-
-          <Link
-            href={`/projects/${projectId}/procurement`}
-            className="command-nav-item"
-          >
-            03
-            <span>
-              Procurement
-            </span>
-          </Link>
-
-          <div className="command-nav-item active">
-            04
-            <span>
-              Risk control
-            </span>
-          </div>
-
-          <a
-            href="#risks"
-            className="command-nav-item"
-          >
-            05
-            <span>
-              Risks
-            </span>
-          </a>
-
-          <a
-            href="#issues"
-            className="command-nav-item"
-          >
-            06
-            <span>
-              Issues
-            </span>
-          </a>
-
-          <a
-            href="#changes"
-            className="command-nav-item"
-          >
-            07
-            <span>
-              Changes
-            </span>
-          </a>
-
-          <a
-            href="#delays"
-            className="command-nav-item"
-          >
-            08
-            <span>
-              Delays
-            </span>
-          </a>
-        </nav>
-
-        <div className="command-sidebar-footer">
-          <span>
-            RISK PROJECT
-          </span>
-
-          <strong>
-            {project.code}
-          </strong>
-
-          <small>
-            Risks, issues, changes and
-            delay exposure remain fully
-            local.
-          </small>
-        </div>
-      </aside>
+      <ProjectWorkspaceSidebar
+        projectId={projectId}
+        projectCode={project.code}
+        className="risk-sidebar"
+        localLinks={[
+          { href: "#risks", label: "Risks" },
+          { href: "#issues", label: "Issues" },
+          { href: "#changes", label: "Changes" },
+          { href: "#delays", label: "Delays" },
+        ]}
+      />
 
       <main className="risk-main">
         <header className="risk-topbar">
