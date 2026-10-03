@@ -1,6 +1,9 @@
 "use client";
 
+// BUILDSIGHT_HOME_DECISION_UI_V1
 import Link from "next/link";
+import styles from "./BuildSightDashboard.module.css";
+
 
 import {
   FormEvent,
@@ -66,6 +69,25 @@ function formatDate(value: string): string {
   }).format(new Date(`${value}T00:00:00`));
 }
 
+function formatUpdatedAt(value: string | null): string {
+  if (!value) {
+    return "No updates";
+  }
+
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return "Unknown";
+  }
+
+  return new Intl.DateTimeFormat("en-GB", {
+    day: "2-digit",
+    month: "short",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(date);
+}
+
 function statusClass(status: ProjectStatus): string {
   return `status-badge status-${status.toLowerCase().replace("_", "-")}`;
 }
@@ -118,6 +140,14 @@ export function BuildSightDashboard() {
       (project) => project.status === "ACTIVE",
     ).length;
 
+    const onHoldProjects = projects.filter(
+      (project) => project.status === "ON_HOLD",
+    ).length;
+
+    const planningProjects = projects.filter(
+      (project) => project.status === "PLANNING",
+    ).length;
+
     const totalBudget = projects.reduce(
       (sum, project) => sum + Number(project.approvedBudget),
       0,
@@ -137,11 +167,32 @@ export function BuildSightDashboard() {
             0,
           ) / projects.length;
 
+    const latestUpdatedAt = projects.reduce<string | null>(
+      (latest, project) => {
+        if (!project.updatedAt) {
+          return latest;
+        }
+
+        if (!latest) {
+          return project.updatedAt;
+        }
+
+        return new Date(project.updatedAt).getTime() >
+          new Date(latest).getTime()
+          ? project.updatedAt
+          : latest;
+      },
+      null,
+    );
+
     return {
       activeProjects,
+      onHoldProjects,
+      planningProjects,
       totalBudget,
       contractValue,
       averageProgress,
+      latestUpdatedAt,
     };
   }, [projects]);
 
@@ -214,7 +265,7 @@ export function BuildSightDashboard() {
   }
 
   return (
-    <div className="app-shell">
+    <div className={`${styles.dashboard} app-shell buildsight-home`}>
       <aside className="sidebar">
         <div className="brand">
           <div className="brand-mark">B</div>
@@ -230,7 +281,11 @@ export function BuildSightDashboard() {
         <div className="workspace-label">WORKSPACE</div>
 
         <nav className="navigation">
-          <button className="nav-item active" type="button">
+          <button
+            aria-current="page"
+            className="nav-item active"
+            type="button"
+          >
             <span className="nav-icon">01</span>
             Portfolio
           </button>
@@ -292,15 +347,23 @@ export function BuildSightDashboard() {
 
       <main className="main">
         <header className="topbar">
-          <div>
+          <div className="page-heading-copy">
             <div className="eyebrow">
               CONSTRUCTION DELIVERY COMMAND CENTER
             </div>
+
             <h1>Portfolio overview</h1>
+
+            <p className="page-subtitle">
+              Monitor project health, budget, schedule and delivery
+              exceptions across the portfolio.
+            </p>
           </div>
 
           <div className="topbar-actions">
             <div
+              aria-live="polite"
+              role="status"
               className={
                 apiOnline
                   ? "connection-pill online"
@@ -378,7 +441,7 @@ export function BuildSightDashboard() {
             </div>
 
             <div className="metric-footer">
-              {projects.length} total projects in portfolio
+              {metrics.activeProjects} of {projects.length} projects currently active
             </div>
           </article>
 
@@ -396,6 +459,59 @@ export function BuildSightDashboard() {
               Portfolio physical completion
             </div>
           </article>
+        </section>
+
+        <section
+          aria-label="Portfolio lifecycle summary"
+          className="portfolio-pulse"
+        >
+          <div className="portfolio-pulse-copy">
+            <div className="eyebrow">PORTFOLIO PULSE</div>
+
+            <h2>Current delivery status</h2>
+
+            <p>
+              Lifecycle signals from the current portfolio. Cost,
+              schedule and health intelligence remain available in
+              their dedicated workspaces.
+            </p>
+          </div>
+
+          <div className="portfolio-pulse-grid">
+            <div className="pulse-stat pulse-stat-warning">
+              <span className="pulse-stat-label">ON HOLD</span>
+              <strong>{metrics.onHoldProjects}</strong>
+              <span className="pulse-stat-detail">
+                Projects paused
+              </span>
+            </div>
+
+            <div className="pulse-stat pulse-stat-info">
+              <span className="pulse-stat-label">PLANNING</span>
+              <strong>{metrics.planningProjects}</strong>
+              <span className="pulse-stat-detail">
+                Pre-delivery projects
+              </span>
+            </div>
+
+            <div className="pulse-stat pulse-stat-positive">
+              <span className="pulse-stat-label">ACTIVE</span>
+              <strong>{metrics.activeProjects}</strong>
+              <span className="pulse-stat-detail">
+                Projects in delivery
+              </span>
+            </div>
+
+            <div className="pulse-stat pulse-stat-neutral">
+              <span className="pulse-stat-label">LATEST UPDATE</span>
+              <strong className="pulse-update-value">
+                {formatUpdatedAt(metrics.latestUpdatedAt)}
+              </strong>
+              <span className="pulse-stat-detail">
+                Most recent project record
+              </span>
+            </div>
+          </div>
         </section>
 
         {showCreatePanel && (
@@ -614,6 +730,11 @@ export function BuildSightDashboard() {
                 LIVE PROJECT PORTFOLIO
               </div>
               <h2>Construction projects</h2>
+
+              <p className="section-support">
+                Open a project to inspect delivery controls, current
+                progress and project-level intelligence.
+              </p>
             </div>
 
             <div className="project-count">
@@ -658,33 +779,38 @@ export function BuildSightDashboard() {
 
                 {!loading &&
                   projects.map((project) => (
-                    <tr key={project.id}>
-                      <td>
-                        <div className="project-identity">
+                    <tr className="project-row" key={project.id}>
+                      <td data-label="Project">
+                        <Link
+                          className="project-identity project-row-link"
+                          href={`/projects/${project.id}`}
+                        >
                           <div className="project-avatar">
                             {project.name.charAt(0).toUpperCase()}
                           </div>
 
-                          <div>
-                            <Link
-                              className="project-link"
-                              href={`/projects/${project.id}`}
-                            >
-                              {project.name}
-                            </Link>
+                          <div className="project-row-copy">
+                            <strong>{project.name}</strong>
                             <span>{project.code}</span>
                           </div>
-                        </div>
+
+                          <span
+                            aria-hidden="true"
+                            className="project-open-arrow"
+                          >
+                            ↗
+                          </span>
+                        </Link>
                       </td>
 
-                      <td>
+                      <td data-label="Client / location">
                         <div className="client-cell">
                           <strong>{project.clientName}</strong>
                           <span>{project.location}</span>
                         </div>
                       </td>
 
-                      <td>
+                      <td data-label="Status">
                         <span
                           className={statusClass(
                             project.status,
@@ -694,7 +820,7 @@ export function BuildSightDashboard() {
                         </span>
                       </td>
 
-                      <td>
+                      <td data-label="Budget">
                         <div className="budget-cell">
                           <strong>
                             {currency(project.approvedBudget)}
@@ -708,7 +834,7 @@ export function BuildSightDashboard() {
                         </div>
                       </td>
 
-                      <td>
+                      <td data-label="Progress">
                         <div className="progress-cell">
                           <div className="progress-label">
                             <strong>
@@ -738,7 +864,7 @@ export function BuildSightDashboard() {
                         </div>
                       </td>
 
-                      <td>
+                      <td data-label="Planned finish">
                         <div className="date-cell">
                           {formatDate(
                             project.plannedEndDate,
@@ -752,48 +878,116 @@ export function BuildSightDashboard() {
           </div>
         </section>
 
-        <section className="intelligence-preview">
+        <section className="intelligence-preview intelligence-operational">
           <div className="intelligence-copy">
             <div className="eyebrow">
               BUILDSIGHT INTELLIGENCE
             </div>
 
-            <h2>
-              From project tracking to construction intelligence.
-            </h2>
+            <h2>Portfolio intelligence</h2>
 
             <p>
-              This foundation is ready for cost variance,
-              schedule-risk analysis, supplier intelligence,
-              procurement risk, document search and locally
-              generated project summaries.
+              Review the cost, schedule, health and project
+              information that may require action.
             </p>
+
+            <div className="intelligence-context">
+              <span className="intelligence-context-dot" />
+
+              <span>
+                Built around the same live portfolio shown above.
+              </span>
+            </div>
           </div>
 
           <div className="intelligence-grid">
-            <div>
-              <span>01</span>
-              <strong>Cost Intelligence</strong>
-              <p>Budget, commitments, actuals and forecasting.</p>
-            </div>
+            <article className="intelligence-card">
+              <span className="intelligence-index">01</span>
 
-            <div>
-              <span>02</span>
-              <strong>Schedule Intelligence</strong>
-              <p>Delay signals, milestones and critical risks.</p>
-            </div>
+              <strong>Cost intelligence</strong>
 
-            <div>
-              <span>03</span>
-              <strong>Project Health</strong>
-              <p>Explainable multidimensional project scoring.</p>
-            </div>
+              <p>
+                Review budget, commitments, actuals and
+                forward-looking cost signals.
+              </p>
 
-            <div>
-              <span>04</span>
+              <Link
+                className="intelligence-card-link"
+                href="/portfolio/forecast"
+              >
+                Open forecast control
+                <span aria-hidden="true">↗</span>
+              </Link>
+            </article>
+
+            <article className="intelligence-card">
+              <span className="intelligence-index">02</span>
+
+              <strong>Schedule intelligence</strong>
+
+              <p>
+                Inspect milestones, delay signals and critical-path
+                pressure.
+              </p>
+
+              {projects[0] ? (
+                <Link
+                  className="intelligence-card-link"
+                  href={`/projects/${projects[0].id}/schedule`}
+                >
+                  Open schedule workspace
+                  <span aria-hidden="true">↗</span>
+                </Link>
+              ) : (
+                <span className="intelligence-card-disabled">
+                  Available after a project is created
+                </span>
+              )}
+            </article>
+
+            <article className="intelligence-card">
+              <span className="intelligence-index">03</span>
+
+              <strong>Project health</strong>
+
+              <p>
+                Compare portfolio health and inspect the factors
+                affecting project scoring.
+              </p>
+
+              <Link
+                className="intelligence-card-link"
+                href="/portfolio"
+              >
+                Review portfolio health
+                <span aria-hidden="true">↗</span>
+              </Link>
+            </article>
+
+            <article className="intelligence-card">
+              <span className="intelligence-index">04</span>
+
               <strong>Local AI</strong>
-              <p>Private document search and project summaries.</p>
-            </div>
+
+              <p>
+                Ask questions across indexed project information
+                and review cited answers.
+              </p>
+
+              {projects[0] ? (
+                <Link
+                  className="intelligence-card-link"
+                  href={`/projects/${projects[0].id}/copilot`}
+                >
+                  Open project copilot
+                  <span aria-hidden="true">↗</span>
+                </Link>
+              ) : (
+                <span className="intelligence-card-disabled">
+                  Available after a project is created
+                </span>
+              )}
+            </article>
           </div>
         </section>
       </main>

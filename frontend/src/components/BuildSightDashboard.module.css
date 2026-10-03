@@ -1,0 +1,563 @@
+.dashboard {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ==========================================================================
+   HEADER — OPERATIONAL ORIENTATION
+   ========================================================================== */
+
+.dashboard :global(.topbar) {
+  align-items: flex-start;
+  gap: 32px;
+  margin-bottom: 24px;
+}
+
+.dashboard :global(.page-heading-copy) {
+  max-width: 660px;
+}
+
+.dashboard :global(.page-subtitle) {
+  color: #6e7673;
+  font-size: 12px;
+  line-height: 1.6;
+  margin: 10px 0 0;
+  max-width: 590px;
+}
+
+.dashboard :global(.topbar-actions) {
+  flex: 0 0 auto;
+  padding-top: 12px;
+}
+
+/* ==========================================================================
+   KPI CARDS — PRESERVE EXISTING IDENTITY, IMPROVE POLISH
+   ========================================================================== */
+
+.dashboard :global(.metric-grid) {
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.dashboard :global(.metric-card) {
+  min-height: 128px;
+  transition:
+    border-color 150ms ease,
+    box-shadow 150ms ease,
+    transform 150ms ease;
+}
+
+.dashboard :global(.metric-card:hover) {
+  border-color: #d7dbd6;
+  box-shadow: 0 10px 28px rgba(18, 25, 23, 0.04);
+  transform: translateY(-1px);
+}
+
+.dashboard :global(.metric-value),
+.dashboard :global(.budget-cell strong),
+.dashboard :global(.progress-label strong) {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ==========================================================================
+   PORTFOLIO PULSE — COMPACT DECISION CONTEXT
+   ========================================================================== */
+
+.dashboard :global(.portfolio-pulse) {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  display: grid;
+  grid-template-columns: minmax(230px, 0.78fr) minmax(0, 2.3fr);
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.dashboard :global(.portfolio-pulse-copy) {
+  border-right: 1px solid var(--border);
+  padding: 17px 20px;
+}
+
+.dashboard :global(.portfolio-pulse-copy .eyebrow) {
+  margin-bottom: 7px;
+}
+
+.dashboard :global(.portfolio-pulse-copy h2) {
+  font-size: 17px;
+  letter-spacing: -0.035em;
+}
+
+.dashboard :global(.portfolio-pulse-copy p) {
+  color: #808985;
+  font-size: 9.5px;
+  line-height: 1.55;
+  margin: 8px 0 0;
+  max-width: 310px;
+}
+
+.dashboard :global(.portfolio-pulse-grid) {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.dashboard :global(.pulse-stat) {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 104px;
+  padding: 16px 18px;
+  position: relative;
+}
+
+.dashboard :global(.pulse-stat:not(:last-child)) {
+  border-right: 1px solid #edf0ec;
+}
+
+.dashboard :global(.pulse-stat::before) {
+  border-radius: 999px;
+  content: "";
+  height: 6px;
+  left: 18px;
+  position: absolute;
+  top: 15px;
+  width: 6px;
+}
+
+.dashboard :global(.pulse-stat-warning::before) {
+  background: #b9831f;
+}
+
+.dashboard :global(.pulse-stat-info::before) {
+  background: #4d7c9a;
+}
+
+.dashboard :global(.pulse-stat-positive::before) {
+  background: #3f8a68;
+}
+
+.dashboard :global(.pulse-stat-neutral::before) {
+  background: #87908c;
+}
+
+.dashboard :global(.pulse-stat-label) {
+  color: #8a938f;
+  font-size: 7.5px;
+  font-weight: 850;
+  letter-spacing: 0.11em;
+  margin-left: 14px;
+}
+
+.dashboard :global(.pulse-stat strong) {
+  color: #202724;
+  font-size: 21px;
+  font-weight: 780;
+  letter-spacing: -0.035em;
+  line-height: 1;
+  margin-top: 13px;
+}
+
+.dashboard :global(.pulse-stat .pulse-update-value) {
+  font-size: 13px;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+}
+
+.dashboard :global(.pulse-stat-detail) {
+  color: #939b98;
+  font-size: 8.5px;
+  line-height: 1.35;
+  margin-top: 7px;
+}
+
+/* ==========================================================================
+   PROJECT PORTFOLIO — KEEP TABLE AS PRIMARY WORKING SURFACE
+   ========================================================================== */
+
+.dashboard :global(.portfolio-section > .section-heading) {
+  align-items: flex-start;
+  padding-bottom: 17px;
+}
+
+.dashboard :global(.section-support) {
+  color: #8a938f;
+  font-size: 9.5px;
+  line-height: 1.5;
+  margin: 7px 0 0;
+  max-width: 560px;
+}
+
+.dashboard :global(.project-row) {
+  transition: background 140ms ease;
+}
+
+.dashboard :global(.project-row-link) {
+  border-radius: 8px;
+  color: inherit;
+  margin: -6px;
+  padding: 6px;
+  text-decoration: none;
+  width: calc(100% + 12px);
+}
+
+.dashboard :global(.project-row-link:focus-visible) {
+  box-shadow: 0 0 0 3px rgba(25, 32, 30, 0.11);
+  outline: 2px solid #50605a;
+  outline-offset: 2px;
+}
+
+.dashboard :global(.project-row-copy) {
+  min-width: 0;
+}
+
+.dashboard :global(.project-open-arrow) {
+  color: #9aa29f !important;
+  display: block !important;
+  font-size: 13px !important;
+  margin: 0 0 0 auto !important;
+  opacity: 0;
+  transform: translate(-3px, 2px);
+  transition:
+    opacity 140ms ease,
+    transform 140ms ease;
+}
+
+.dashboard :global(.project-row:hover .project-open-arrow),
+.dashboard :global(.project-row-link:focus-visible .project-open-arrow) {
+  opacity: 1;
+  transform: translate(0, 2px);
+}
+
+/* ==========================================================================
+   INTELLIGENCE — CHANGE FROM MARKETING TO OPERATIONAL NAVIGATION
+   ========================================================================== */
+
+.dashboard :global(.intelligence-operational) {
+  gap: 34px;
+  padding: 30px;
+}
+
+.dashboard :global(.intelligence-operational .intelligence-copy) {
+  align-self: center;
+}
+
+.dashboard :global(.intelligence-operational .intelligence-copy h2) {
+  font-size: 24px;
+  line-height: 1.12;
+}
+
+.dashboard :global(.intelligence-operational .intelligence-copy p) {
+  color: #97a29e;
+  font-size: 10.5px;
+  line-height: 1.65;
+  max-width: 410px;
+}
+
+.dashboard :global(.intelligence-context) {
+  align-items: center;
+  border-top: 1px solid #26322e;
+  color: #72807b;
+  display: flex;
+  font-size: 8.5px;
+  gap: 8px;
+  line-height: 1.45;
+  margin-top: 22px;
+  padding-top: 14px;
+}
+
+.dashboard :global(.intelligence-context-dot) {
+  background: var(--accent);
+  border-radius: 999px;
+  flex: 0 0 auto;
+  height: 5px;
+  margin: 0 !important;
+  width: 5px;
+}
+
+.dashboard :global(.intelligence-grid) {
+  gap: 10px;
+}
+
+.dashboard :global(.intelligence-card) {
+  background: #1b2522;
+  border: 1px solid #2a3632;
+  border-radius: 11px;
+  display: flex;
+  flex-direction: column;
+  min-height: 162px;
+  padding: 16px;
+  transition:
+    background 150ms ease,
+    border-color 150ms ease,
+    transform 150ms ease;
+}
+
+.dashboard :global(.intelligence-card:hover) {
+  background: #1e2925;
+  border-color: #35433e;
+  transform: translateY(-1px);
+}
+
+.dashboard :global(.intelligence-card .intelligence-index) {
+  color: var(--accent);
+  display: block;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 8px;
+  margin: 0 0 20px;
+}
+
+.dashboard :global(.intelligence-card > strong) {
+  color: #f4f7f5;
+  display: block;
+  font-size: 11px;
+  font-weight: 760;
+}
+
+.dashboard :global(.intelligence-card > p) {
+  color: #83908b;
+  display: block;
+  font-size: 9px;
+  line-height: 1.55;
+  margin: 7px 0 16px;
+}
+
+.dashboard :global(.intelligence-card-link) {
+  align-items: center;
+  color: #d9ff4a;
+  display: inline-flex;
+  font-size: 8.5px;
+  font-weight: 750;
+  gap: 7px;
+  margin-top: auto;
+  text-decoration: none;
+  width: fit-content;
+}
+
+.dashboard :global(.intelligence-card-link span) {
+  color: inherit;
+  display: inline;
+  font-family: inherit;
+  font-size: 10px;
+  margin: 0;
+  transition: transform 140ms ease;
+}
+
+.dashboard :global(.intelligence-card-link:hover span) {
+  transform: translate(2px, -2px);
+}
+
+.dashboard :global(.intelligence-card-link:focus-visible) {
+  border-radius: 3px;
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
+.dashboard :global(.intelligence-card-disabled) {
+  color: #697671;
+  display: block;
+  font-size: 8px;
+  line-height: 1.45;
+  margin: auto 0 0;
+}
+
+/* ==========================================================================
+   FOCUS — VISIBLE WITHOUT CHANGING EXISTING BRAND
+   ========================================================================== */
+
+.dashboard :global(.primary-button:focus-visible),
+.dashboard :global(.secondary-button:focus-visible),
+.dashboard :global(.close-button:focus-visible),
+.dashboard :global(.nav-item:focus-visible) {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* ==========================================================================
+   RESPONSIVE — PRESERVE ESSENTIAL PROJECT INFORMATION
+   ========================================================================== */
+
+@media (max-width: 1180px) {
+  .dashboard :global(.portfolio-pulse) {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard :global(.portfolio-pulse-copy) {
+    border-bottom: 1px solid var(--border);
+    border-right: 0;
+  }
+
+  .dashboard :global(.portfolio-pulse-copy p) {
+    max-width: 620px;
+  }
+}
+
+@media (max-width: 960px) {
+  .dashboard :global(.portfolio-pulse-grid) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dashboard :global(.pulse-stat:nth-child(2)) {
+    border-right: 0;
+  }
+
+  .dashboard :global(.pulse-stat:nth-child(-n + 2)) {
+    border-bottom: 1px solid #edf0ec;
+  }
+}
+
+@media (max-width: 860px) {
+  .dashboard :global(.topbar) {
+    gap: 18px;
+  }
+
+  .dashboard :global(.topbar-actions) {
+    padding-top: 0;
+  }
+
+  .dashboard :global(.page-subtitle) {
+    max-width: 680px;
+  }
+}
+
+@media (max-width: 720px) {
+  .dashboard :global(.portfolio-section) {
+    background: transparent;
+    border: 0;
+    overflow: visible;
+  }
+
+  .dashboard :global(.portfolio-section > .section-heading) {
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: 13px;
+    margin-bottom: 10px;
+    padding: 17px;
+  }
+
+  .dashboard :global(.table-wrapper) {
+    overflow: visible;
+  }
+
+  .dashboard :global(.project-table) {
+    border-collapse: separate;
+    min-width: 0;
+  }
+
+  .dashboard :global(.project-table thead) {
+    display: none;
+  }
+
+  .dashboard :global(.project-table),
+  .dashboard :global(.project-table tbody) {
+    display: block;
+    width: 100%;
+  }
+
+  .dashboard :global(.project-table tbody tr) {
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: 13px;
+    display: block;
+    margin-bottom: 10px;
+    overflow: hidden;
+    width: 100%;
+  }
+
+  .dashboard :global(.project-table tbody tr:hover) {
+    background: #ffffff;
+  }
+
+  .dashboard :global(.project-table td) {
+    align-items: center;
+    border: 0;
+    border-bottom: 1px solid #eef0ed;
+    display: grid;
+    gap: 14px;
+    grid-template-columns: 108px minmax(0, 1fr);
+    padding: 10px 14px;
+    width: 100%;
+  }
+
+  .dashboard :global(.project-table td::before) {
+    color: #8a938f;
+    content: attr(data-label);
+    font-size: 7.5px;
+    font-weight: 850;
+    letter-spacing: 0.08em;
+  }
+
+  .dashboard :global(.project-table td:first-child) {
+    display: block;
+    padding: 14px;
+  }
+
+  .dashboard :global(.project-table td:first-child::before),
+  .dashboard :global(.project-table td[colspan]::before) {
+    display: none;
+  }
+
+  .dashboard :global(.project-table td:last-child) {
+    border-bottom: 0;
+  }
+
+  .dashboard :global(.project-identity) {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .dashboard :global(.project-open-arrow) {
+    opacity: 1;
+  }
+
+  .dashboard :global(.progress-cell) {
+    min-width: 0;
+  }
+
+  .dashboard :global(.table-message) {
+    padding: 20px 8px;
+  }
+}
+
+@media (max-width: 620px) {
+  .dashboard :global(.page-subtitle) {
+    font-size: 11px;
+  }
+
+  .dashboard :global(.portfolio-pulse-grid) {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard :global(.pulse-stat) {
+    border-bottom: 1px solid #edf0ec;
+    border-right: 0 !important;
+    min-height: 88px;
+  }
+
+  .dashboard :global(.pulse-stat:last-child) {
+    border-bottom: 0;
+  }
+
+  .dashboard :global(.intelligence-operational) {
+    padding: 21px;
+  }
+
+  .dashboard :global(.intelligence-context) {
+    margin-top: 17px;
+  }
+
+  .dashboard :global(.project-table td) {
+    grid-template-columns: 96px minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dashboard :global(.metric-card),
+  .dashboard :global(.project-open-arrow),
+  .dashboard :global(.intelligence-card),
+  .dashboard :global(.intelligence-card-link span) {
+    transition: none;
+  }
+
+  .dashboard :global(.metric-card:hover),
+  .dashboard :global(.intelligence-card:hover) {
+    transform: none;
+  }
+}
