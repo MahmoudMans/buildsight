@@ -1,6 +1,7 @@
 "use client";
 
 // BUILDSIGHT_HOME_DECISION_UI_V1
+// BUILDSIGHT_HOME_REFINEMENT_V3
 import Link from "next/link";
 import styles from "./BuildSightDashboard.module.css";
 
@@ -468,12 +469,10 @@ export function BuildSightDashboard() {
           <div className="portfolio-pulse-copy">
             <div className="eyebrow">PORTFOLIO PULSE</div>
 
-            <h2>Current delivery status</h2>
+            <h2>Lifecycle distribution</h2>
 
             <p>
-              Lifecycle signals from the current portfolio. Cost,
-              schedule and health intelligence remain available in
-              their dedicated workspaces.
+              Live project status across the portfolio.
             </p>
           </div>
 
@@ -930,14 +929,25 @@ export function BuildSightDashboard() {
                 pressure.
               </p>
 
-              {projects[0] ? (
-                <Link
-                  className="intelligence-card-link"
-                  href={`/projects/${projects[0].id}/schedule`}
-                >
-                  Open schedule workspace
-                  <span aria-hidden="true">↗</span>
-                </Link>
+              {projects.length > 0 ? (
+                <details className="intelligence-project-picker">
+                  <summary>
+                    Choose a project
+                  </summary>
+
+                  <div className="intelligence-project-list">
+                    {projects.map((project) => (
+                      <Link
+                        className="intelligence-project-option"
+                        href={`/projects/${project.id}/schedule`}
+                        key={project.id}
+                      >
+                        <span>{project.name}</span>
+                        <small>{project.code}</small>
+                      </Link>
+                    ))}
+                  </div>
+                </details>
               ) : (
                 <span className="intelligence-card-disabled">
                   Available after a project is created
@@ -974,14 +984,25 @@ export function BuildSightDashboard() {
                 and review cited answers.
               </p>
 
-              {projects[0] ? (
-                <Link
-                  className="intelligence-card-link"
-                  href={`/projects/${projects[0].id}/copilot`}
-                >
-                  Open project copilot
-                  <span aria-hidden="true">↗</span>
-                </Link>
+              {projects.length > 0 ? (
+                <details className="intelligence-project-picker">
+                  <summary>
+                    Choose a project
+                  </summary>
+
+                  <div className="intelligence-project-list">
+                    {projects.map((project) => (
+                      <Link
+                        className="intelligence-project-option"
+                        href={`/projects/${project.id}/copilot`}
+                        key={project.id}
+                      >
+                        <span>{project.name}</span>
+                        <small>{project.code}</small>
+                      </Link>
+                    ))}
+                  </div>
+                </details>
               ) : (
                 <span className="intelligence-card-disabled">
                   Available after a project is created
