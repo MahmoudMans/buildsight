@@ -1,11 +1,7 @@
 import {
-  WorkspaceDirectoryView,
-} from "@/components/WorkspaceDirectoryView";
+  DocumentsWorkspaceView,
+} from "@/components/DocumentsWorkspaceView";
 
 export default function DocumentsPage() {
-  return (
-    <WorkspaceDirectoryView
-      kind="documents"
-    />
-  );
+  return <DocumentsWorkspaceView />;
 }

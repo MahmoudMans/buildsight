@@ -1,11 +1,7 @@
 import {
-  WorkspaceDirectoryView,
-} from "@/components/WorkspaceDirectoryView";
+  ProcurementWorkspaceView,
+} from "@/components/ProcurementWorkspaceView";
 
 export default function ProcurementPage() {
-  return (
-    <WorkspaceDirectoryView
-      kind="procurement"
-    />
-  );
+  return <ProcurementWorkspaceView />;
 }
