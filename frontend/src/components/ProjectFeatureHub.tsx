@@ -23,24 +23,17 @@ const groups: FeatureGroup[] = [
   {
     label: "FINANCIAL & SUPPLY",
     description:
-      "Money, contractual exposure and the supply chain.",
+      "Financial position, commercial exposure and supply-chain control.",
     features: [
       {
         index: "01",
-        title: "Cost control",
+        title: "Financial control",
         description:
-          "Budget lines, commitments and actual costs.",
+          "Cost planning, commitments, actual expenditure, contract changes, claims, certificates and cash flow.",
         segment: "costs",
       },
       {
         index: "02",
-        title: "Commercial",
-        description:
-          "Contract changes, claims, certification and cash flow.",
-        segment: "commercial",
-      },
-      {
-        index: "03",
         title: "Procurement",
         description:
           "Procurement packages, bids, awards and supplier performance.",
@@ -54,21 +47,21 @@ const groups: FeatureGroup[] = [
       "Execution, resources and programme control.",
     features: [
       {
-        index: "04",
+        index: "03",
         title: "Work packages",
         description:
           "Executable scope, site reports and daily production evidence.",
         segment: "production",
       },
       {
-        index: "05",
+        index: "04",
         title: "Resources",
         description:
           "Workforce, deployment, equipment and forward capacity.",
         segment: "resources",
       },
       {
-        index: "06",
+        index: "05",
         title: "Schedule",
         description:
           "Activities, logic, constraints, lookahead and schedule baselines.",
@@ -82,28 +75,28 @@ const groups: FeatureGroup[] = [
       "Risk, information, quality and HSE controls.",
     features: [
       {
-        index: "07",
+        index: "06",
         title: "Risk control",
         description:
           "Risks, issues, change-control events and project delays.",
         segment: "risk-control",
       },
       {
-        index: "08",
+        index: "07",
         title: "Documents",
         description:
           "Controlled records, revisions, RFIs and transmittals.",
         segment: "documents",
       },
       {
-        index: "09",
+        index: "08",
         title: "Quality",
         description:
           "Inspections, NCRs, punch items and handover readiness.",
         segment: "quality",
       },
       {
-        index: "10",
+        index: "09",
         title: "Safety / HSE",
         description:
           "Incidents, observations, actions and permits to work.",
@@ -117,28 +110,28 @@ const groups: FeatureGroup[] = [
       "Forward-looking management and evidence-grounded decisions.",
     features: [
       {
-        index: "11",
+        index: "10",
         title: "Forecast",
         description:
           "EVM, CPI/SPI, cost-to-complete and management scenarios.",
         segment: "forecast",
       },
       {
-        index: "12",
+        index: "11",
         title: "Governance",
         description:
           "Meetings, decisions, management actions and reporting.",
         segment: "governance",
       },
       {
-        index: "13",
+        index: "12",
         title: "Recovery",
         description:
           "Change-impact simulations and recovery-option comparison.",
         segment: "recovery",
       },
       {
-        index: "14",
+        index: "13",
         title: "Project Copilot",
         description:
           "Cited cross-domain questions using local project evidence.",
@@ -176,7 +169,7 @@ export function ProjectFeatureHub({
         </div>
 
         <div className={styles.count}>
-          14 SPECIALIZED WORKSPACES
+          13 MAJOR WORKSPACES
         </div>
       </div>
 

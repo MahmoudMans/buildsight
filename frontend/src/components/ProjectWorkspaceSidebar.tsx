@@ -22,6 +22,7 @@ interface WorkspaceItem {
   key: string;
   label: string;
   segment: string | null;
+  aliases?: string[];
 }
 
 interface WorkspaceGroup {
@@ -42,18 +43,16 @@ const groups: WorkspaceGroup[] = [
     items: [
       {
         index: "01",
-        key: "costs",
-        label: "Cost control",
+        key: "financial-control",
+        label: "Financial control",
         segment: "costs",
+        aliases: [
+          "costs",
+          "commercial",
+        ],
       },
       {
         index: "02",
-        key: "commercial",
-        label: "Commercial",
-        segment: "commercial",
-      },
-      {
-        index: "03",
         key: "procurement",
         label: "Procurement",
         segment: "procurement",
@@ -64,19 +63,19 @@ const groups: WorkspaceGroup[] = [
     label: "DELIVERY",
     items: [
       {
-        index: "04",
+        index: "03",
         key: "production",
         label: "Work packages",
         segment: "production",
       },
       {
-        index: "05",
+        index: "04",
         key: "resources",
         label: "Resources",
         segment: "resources",
       },
       {
-        index: "06",
+        index: "05",
         key: "schedule",
         label: "Schedule",
         segment: "schedule",
@@ -87,25 +86,25 @@ const groups: WorkspaceGroup[] = [
     label: "ASSURANCE",
     items: [
       {
-        index: "07",
+        index: "06",
         key: "risk-control",
         label: "Risk control",
         segment: "risk-control",
       },
       {
-        index: "08",
+        index: "07",
         key: "documents",
         label: "Documents",
         segment: "documents",
       },
       {
-        index: "09",
+        index: "08",
         key: "quality",
         label: "Quality",
         segment: "quality",
       },
       {
-        index: "10",
+        index: "09",
         key: "safety",
         label: "Safety / HSE",
         segment: "safety",
@@ -116,31 +115,31 @@ const groups: WorkspaceGroup[] = [
     label: "INTELLIGENCE & DECISIONS",
     items: [
       {
-        index: "11",
+        index: "10",
         key: "forecast",
         label: "Forecast",
         segment: "forecast",
       },
       {
-        index: "12",
+        index: "11",
         key: "governance",
         label: "Governance",
         segment: "governance",
       },
       {
-        index: "13",
+        index: "12",
         key: "recovery",
         label: "Recovery",
         segment: "recovery",
       },
       {
-        index: "14",
+        index: "13",
         key: "period-control",
         label: "Period control",
         segment: "period-control",
       },
       {
-        index: "15",
+        index: "14",
         key: "copilot",
         label: "Project Copilot",
         segment: "copilot",
@@ -178,7 +177,10 @@ function WorkspaceLink({
   active: string;
 }) {
   const selected =
-    item.key === active;
+    item.key === active ||
+    item.aliases?.includes(
+      active,
+    ) === true;
 
   return (
     <Link
@@ -236,7 +238,10 @@ export function ProjectWorkspaceSidebar({
           )
           .find(
             (item) =>
-              item.key === active,
+              item.key === active ||
+              item.aliases?.includes(
+                active,
+              ) === true,
           );
 
   const sidebarClassName = [

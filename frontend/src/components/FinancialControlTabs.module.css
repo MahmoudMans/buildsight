@@ -1,0 +1,174 @@
+.workspace {
+  background: #ffffff;
+  border: 1px solid #dde2dd;
+  border-radius: 12px;
+  margin-bottom: 18px;
+  overflow: hidden;
+}
+
+.context {
+  align-items: flex-start;
+  display: flex;
+  gap: 24px;
+  justify-content: space-between;
+  padding: 17px 18px 15px;
+}
+
+.context > div:first-child {
+  min-width: 0;
+}
+
+.eyebrow {
+  color: #819000;
+  display: block;
+  font-size: 7px;
+  font-weight: 850;
+  letter-spacing: 0.11em;
+}
+
+.context strong {
+  color: #18211d;
+  display: block;
+  font-size: 14px;
+  letter-spacing: -0.02em;
+  margin-top: 6px;
+}
+
+.context p {
+  color: #68736d;
+  font-size: 8px;
+  line-height: 1.55;
+  margin: 5px 0 0;
+  max-width: 620px;
+}
+
+.badge {
+  background: #f5f7f3;
+  border: 1px solid #dce1dc;
+  border-radius: 999px;
+  color: #64706a;
+  flex: 0 0 auto;
+  font-size: 7px;
+  font-weight: 850;
+  letter-spacing: 0.04em;
+  padding: 6px 9px;
+}
+
+.tabs {
+  border-top: 1px solid #e2e6e2;
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+}
+
+.tab {
+  align-items: center;
+  color: #24302a;
+  display: grid;
+  gap: 10px;
+  grid-template-columns:
+    3px 24px minmax(0, 1fr) auto;
+  min-height: 82px;
+  padding: 11px 15px;
+  position: relative;
+  text-decoration: none;
+  transition:
+    background 120ms ease,
+    border-color 120ms ease;
+}
+
+.tab + .tab {
+  border-left: 1px solid #e2e6e2;
+}
+
+.tab:hover {
+  background: #fafbf8;
+}
+
+.tab:focus-visible {
+  outline: 2px solid #839100;
+  outline-offset: -2px;
+}
+
+.active {
+  background: #f7f9f3;
+}
+
+.activeRail {
+  align-self: stretch;
+  background: transparent;
+  border-radius: 999px;
+  width: 3px;
+}
+
+.active .activeRail {
+  background: #aec400;
+}
+
+.index {
+  color: #87918c;
+  font-family:
+    ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    monospace;
+  font-size: 7px;
+  font-weight: 850;
+}
+
+.active .index {
+  color: #879600;
+}
+
+.copy {
+  min-width: 0;
+}
+
+.copy small {
+  color: #7a8580;
+  display: block;
+  font-size: 6.5px;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+}
+
+.copy strong {
+  display: block;
+  font-size: 9.5px;
+  margin-top: 3px;
+}
+
+.copy p {
+  color: #77827c;
+  font-size: 7.3px;
+  line-height: 1.45;
+  margin: 4px 0 0;
+  max-width: 390px;
+}
+
+.arrow {
+  color: #869400;
+  font-size: 11px;
+}
+
+@media (max-width: 760px) {
+  .context {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .tabs {
+    grid-template-columns: 1fr;
+  }
+
+  .tab + .tab {
+    border-left: 0;
+    border-top: 1px solid #e2e6e2;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tab {
+    transition: none;
+  }
+}

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ProjectWorkspaceSidebar } from "./ProjectWorkspaceSidebar";
+import { FinancialControlTabs } from "./FinancialControlTabs";
 
 import {
   type FormEvent,
@@ -1064,6 +1065,10 @@ export function ProjectCommercialControlView({
             </i>
           </div>
         </header>
+
+        <FinancialControlTabs
+          projectId={projectId}
+        />
 
         {error && (
           <div className="command-alert">

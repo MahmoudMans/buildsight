@@ -3,6 +3,7 @@
 import Link from "next/link";
 import costRefinement from "./ProjectCostControlRefinement.module.css";
 import { ProjectWorkspaceSidebar } from "./ProjectWorkspaceSidebar";
+import { FinancialControlTabs } from "./FinancialControlTabs";
 
 import {
   type FormEvent,
@@ -870,6 +871,10 @@ export function ProjectCostControlView({
             </i>
           </div>
         </header>
+
+        <FinancialControlTabs
+          projectId={projectId}
+        />
 
         {error && (
           <div className="command-alert">
