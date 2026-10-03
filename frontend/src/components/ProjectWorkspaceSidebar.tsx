@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { ProjectRouteWarmup } from "./ProjectRouteWarmup";
+
 import styles from "./ProjectWorkspaceSidebar.module.css";
 
 export interface ProjectWorkspaceLocalLink {
@@ -205,6 +207,7 @@ function WorkspaceLink({
         projectId,
         item.segment,
       )}
+      prefetch={true}
     >
       <span className={styles.index}>
         {item.index}
@@ -260,6 +263,10 @@ export function ProjectWorkspaceSidebar({
     <aside
       className={sidebarClassName}
     >
+
+      <ProjectRouteWarmup
+        projectId={projectId}
+      />
       <Link
         className={`command-brand ${styles.brand}`}
         href="/"
