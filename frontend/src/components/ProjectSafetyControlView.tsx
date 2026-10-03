@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ProjectWorkspaceSidebar } from "./ProjectWorkspaceSidebar";
+import { ProjectWorkspaceLoading } from "./ProjectWorkspaceLoading";
 
 import {
   type FormEvent,
@@ -862,15 +863,11 @@ export function ProjectSafetyControlView({
 
   if (loading) {
     return (
-      <main className="command-loading">
-        <div className="loading-mark">
-          B
-        </div>
-
-        <strong>
-          Loading HSE intelligence...
-        </strong>
-      </main>
+      <ProjectWorkspaceLoading
+        label={"Loading HSE intelligence..."}
+        mainClassName={"safety-main"}
+        projectId={projectId}
+      />
     );
   }
 

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ProjectWorkspaceSidebar } from "./ProjectWorkspaceSidebar";
+import { ProjectWorkspaceLoading } from "./ProjectWorkspaceLoading";
 
 import {
   type FormEvent,
@@ -866,19 +867,13 @@ export function ProjectRiskControlView({
     );
   }
 
-  if (
-    loading
-  ) {
+  if (loading) {
     return (
-      <main className="command-loading">
-        <div className="loading-mark">
-          B
-        </div>
-
-        <strong>
-          Loading risk intelligence...
-        </strong>
-      </main>
+      <ProjectWorkspaceLoading
+        label={"Loading risk intelligence..."}
+        mainClassName={"risk-main"}
+        projectId={projectId}
+      />
     );
   }
 

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ProjectWorkspaceSidebar } from "./ProjectWorkspaceSidebar";
+import { ProjectWorkspaceLoading } from "./ProjectWorkspaceLoading";
 
 import {
   type FormEvent,
@@ -687,15 +688,11 @@ export function ProjectResourceControlView({
 
   if (loading) {
     return (
-      <main className="command-loading">
-        <div className="loading-mark">
-          B
-        </div>
-
-        <strong>
-          Loading resource intelligence...
-        </strong>
-      </main>
+      <ProjectWorkspaceLoading
+        label={"Loading resource intelligence..."}
+        mainClassName={"resource-main"}
+        projectId={projectId}
+      />
     );
   }
 

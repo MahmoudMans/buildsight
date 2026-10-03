@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ProjectWorkspaceSidebar } from "./ProjectWorkspaceSidebar";
+import { ProjectWorkspaceLoading } from "./ProjectWorkspaceLoading";
 
 import {
   type FormEvent,
@@ -904,15 +905,11 @@ export function ProjectQualityControlView({
 
   if (loading) {
     return (
-      <main className="command-loading">
-        <div className="loading-mark">
-          B
-        </div>
-
-        <strong>
-          Loading quality intelligence...
-        </strong>
-      </main>
+      <ProjectWorkspaceLoading
+        label={"Loading quality intelligence..."}
+        mainClassName={"quality-main"}
+        projectId={projectId}
+      />
     );
   }
 

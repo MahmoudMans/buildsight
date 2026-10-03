@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ProjectWorkspaceSidebar } from "./ProjectWorkspaceSidebar";
+import { ProjectWorkspaceLoading } from "./ProjectWorkspaceLoading";
 
 import {
   type FormEvent,
@@ -886,19 +887,13 @@ export function ProjectProcurementView({
     );
   }
 
-  if (
-    loading
-  ) {
+  if (loading) {
     return (
-      <main className="command-loading">
-        <div className="loading-mark">
-          B
-        </div>
-
-        <strong>
-          Loading procurement intelligence...
-        </strong>
-      </main>
+      <ProjectWorkspaceLoading
+        label={"Loading procurement intelligence..."}
+        mainClassName={"procurement-main"}
+        projectId={projectId}
+      />
     );
   }
 

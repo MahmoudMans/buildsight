@@ -3,6 +3,7 @@
 import Link from "next/link";
 import costRefinement from "./ProjectCostControlRefinement.module.css";
 import { ProjectWorkspaceSidebar } from "./ProjectWorkspaceSidebar";
+import { ProjectWorkspaceLoading } from "./ProjectWorkspaceLoading";
 import { FinancialControlTabs } from "./FinancialControlTabs";
 
 import {
@@ -734,19 +735,12 @@ export function ProjectCostControlView({
     );
   }
 
-  if (
-    loading
-  ) {
+  if (loading) {
     return (
-      <main className="command-loading">
-        <div className="loading-mark">
-          B
-        </div>
-
-        <strong>
-          Loading cost intelligence...
-        </strong>
-      </main>
+      <ProjectWorkspaceLoading
+        label={"Loading cost intelligence..."}
+        projectId={projectId}
+      />
     );
   }
 

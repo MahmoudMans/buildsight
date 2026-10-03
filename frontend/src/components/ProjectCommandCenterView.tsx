@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ProjectWorkspaceSidebar } from "./ProjectWorkspaceSidebar";
+import { ProjectWorkspaceLoading } from "./ProjectWorkspaceLoading";
 import { ProjectFeatureHub } from "./ProjectFeatureHub";
 
 import {
@@ -580,15 +581,11 @@ export function ProjectCommandCenterView({
 
   if (loading) {
     return (
-      <main className="command-loading">
-        <div className="loading-mark">
-          B
-        </div>
-
-        <strong>
-          Loading project intelligence...
-        </strong>
-      </main>
+      <ProjectWorkspaceLoading
+        label={"Loading project intelligence..."}
+        mainClassName={"command-main"}
+        projectId={projectId}
+      />
     );
   }
 

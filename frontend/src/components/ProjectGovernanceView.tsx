@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ProjectWorkspaceSidebar } from "./ProjectWorkspaceSidebar";
+import { ProjectWorkspaceLoading } from "./ProjectWorkspaceLoading";
 
 import {
   type FormEvent,
@@ -646,15 +647,11 @@ export function ProjectGovernanceView({
 
   if (loading) {
     return (
-      <main className="command-loading">
-        <div className="loading-mark">
-          B
-        </div>
-
-        <strong>
-          Loading governance intelligence...
-        </strong>
-      </main>
+      <ProjectWorkspaceLoading
+        label={"Loading governance intelligence..."}
+        mainClassName={"governance-main"}
+        projectId={projectId}
+      />
     );
   }
 

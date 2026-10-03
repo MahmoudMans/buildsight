@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ProjectWorkspaceSidebar } from "./ProjectWorkspaceSidebar";
+import { ProjectWorkspaceLoading } from "./ProjectWorkspaceLoading";
 
 import {
   type FormEvent,
@@ -390,15 +391,11 @@ export function ProjectRecoveryView({
 
   if (loading) {
     return (
-      <main className="command-loading">
-        <div className="loading-mark">
-          B
-        </div>
-
-        <strong>
-          Loading change-impact intelligence...
-        </strong>
-      </main>
+      <ProjectWorkspaceLoading
+        label={"Loading change-impact intelligence..."}
+        mainClassName={"recovery-main"}
+        projectId={projectId}
+      />
     );
   }
 

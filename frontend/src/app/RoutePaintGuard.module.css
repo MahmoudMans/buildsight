@@ -1,0 +1,18 @@
+.body {
+  min-height: 100vh;
+  background: #f3f4f1;
+  color: #19201e;
+}
+
+/*
+ * Legacy loading states still used by unfinished / excluded workspaces
+ * must never paint a white viewport.
+ */
+.body :global(.command-loading) {
+  background: #f3f4f1 !important;
+  color: #19201e;
+}
+
+.body :global(.command-error-page) {
+  background: #f3f4f1;
+}

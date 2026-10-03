@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ProjectWorkspaceSidebar } from "./ProjectWorkspaceSidebar";
+import { ProjectWorkspaceLoading } from "./ProjectWorkspaceLoading";
 
 import {
   type FormEvent,
@@ -332,19 +333,13 @@ export function ProjectAiCopilotView({
     }
   }
 
-  if (
-    loading
-  ) {
+  if (loading) {
     return (
-      <main className="command-loading">
-        <div className="loading-mark">
-          B
-        </div>
-
-        <strong>
-          Loading local AI copilot...
-        </strong>
-      </main>
+      <ProjectWorkspaceLoading
+        label={"Loading local AI copilot..."}
+        mainClassName={"copilot-main"}
+        projectId={projectId}
+      />
     );
   }
 

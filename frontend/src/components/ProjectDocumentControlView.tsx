@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ProjectWorkspaceSidebar } from "./ProjectWorkspaceSidebar";
+import { ProjectWorkspaceLoading } from "./ProjectWorkspaceLoading";
 
 import {
   type FormEvent,
@@ -820,15 +821,11 @@ export function ProjectDocumentControlView({
 
   if (loading) {
     return (
-      <main className="command-loading">
-        <div className="loading-mark">
-          B
-        </div>
-
-        <strong>
-          Loading document intelligence...
-        </strong>
-      </main>
+      <ProjectWorkspaceLoading
+        label={"Loading document intelligence..."}
+        mainClassName={"document-main"}
+        projectId={projectId}
+      />
     );
   }
 
