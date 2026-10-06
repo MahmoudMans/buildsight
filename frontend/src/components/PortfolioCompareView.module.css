@@ -1,0 +1,309 @@
+.header {
+  align-items: flex-start;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: space-between;
+  margin-bottom: 22px;
+}
+
+.subtitle {
+  color: #626b67;
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 8px 0 0;
+  max-width: 640px;
+}
+
+.loading {
+  color: #66706b;
+  font-size: 13px;
+  padding: 40px 0;
+  text-align: center;
+}
+
+.panel {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  margin-bottom: 14px;
+  min-width: 0;
+  padding: 18px 20px;
+}
+
+.panelHead {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.panelHead :global(.eyebrow) {
+  margin-bottom: 0;
+}
+
+.muted {
+  color: #7a847f;
+  font-size: 11px;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  align-items: center;
+  background: #f6f8f5;
+  border: 1px solid #dde2dd;
+  border-radius: 10px;
+  color: #3c4642;
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 12px;
+  gap: 8px;
+  padding: 8px 12px;
+}
+
+.chip input {
+  accent-color: #121917;
+  margin: 0;
+}
+
+.chip small {
+  color: #7a847f;
+  font-size: 11px;
+}
+
+.chipOn {
+  background: #ffffff;
+  border-color: #121917;
+  box-shadow: 0 0 0 1px #121917;
+}
+
+.chipOff {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.dot {
+  border-radius: 50%;
+  display: inline-block;
+  flex: 0 0 auto;
+  height: 9px;
+  width: 9px;
+}
+
+.overview {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: minmax(300px, 1.2fr) minmax(260px, 1fr);
+  margin-bottom: 14px;
+}
+
+.radarPanel {
+  margin-bottom: 0;
+}
+
+.radar {
+  display: block;
+  height: auto;
+  margin: 0 auto;
+  max-width: 520px;
+  width: 100%;
+}
+
+.ring {
+  fill: none;
+  stroke: #e3e6e2;
+  stroke-width: 1;
+}
+
+.spoke {
+  stroke: #e3e6e2;
+  stroke-width: 1;
+}
+
+.axisLabel {
+  fill: #3c4642;
+  font-size: 11.5px;
+  font-weight: 650;
+}
+
+.ringLabel {
+  fill: #9aa29f;
+  font-size: 9px;
+}
+
+.average {
+  fill: none;
+  stroke: #7a847f;
+  stroke-dasharray: 5 4;
+  stroke-width: 1.6;
+}
+
+.legendAvg {
+  align-items: center;
+  color: #66706b;
+  display: inline-flex;
+  font-size: 11px;
+  gap: 7px;
+}
+
+.legendAvg i {
+  border-top: 2px dashed #7a847f;
+  display: inline-block;
+  width: 18px;
+}
+
+.cards {
+  align-content: start;
+  display: grid;
+  gap: 12px;
+}
+
+.card {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  border-top: 4px solid #344b42;
+  padding: 14px 16px;
+}
+
+.cardTop {
+  align-items: flex-start;
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+}
+
+.cardTop strong,
+.cardTop small {
+  display: block;
+}
+
+.cardTop strong {
+  font-size: 14px;
+}
+
+.cardTop small {
+  color: #7a847f;
+  font-size: 11px;
+  margin-top: 3px;
+}
+
+.cardScore {
+  font-size: 30px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  letter-spacing: -0.05em;
+}
+
+.cardBottom {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 12px;
+}
+
+.pill {
+  border-radius: 999px;
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 850;
+  padding: 4px 9px;
+}
+
+.bandHealthy {
+  background: #dff4e8;
+  color: #287051;
+}
+
+.bandWatch {
+  background: #fff0cd;
+  color: #8d6418;
+}
+
+.bandRisk {
+  background: #fbe3df;
+  color: #9a493f;
+}
+
+.open {
+  color: #19201e;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.open:hover {
+  text-decoration: underline;
+}
+
+.tableWrap {
+  margin: 0 -20px -18px;
+  overflow-x: auto;
+}
+
+.table {
+  border-collapse: collapse;
+  min-width: 620px;
+  width: 100%;
+}
+
+.table th {
+  background: #fafbf9;
+  border-bottom: 1px solid var(--border);
+  border-top: 1px solid var(--border);
+  color: #66706b;
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  padding: 10px 16px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.table th .dot {
+  margin-right: 7px;
+}
+
+.table td {
+  border-bottom: 1px solid #eef0ed;
+  color: #3c4642;
+  font-size: 12.5px;
+  font-variant-numeric: tabular-nums;
+  padding: 10px 16px;
+}
+
+.table td:first-child {
+  color: #26302c;
+  font-weight: 650;
+}
+
+.groupRow td {
+  background: #f6f8f5;
+  color: #66706b;
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.best {
+  background: #edf5da;
+  color: #3f5a14;
+  font-weight: 800;
+}
+
+.avgCell {
+  color: #7a847f;
+}
+
+@media (max-width: 900px) {
+  .overview {
+    grid-template-columns: 1fr;
+  }
+}

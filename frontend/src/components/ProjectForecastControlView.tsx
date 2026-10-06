@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { codeLabel } from "@/lib/labels";
 import { ProjectWorkspaceSidebar } from "./ProjectWorkspaceSidebar";
 import { ProjectWorkspaceLoading } from "./ProjectWorkspaceLoading";
 
@@ -945,7 +946,7 @@ export function ProjectForecastControlView({
                       )}`}
                     >
                       {
-                        scenario.evaluation.scenarioRisk
+                        codeLabel(scenario.evaluation.scenarioRisk)
                       }
                     </i>
                   </div>

@@ -88,7 +88,9 @@ function activeKey(
 ): SidebarKey {
   if (
     pathname === "/" ||
-    pathname === "/portfolio"
+    pathname === "/portfolio" ||
+    pathname === "/portfolio/report" ||
+    pathname === "/portfolio/compare"
   ) {
     return "portfolio";
   }
@@ -132,16 +134,20 @@ function activeKey(
 
   switch (section) {
     case "costs":
+    case "cost-breakdown":
     case "commercial":
+    case "cashflow":
       return "budgets";
 
     case "production":
       return "work-packages";
 
     case "procurement":
+    case "procurement-pipeline":
       return "procurement";
 
     case "risk-control":
+    case "risk-matrix":
     case "recovery":
       return "risks";
 
@@ -150,7 +156,9 @@ function activeKey(
 
     case "copilot":
     case "forecast":
+    case "trends":
     case "governance":
+    case "board":
     case "period-control":
       return "intelligence";
 

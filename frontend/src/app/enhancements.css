@@ -1,0 +1,119 @@
+/* BuildSight enhancements: loaded after globals.css */
+
+/* Keyboard focus rings for links and buttons */
+:where(a, button, summary, select):focus-visible {
+  outline: 2px solid #50605a;
+  outline-offset: 2px;
+}
+
+/* Subtle press feedback */
+.primary-button:active,
+.secondary-button:active {
+  transform: translateY(1px);
+}
+
+/* Page entrance */
+main {
+  animation: bs-fade-up 240ms ease both;
+}
+
+@keyframes bs-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Readability: the original tables and form labels used 7-9px text */
+table[class*="-table"] td {
+  font-size: 11px;
+}
+
+table[class*="-table"] th {
+  font-size: 9px;
+}
+
+[class*="-form"] label > span {
+  font-size: 11px;
+}
+
+/* Project table toolbar (search / filter / sort / export) */
+.portfolio-toolbar {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 0 21px 16px;
+}
+
+.portfolio-search {
+  background: #fbfcfa;
+  border: 1px solid var(--border-strong);
+  border-radius: 9px;
+  color: var(--text);
+  flex: 1 1 260px;
+  font-size: 12px;
+  height: 40px;
+  min-width: 0;
+  outline: none;
+  padding: 0 12px;
+  transition: 140ms ease;
+}
+
+.portfolio-select {
+  background: #fbfcfa;
+  border: 1px solid var(--border-strong);
+  border-radius: 9px;
+  color: var(--text);
+  font-size: 12px;
+  height: 40px;
+  outline: none;
+  padding: 0 10px;
+}
+
+.portfolio-search:focus,
+.portfolio-select:focus {
+  background: #ffffff;
+  border-color: #8f9a95;
+  box-shadow: 0 0 0 3px rgba(25, 32, 30, 0.05);
+}
+
+.portfolio-toolbar .secondary-button {
+  height: 40px;
+}
+
+.portfolio-toolbar .secondary-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  main {
+    animation: none;
+  }
+}
+
+/* Print / save-as-PDF friendly */
+@media print {
+  aside,
+  .primary-button,
+  .secondary-button,
+  .portfolio-toolbar {
+    display: none !important;
+  }
+
+  main,
+  [class$="-main"],
+  .main {
+    margin-left: 0 !important;
+    padding: 0 !important;
+  }
+
+  body {
+    background: #ffffff !important;
+  }
+}

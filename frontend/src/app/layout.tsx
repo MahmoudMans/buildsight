@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
 
+import { AttentionBell } from "@/components/AttentionBell";
+import { ProjectViewsMenu } from "@/components/ProjectViewsMenu";
+import { CommandPalette } from "@/components/CommandPalette";
+
 import "./globals.css";
+import "./enhancements.css";
 import routePaint from "./RoutePaintGuard.module.css";
 
 export const metadata: Metadata = {
@@ -30,6 +35,9 @@ export default function RootLayout({
         }}
       >
         {children}
+        <ProjectViewsMenu />
+        <AttentionBell />
+        <CommandPalette />
       </body>
     </html>
   );

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { plainCodes } from "@/lib/labels";
 import { ProjectWorkspaceSidebar } from "./ProjectWorkspaceSidebar";
 import { ProjectWorkspaceLoading } from "./ProjectWorkspaceLoading";
 
@@ -893,7 +894,7 @@ export function ProjectGovernanceView({
           </div>
 
           <p className="executive-summary">
-            {executiveReport.executiveSummary}
+            {plainCodes(executiveReport.executiveSummary)}
           </p>
 
           <div className="attention-list">
@@ -2010,7 +2011,7 @@ export function ProjectGovernanceView({
           </div>
 
           <p className="executive-summary">
-            {intelligence.explanation}
+            {plainCodes(intelligence.explanation)}
           </p>
         </section>
 

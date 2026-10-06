@@ -2457,3 +2457,91 @@ export async function getPortfolioRecovery(): Promise<
     "/portfolio/recovery",
   );
 }
+
+export async function getProjectPeriodControl(
+  projectId: string,
+): Promise<
+  import("@/types/project").PeriodControl
+> {
+  return request<
+    import("@/types/project").PeriodControl
+  >(
+    `/projects/${projectId}/period-control`,
+  );
+}
+
+export async function captureControlBaseline(
+  projectId: string,
+  input: import("@/types/project").CaptureBaselineInput,
+): Promise<
+  import("@/types/project").ControlBaselineVersion
+> {
+  return request<
+    import("@/types/project").ControlBaselineVersion
+  >(
+    `/projects/${projectId}/period-control/baselines`,
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function approveControlBaseline(
+  projectId: string,
+  baselineId: string,
+): Promise<
+  import("@/types/project").ControlBaselineVersion
+> {
+  return request<
+    import("@/types/project").ControlBaselineVersion
+  >(
+    `/projects/${projectId}/period-control/baselines/${baselineId}/approve`,
+    {
+      method: "POST",
+    },
+  );
+}
+
+export async function createProgressPeriod(
+  projectId: string,
+  input: import("@/types/project").CreateProgressPeriodInput,
+): Promise<
+  import("@/types/project").ProgressPeriod
+> {
+  return request<
+    import("@/types/project").ProgressPeriod
+  >(
+    `/projects/${projectId}/period-control/periods`,
+    {
+      method: "POST",
+      body: JSON.stringify(input),
+    },
+  );
+}
+
+export async function closeProgressPeriod(
+  projectId: string,
+  periodId: string,
+): Promise<
+  import("@/types/project").PeriodEndSnapshot
+> {
+  return request<
+    import("@/types/project").PeriodEndSnapshot
+  >(
+    `/projects/${projectId}/period-control/periods/${periodId}/close`,
+    {
+      method: "POST",
+    },
+  );
+}
+
+export async function getPortfolioPeriodControl(): Promise<
+  import("@/types/project").PortfolioPeriodControl
+> {
+  return request<
+    import("@/types/project").PortfolioPeriodControl
+  >(
+    "/portfolio/period-control",
+  );
+}

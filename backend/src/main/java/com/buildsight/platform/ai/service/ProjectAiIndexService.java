@@ -47,6 +47,8 @@ import com.buildsight.platform.governance.api.GovernanceModels.GovernanceIntelli
 import com.buildsight.platform.governance.service.GovernanceControlService;
 import com.buildsight.platform.recovery.api.RecoveryModels.ChangeImpactIntelligenceResponse;
 import com.buildsight.platform.recovery.service.ChangeImpactControlService;
+import com.buildsight.platform.periodcontrol.api.PeriodControlModels.PeriodControlIntelligenceResponse;
+import com.buildsight.platform.periodcontrol.service.PeriodControlService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -86,6 +88,9 @@ public class ProjectAiIndexService {
 
     private final ChangeImpactControlService
             changeImpactControlService;
+
+    private final PeriodControlService
+            periodControlService;
 
     private final CostControlService
             costControlService;
@@ -134,6 +139,7 @@ public class ProjectAiIndexService {
             ForecastControlService forecastControlService,
             GovernanceControlService governanceControlService,
             ChangeImpactControlService changeImpactControlService,
+            PeriodControlService periodControlService,
             CostControlService costControlService,
             ProcurementControlService procurementControlService,
             RiskControlService riskControlService,
@@ -182,6 +188,9 @@ public class ProjectAiIndexService {
 
         this.changeImpactControlService =
                 changeImpactControlService;
+
+        this.periodControlService =
+                periodControlService;
 
         this.costControlService =
                 costControlService;
@@ -483,6 +492,11 @@ public class ProjectAiIndexService {
                         .intelligence(
                                 project.getId());
 
+        PeriodControlIntelligenceResponse periodControl =
+                periodControlService
+                        .intelligence(
+                                project.getId());
+
         CostIntelligenceResponse cost =
                 costControlService
                         .get(
@@ -684,6 +698,21 @@ public class ProjectAiIndexService {
                 Residual Delay Days: %s
                 Recovery Score: %s
                 Recovery Risk: %s
+
+                Period-End Controls
+                Control Baseline: %s
+                Open Period: %s
+                Baseline Cost Target: %s
+                Baseline Finish Target: %s
+                Current Forecast Cost: %s
+                Cost Variance to Baseline: %s
+                Finish Variance Days: %s
+                Planned Progress: %s
+                Earned Progress: %s
+                CPI: %s
+                SPI: %s
+                Period Control Score: %s
+                Period Control Risk: %s
 """
                 .formatted(
                         project.getCode(),
@@ -842,7 +871,21 @@ public class ProjectAiIndexService {
                         recovery.recoverableDays(),
                         recovery.residualDelayDays(),
                         recovery.recoveryScore(),
-                        recovery.recoveryRisk());
+                        recovery.recoveryRisk(),
+
+                        periodControl.activeBaselineVersionCode(),
+                        periodControl.openPeriodCode(),
+                        periodControl.baselineCostTarget(),
+                        periodControl.baselineFinishTarget(),
+                        periodControl.currentExpectedForecastCost(),
+                        periodControl.costVarianceToBaseline(),
+                        periodControl.finishVarianceDays(),
+                        periodControl.plannedProgressPercentage(),
+                        periodControl.earnedProgressPercentage(),
+                        periodControl.costPerformanceIndex(),
+                        periodControl.schedulePerformanceIndex(),
+                        periodControl.periodControlScore(),
+                        periodControl.periodControlRisk());
         return new AiSourceDraft(
                 AiSourceType.PROJECT_FACT,
                 project.getId(),

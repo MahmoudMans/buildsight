@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { codeLabel, netCost } from "@/lib/labels";
 import { ProjectWorkspaceSidebar } from "./ProjectWorkspaceSidebar";
 import { ProjectWorkspaceLoading } from "./ProjectWorkspaceLoading";
 
@@ -544,10 +545,8 @@ export function ProjectRecoveryView({
           />
 
           <Kpi
-            label="RECOVERY COST"
-            value={currency(
-              intelligence.recoveryCost,
-            )}
+            label="NET RECOVERY COST"
+            value={netCost(intelligence.recoveryCost, currency)}
             detail={
               intelligence.recommendedRecoveryOptionNumber
               ?? "No recovery option"
@@ -1148,7 +1147,7 @@ export function ProjectRecoveryView({
                 <Metric
                   label="Impact risk"
                   value={
-                    selectedSimulation.impact.impactRisk
+                    codeLabel(selectedSimulation.impact.impactRisk)
                   }
                 />
               </div>
@@ -1253,7 +1252,7 @@ export function ProjectRecoveryView({
                       <th>STRATEGY</th>
                       <th>RECOVER</th>
                       <th>RESIDUAL</th>
-                      <th>RECOVERY COST</th>
+                      <th title="Cost of the recovery option minus the time-related savings from the days recovered. A negative figure is a net saving.">NET RECOVERY COST</th>
                       <th>COST / DAY</th>
                       <th>FINISH</th>
                       <th>SCORE</th>
@@ -1314,15 +1313,11 @@ export function ProjectRecoveryView({
                           </td>
 
                           <td>
-                            {currency(
-                              option.evaluation.recoveryCostVsImpacted,
-                            )}
+                            {netCost(option.evaluation.recoveryCostVsImpacted, currency)}
                           </td>
 
                           <td>
-                            {currency(
-                              option.evaluation.costPerDayRecovered,
-                            )}
+                            {netCost(option.evaluation.costPerDayRecovered, currency)}
                           </td>
 
                           <td>

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { codeLabel } from "@/lib/labels";
 import { ProjectWorkspaceSidebar } from "./ProjectWorkspaceSidebar";
 import { ProjectWorkspaceLoading } from "./ProjectWorkspaceLoading";
 
@@ -1987,7 +1988,7 @@ export function ProjectDocumentControlView({
                         }
                         {" · "}
                         {
-                          revision.revisionStatus
+                          codeLabel(revision.revisionStatus)
                         }
                       </span>
                     </label>
@@ -2099,7 +2100,7 @@ export function ProjectDocumentControlView({
 
                       <td>
                         {document.latestRevisionCode
-                          ? `${document.latestRevisionCode} · ${document.latestRevisionStatus}`
+                          ? `${document.latestRevisionCode} · ${codeLabel(document.latestRevisionStatus)}`
                           : "No revision"}
                       </td>
                     </tr>

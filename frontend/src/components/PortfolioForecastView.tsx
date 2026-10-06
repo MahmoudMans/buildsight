@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { codeLabel } from "@/lib/labels";
 
 import {
   useEffect,
@@ -314,7 +315,7 @@ export function PortfolioForecastView() {
 
                     <td>
                       {
-                        project.trend
+                        codeLabel(project.trend)
                       }
                     </td>
                   </tr>

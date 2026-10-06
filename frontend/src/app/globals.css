@@ -10012,3 +10012,401 @@ h2 {
     padding: 24px 18px 40px;
   }
 }
+
+
+/* ==========================================================================
+   BUILDSIGHT STEP 18 — PERIOD-END CONTROLS
+   ========================================================================== */
+
+.period-shell {
+  min-height: 100vh;
+}
+
+.period-sidebar {
+  background: #121917;
+  bottom: 0;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  left: 0;
+  padding: 26px 21px 20px;
+  position: fixed;
+  top: 0;
+  width: 250px;
+  z-index: 30;
+}
+
+.period-main {
+  margin-left: 250px;
+  min-height: 100vh;
+  padding: 30px 35px 48px;
+}
+
+.period-header,
+.portfolio-period-header {
+  align-items: flex-end;
+  display: flex;
+  gap: 30px;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.period-header h1,
+.portfolio-period-header h1 {
+  font-size: 29px;
+}
+
+.period-header p,
+.portfolio-period-header p {
+  color: #818b86;
+  font-size: 10px;
+  line-height: 1.55;
+  margin: 7px 0 0;
+  max-width: 720px;
+}
+
+.period-score,
+.portfolio-period-score {
+  align-items: flex-end;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.period-score > span,
+.portfolio-period-score > span {
+  color: #89928e;
+  font-size: 7px;
+  font-weight: 850;
+  letter-spacing: 0.1em;
+}
+
+.period-score > strong,
+.portfolio-period-score > strong {
+  font-size: 24px;
+}
+
+.period-risk {
+  border-radius: 999px;
+  display: inline-block;
+  font-size: 7px;
+  font-style: normal;
+  font-weight: 850;
+  padding: 5px 8px;
+}
+
+.period-risk-on-track {
+  background: #e2f3e9;
+  color: #2e7354;
+}
+
+.period-risk-watch {
+  background: #fff1d4;
+  color: #90691c;
+}
+
+.period-risk-at-risk {
+  background: #fbe4e0;
+  color: #9c493f;
+}
+
+.period-architecture-note {
+  background: #f6f8f5;
+  border: 1px solid #e1e6df;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  font-size: 8px;
+  gap: 4px;
+  line-height: 1.55;
+  margin-bottom: 18px;
+  padding: 12px 14px;
+}
+
+.period-architecture-note strong {
+  color: #3d4843;
+}
+
+.period-architecture-note span {
+  color: #7c8782;
+}
+
+.period-kpis {
+  display: grid;
+  gap: 12px;
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+  margin-bottom: 18px;
+}
+
+.period-kpi {
+  background: white;
+  border: 1px solid #e1e5e0;
+  border-radius: 12px;
+  min-height: 128px;
+  padding: 17px;
+}
+
+.period-kpi span,
+.period-kpi strong,
+.period-kpi small {
+  display: block;
+}
+
+.period-kpi span {
+  color: #858f8a;
+  font-size: 7px;
+  font-weight: 850;
+  letter-spacing: 0.09em;
+}
+
+.period-kpi strong {
+  font-size: 20px;
+  margin-top: 18px;
+}
+
+.period-kpi small {
+  color: #929b97;
+  font-size: 8px;
+  margin-top: 8px;
+}
+
+.period-kpi-dark {
+  background: #121917;
+  border-color: #121917;
+}
+
+.period-kpi-dark strong {
+  color: #d7ff45;
+}
+
+.period-kpi-dark span,
+.period-kpi-dark small {
+  color: #7d8a85;
+}
+
+.period-performance-strip {
+  display: grid;
+  gap: 8px;
+  grid-template-columns:
+    repeat(7, minmax(0, 1fr));
+  margin-bottom: 18px;
+}
+
+.period-metric {
+  background: white;
+  border: 1px solid #e4e8e3;
+  border-radius: 9px;
+  padding: 12px;
+}
+
+.period-metric span,
+.period-metric strong {
+  display: block;
+}
+
+.period-metric span {
+  color: #8a938f;
+  font-size: 7px;
+}
+
+.period-metric strong {
+  font-size: 9px;
+  margin-top: 6px;
+}
+
+.period-actions-toolbar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.period-actions-toolbar button,
+.period-table-button,
+.period-readiness button {
+  background: white;
+  border: 1px solid #dce1dc;
+  border-radius: 8px;
+  color: #4a5550;
+  font-size: 8px;
+  font-weight: 750;
+  padding: 9px 11px;
+}
+
+.period-actions-toolbar button:disabled,
+.period-table-button:disabled,
+.period-readiness button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.period-card {
+  background: white;
+  border: 1px solid #e1e5e0;
+  border-radius: 13px;
+  margin-bottom: 18px;
+  overflow: hidden;
+}
+
+.period-card-header {
+  align-items: center;
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
+  padding: 19px 20px;
+}
+
+.period-card-header h2 {
+  font-size: 18px;
+}
+
+.period-card-header > strong {
+  color: #69736e;
+  font-size: 9px;
+}
+
+.period-form {
+  border-top: 1px solid #e7eae6;
+  display: grid;
+  gap: 15px;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  margin: 0 20px;
+  padding: 18px 0;
+}
+
+.period-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.period-form label > span {
+  color: #69736f;
+  font-size: 9px;
+  font-weight: 750;
+}
+
+.period-form input,
+.period-form textarea {
+  background: #fbfcfa;
+  border: 1px solid #dce1dc;
+  border-radius: 8px;
+  color: #252c29;
+  outline: none;
+  padding: 10px 11px;
+  width: 100%;
+}
+
+.period-readiness {
+  align-items: center;
+  background: #f7f9f6;
+  border-top: 1px solid #e8ebe7;
+  display: grid;
+  gap: 12px;
+  grid-template-columns:
+    1.3fr 0.7fr 0.7fr auto;
+  padding: 14px 20px;
+}
+
+.period-readiness > div span,
+.period-readiness > div strong {
+  display: block;
+}
+
+.period-readiness > div span {
+  color: #8a938f;
+  font-size: 6px;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+}
+
+.period-readiness > div strong {
+  font-size: 9px;
+  margin-top: 4px;
+}
+
+.period-readiness-notes {
+  border-top: 1px solid #e8ebe7;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 20px;
+}
+
+.period-blocker,
+.period-warning {
+  border-radius: 7px;
+  font-size: 8px;
+  line-height: 1.4;
+  padding: 8px 10px;
+}
+
+.period-blocker {
+  background: #fbe4e0;
+  color: #93483f;
+}
+
+.period-warning {
+  background: #fff3d9;
+  color: #87661c;
+}
+
+.portfolio-period-page {
+  min-height: 100vh;
+  padding: 32px 36px 48px;
+}
+
+@media (max-width: 1250px) {
+  .period-performance-strip {
+    grid-template-columns:
+      repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1100px) {
+  .period-kpis {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .period-readiness {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .period-sidebar {
+    display: none;
+  }
+
+  .period-main {
+    margin-left: 0;
+    padding: 24px 18px 40px;
+  }
+}
+
+@media (max-width: 680px) {
+  .period-header,
+  .portfolio-period-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .period-score,
+  .portfolio-period-score {
+    align-items: flex-start;
+  }
+
+  .period-kpis,
+  .period-performance-strip,
+  .period-form,
+  .period-readiness {
+    grid-template-columns: 1fr;
+  }
+
+  .portfolio-period-page {
+    padding: 24px 18px 40px;
+  }
+}

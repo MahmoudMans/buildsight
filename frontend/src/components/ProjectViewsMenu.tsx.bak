@@ -1,0 +1,132 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+
+import styles from "./ProjectViewsMenu.module.css";
+
+const VIEWS = [
+  ["", "Command center", false],
+  ["costs", "Cost control", false],
+  ["cost-breakdown", "Cost breakdown", true],
+  ["schedule", "Schedule", false],
+  ["timeline", "Timeline (Gantt)", true],
+  ["forecast", "Forecast", false],
+  ["trends", "Trends (S-curve)", true],
+  ["governance", "Governance", false],
+  ["board", "Action board", true],
+  ["risk-control", "Risk control", false],
+  ["procurement", "Procurement", false],
+  ["production", "Production", false],
+  ["quality", "Quality", false],
+  ["safety", "Safety", false],
+  ["commercial", "Commercial", false],
+  ["resources", "Resources", false],
+  ["documents", "Documents", false],
+  ["recovery", "Recovery", false],
+  ["period-control", "Period control", false],
+  ["copilot", "AI copilot", false],
+] as const;
+
+export function ProjectViewsMenu() {
+  const pathname = usePathname();
+  const rootRef = useRef<HTMLDivElement>(null);
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (!open) {
+      return;
+    }
+
+    function onPointer(event: MouseEvent) {
+      if (
+        rootRef.current &&
+        event.target instanceof Node &&
+        !rootRef.current.contains(event.target)
+      ) {
+        setOpen(false);
+      }
+    }
+
+    function onKey(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", onPointer);
+    document.addEventListener("keydown", onKey);
+
+    return () => {
+      document.removeEventListener("mousedown", onPointer);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+
+  const match = pathname.match(/^\/projects\/([^/]+)(?:\/([^/]+))?/);
+  const projectId = match?.[1];
+  const section = match?.[2] ?? "";
+
+  if (!projectId) {
+    return null;
+  }
+
+  return (
+    <div className={styles.root} ref={rootRef}>
+      <button
+        aria-expanded={open}
+        aria-haspopup="menu"
+        aria-label="Project views"
+        className={styles.button}
+        onClick={() => setOpen((value) => !value)}
+        type="button"
+      >
+        <svg
+          aria-hidden="true"
+          fill="none"
+          height="19"
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="1.8"
+          viewBox="0 0 24 24"
+          width="19"
+        >
+          <rect height="7" rx="1.5" width="7" x="3" y="3" />
+          <rect height="7" rx="1.5" width="7" x="14" y="3" />
+          <rect height="7" rx="1.5" width="7" x="3" y="14" />
+          <rect height="7" rx="1.5" width="7" x="14" y="14" />
+        </svg>
+      </button>
+
+      {open && (
+        <nav aria-label="Project views" className={styles.panel}>
+          <div className={styles.head}>Project views</div>
+
+          <ul>
+            {VIEWS.map(([slug, label, isNew]) => (
+              <li key={slug || "overview"}>
+                <Link
+                  aria-current={section === slug ? "page" : undefined}
+                  className={`${styles.item} ${
+                    section === slug ? styles.active : ""
+                  }`}
+                  href={
+                    slug
+                      ? `/projects/${projectId}/${slug}`
+                      : `/projects/${projectId}`
+                  }
+                  onClick={() => setOpen(false)}
+                >
+                  <span>{label}</span>
+                  {isNew && <em>NEW</em>}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )}
+    </div>
+  );
+}

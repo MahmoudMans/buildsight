@@ -11,7 +11,7 @@ services:
     ports:
       - "${POSTGRES_PORT:-5435}:5432"
     volumes:
-      - buildsight_postgres_data:/var/lib/postgresql/data
+      - buildsight_postgres_data_v18:/var/lib/postgresql
     healthcheck:
       test:
         [
@@ -51,3 +51,5 @@ volumes:
   buildsight_postgres_data:
   buildsight_seaweedfs_data:
   buildsight_ollama_data:
+
+  buildsight_postgres_data_v18:

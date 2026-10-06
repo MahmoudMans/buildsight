@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { codeLabel } from "@/lib/labels";
 
 import {
   useEffect,
@@ -235,7 +236,7 @@ export function PortfolioGovernanceView() {
 
                     <td>
                       {
-                        project.governanceRisk
+                        codeLabel(project.governanceRisk)
                       }
                     </td>
 

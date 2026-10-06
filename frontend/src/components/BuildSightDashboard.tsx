@@ -4,6 +4,7 @@
 // BUILDSIGHT_HOME_REFINEMENT_V3
 import Link from "next/link";
 import { BuildSightSidebar } from "@/components/BuildSightSidebar";
+import { PortfolioInsights } from "@/components/PortfolioInsights";
 import styles from "./BuildSightDashboard.module.css";
 
 
@@ -99,6 +100,14 @@ export function BuildSightDashboard() {
   const [loading, setLoading] = useState(true);
   const [apiOnline, setApiOnline] = useState(true);
   const [showCreatePanel, setShowCreatePanel] = useState(false);
+
+  const [query, setQuery] = useState("");
+
+  const [statusFilter, setStatusFilter] =
+    useState<"ALL" | ProjectStatus>("ALL");
+
+  const [sortKey, setSortKey] =
+    useState<"name" | "progress" | "budget" | "finish">("name");
 
   const [form, setForm] =
     useState<CreateProjectInput>(initialForm);
@@ -197,6 +206,94 @@ export function BuildSightDashboard() {
       latestUpdatedAt,
     };
   }, [projects]);
+
+  const visibleProjects = useMemo(() => {
+    const needle = query.trim().toLowerCase();
+
+    const filtered = projects.filter((project) => {
+      if (statusFilter !== "ALL" && project.status !== statusFilter) {
+        return false;
+      }
+
+      if (!needle) {
+        return true;
+      }
+
+      return [
+        project.name,
+        project.code,
+        project.clientName,
+        project.location,
+      ]
+        .join(" ")
+        .toLowerCase()
+        .includes(needle);
+    });
+
+    return [...filtered].sort((a, b) => {
+      switch (sortKey) {
+        case "progress":
+          return (
+            Number(b.physicalProgressPercentage) -
+            Number(a.physicalProgressPercentage)
+          );
+        case "budget":
+          return Number(b.approvedBudget) - Number(a.approvedBudget);
+        case "finish":
+          return a.plannedEndDate.localeCompare(b.plannedEndDate);
+        default:
+          return a.name.localeCompare(b.name);
+      }
+    });
+  }, [projects, query, statusFilter, sortKey]);
+
+  function exportProjectsCsv() {
+    const header = [
+      "Code",
+      "Name",
+      "Client",
+      "Location",
+      "Status",
+      "Approved budget (EUR)",
+      "Contract value (EUR)",
+      "Progress (%)",
+      "Planned finish",
+    ];
+
+    const escape = (value: string | number) =>
+      `"${String(value).replace(/"/g, '""')}"`;
+
+    const rows = visibleProjects.map((project) => [
+      project.code,
+      project.name,
+      project.clientName,
+      project.location,
+      statusLabels[project.status],
+      project.approvedBudget,
+      project.contractValue,
+      Number(project.physicalProgressPercentage).toFixed(1),
+      project.plannedEndDate,
+    ]);
+
+    const csv = [header, ...rows]
+      .map((row) => row.map(escape).join(","))
+      .join("\n");
+
+    const blob = new Blob([`\uFEFF${csv}`], {
+      type: "text/csv;charset=utf-8",
+    });
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+
+    link.href = url;
+    link.download = `buildsight-projects-${new Date()
+      .toISOString()
+      .slice(0, 10)}.csv`;
+    link.click();
+
+    URL.revokeObjectURL(url);
+  }
 
   function updateTextField(
     field: keyof CreateProjectInput,
@@ -437,6 +534,8 @@ export function BuildSightDashboard() {
           </div>
         </section>
 
+        <PortfolioInsights />
+
         {showCreatePanel && (
           <section className="create-panel">
             <div className="section-heading">
@@ -661,8 +760,70 @@ export function BuildSightDashboard() {
             </div>
 
             <div className="project-count">
-              {projects.length} projects
+              {visibleProjects.length === projects.length
+                ? `${projects.length} projects`
+                : `${visibleProjects.length} of ${projects.length} projects`}
             </div>
+          </div>
+
+          <div className="portfolio-toolbar">
+            <input
+              aria-label="Search projects"
+              className="portfolio-search"
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder="Search by name, code, client or location…"
+              type="search"
+              value={query}
+            />
+
+            <select
+              aria-label="Filter by status"
+              className="portfolio-select"
+              onChange={(event) =>
+                setStatusFilter(
+                  event.target.value as "ALL" | ProjectStatus,
+                )
+              }
+              value={statusFilter}
+            >
+              <option value="ALL">All statuses</option>
+              {(Object.keys(statusLabels) as ProjectStatus[]).map(
+                (status) => (
+                  <option key={status} value={status}>
+                    {statusLabels[status]}
+                  </option>
+                ),
+              )}
+            </select>
+
+            <select
+              aria-label="Sort projects"
+              className="portfolio-select"
+              onChange={(event) =>
+                setSortKey(
+                  event.target.value as
+                    | "name"
+                    | "progress"
+                    | "budget"
+                    | "finish",
+                )
+              }
+              value={sortKey}
+            >
+              <option value="name">Sort: Name</option>
+              <option value="progress">Sort: Progress</option>
+              <option value="budget">Sort: Budget</option>
+              <option value="finish">Sort: Planned finish</option>
+            </select>
+
+            <button
+              className="secondary-button"
+              disabled={visibleProjects.length === 0}
+              onClick={exportProjectsCsv}
+              type="button"
+            >
+              Export CSV
+            </button>
           </div>
 
           <div className="table-wrapper">
@@ -701,7 +862,19 @@ export function BuildSightDashboard() {
                 )}
 
                 {!loading &&
-                  projects.map((project) => (
+                  projects.length > 0 &&
+                  visibleProjects.length === 0 && (
+                    <tr>
+                      <td colSpan={6}>
+                        <div className="table-message">
+                          No projects match your filters.
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+
+                {!loading &&
+                  visibleProjects.map((project) => (
                     <tr className="project-row" key={project.id}>
                       <td data-label="Project">
                         <Link

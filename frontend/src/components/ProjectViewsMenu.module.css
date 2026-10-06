@@ -1,0 +1,172 @@
+.root {
+  bottom: 114px;
+  position: fixed;
+  right: 18px;
+  z-index: 40;
+}
+
+.button {
+  align-items: center;
+  background: #ffffff;
+  border: 1px solid #d3d8d3;
+  border-radius: 50%;
+  box-shadow: 0 8px 24px rgba(18, 25, 23, 0.16);
+  color: #19201e;
+  display: flex;
+  height: 42px;
+  justify-content: center;
+  transition: background 140ms ease, transform 140ms ease;
+  width: 42px;
+}
+
+.button:hover {
+  background: #f5f7f4;
+  transform: translateY(-1px);
+}
+
+.button:focus-visible {
+  outline: 2px solid #50605a;
+  outline-offset: 3px;
+}
+
+.panel {
+  animation: rise 140ms ease;
+  background: #ffffff;
+  border: 1px solid #e3e6e2;
+  border-radius: 14px;
+  bottom: calc(100% + 10px);
+  box-shadow: 0 24px 60px rgba(10, 16, 14, 0.28);
+  max-height: min(60vh, 480px);
+  overflow-y: auto;
+  padding: 6px;
+  position: absolute;
+  right: 0;
+  width: 250px;
+}
+
+.head {
+  color: #7a847f;
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: 0.1em;
+  padding: 10px 12px 6px;
+  text-transform: uppercase;
+}
+
+.panel ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.item {
+  align-items: center;
+  border-radius: 8px;
+  color: #29312e;
+  display: flex;
+  font-size: 13px;
+  font-weight: 600;
+  gap: 10px;
+  justify-content: space-between;
+  padding: 8px 12px;
+  text-decoration: none;
+}
+
+.item:hover {
+  background: #f1f3f0;
+}
+
+.item:focus-visible {
+  outline: 2px solid #50605a;
+  outline-offset: -2px;
+}
+
+.active {
+  background: #121917;
+  color: #ffffff;
+}
+
+.active:hover {
+  background: #121917;
+}
+
+.item em {
+  background: #d7ff45;
+  border-radius: 999px;
+  color: #172019;
+  font-size: 9px;
+  font-style: normal;
+  font-weight: 850;
+  letter-spacing: 0.05em;
+  padding: 2px 7px;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel {
+    animation: none;
+  }
+}
+
+@media print {
+  .root {
+    display: none;
+  }
+}
+
+.tabs {
+  background: #eef0ed;
+  border-radius: 9px;
+  display: flex;
+  gap: 2px;
+  margin: 0 6px 6px;
+  padding: 3px;
+}
+
+.tab {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: 7px;
+  color: #55605b;
+  cursor: pointer;
+  display: flex;
+  flex: 1;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  gap: 5px;
+  justify-content: center;
+  padding: 6px 4px;
+}
+
+.tab small {
+  color: #8a948f;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.tab:hover {
+  color: #19201e;
+}
+
+.tab:focus-visible {
+  outline: 2px solid #50605a;
+  outline-offset: 1px;
+}
+
+.tabOn {
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(18, 25, 23, 0.12);
+  color: #19201e;
+}

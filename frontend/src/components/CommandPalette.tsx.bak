@@ -1,0 +1,325 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+import {
+  type KeyboardEvent as ReactKeyboardEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+
+import { getProjects } from "@/lib/api";
+import type { Project } from "@/types/project";
+
+import styles from "./CommandPalette.module.css";
+
+interface PaletteItem {
+  id: string;
+  group: string;
+  label: string;
+  hint: string;
+  href: string;
+  search: string;
+}
+
+function page(
+  label: string,
+  href: string,
+  keywords = "",
+): PaletteItem {
+  return {
+    id: `page:${href}`,
+    group: "Go to",
+    label,
+    hint: href,
+    href,
+    search: `${label} ${keywords}`.toLowerCase(),
+  };
+}
+
+const PAGES: PaletteItem[] = [
+  page("Portfolio overview", "/", "home dashboard"),
+  page("Portfolio health", "/portfolio", "executive"),
+  page("Portfolio forecast", "/portfolio/forecast", "evm cost"),
+  page("Portfolio governance", "/portfolio/governance", "actions decisions"),
+  page("Portfolio recovery", "/portfolio/recovery", "change impact"),
+  page("Portfolio period control", "/portfolio/period-control", "baseline"),
+  page("Projects", "/projects"),
+  page("Budgets", "/budgets", "cost"),
+  page("Work packages", "/work-packages", "production"),
+  page("Procurement", "/procurement", "suppliers"),
+  page("Risks", "/risks", "issues"),
+  page("Documents", "/documents", "rfi transmittal"),
+  page("Intelligence", "/intelligence", "ai"),
+];
+
+const SECTIONS: ReadonlyArray<readonly [string, string, string]> = [
+  ["", "Command center", "overview health"],
+  ["costs", "Cost control", "budget commitments actuals"],
+  ["schedule", "Schedule", "critical path activities lookahead"],
+  ["forecast", "Forecast", "evm cpi spi scenarios"],
+  ["risk-control", "Risk control", "risks issues changes delays"],
+  ["procurement", "Procurement", "packages bids suppliers"],
+  ["production", "Production", "work packages site reports"],
+  ["quality", "Quality", "inspections ncr punch handover"],
+  ["safety", "Safety", "hse incidents permits"],
+  ["commercial", "Commercial", "claims payments cashflow"],
+  ["resources", "Resources", "workforce equipment"],
+  ["documents", "Documents", "rfi transmittal drawings"],
+  ["governance", "Governance", "meetings decisions actions"],
+  ["recovery", "Recovery", "change impact simulation"],
+  ["period-control", "Period control", "baseline period close"],
+  ["copilot", "AI copilot", "ask local ai"],
+];
+
+function projectItems(projects: Project[]): PaletteItem[] {
+  return projects.flatMap((project) =>
+    SECTIONS.map(([slug, label, keywords]) => ({
+      id: `project:${project.id}:${slug}`,
+      group: slug === "" ? "Projects" : project.name,
+      label: slug === "" ? project.name : label,
+      hint: project.code,
+      href: slug
+        ? `/projects/${project.id}/${slug}`
+        : `/projects/${project.id}`,
+      search:
+        `${project.name} ${project.code} ${project.clientName} ${label} ${keywords}`.toLowerCase(),
+    })),
+  );
+}
+
+export function CommandPalette() {
+  const router = useRouter();
+  const inputRef = useRef<HTMLInputElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
+
+  const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const [active, setActive] = useState(0);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loaded, setLoaded] = useState(false);
+
+  const close = useCallback(() => {
+    setOpen(false);
+    setQuery("");
+    setActive(0);
+  }, []);
+
+  useEffect(() => {
+    function onKey(event: KeyboardEvent) {
+      if (
+        (event.metaKey || event.ctrlKey) &&
+        event.key.toLowerCase() === "k"
+      ) {
+        event.preventDefault();
+
+        if (open) {
+          close();
+        } else {
+          setOpen(true);
+        }
+      }
+    }
+
+    window.addEventListener("keydown", onKey);
+
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open, close]);
+
+  useEffect(() => {
+    if (!open || loaded) {
+      return;
+    }
+
+    let cancelled = false;
+
+    getProjects()
+      .then((response) => {
+        if (!cancelled) {
+          setProjects(response);
+          setLoaded(true);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setLoaded(true);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [open, loaded]);
+
+  useEffect(() => {
+    if (open) {
+      inputRef.current?.focus();
+    }
+  }, [open]);
+
+  const projectEntries = useMemo(
+    () => projectItems(projects),
+    [projects],
+  );
+
+  const results = useMemo(() => {
+    const needle = query.trim().toLowerCase();
+    const all = [...PAGES, ...projectEntries];
+
+    if (!needle) {
+      return all
+        .filter(
+          (item) =>
+            item.group === "Go to" || item.id.endsWith(":"),
+        )
+        .slice(0, 30);
+    }
+
+    const tokens = needle.split(/\s+/);
+
+    return all
+      .filter((item) =>
+        tokens.every((token) => item.search.includes(token)),
+      )
+      .slice(0, 40);
+  }, [query, projectEntries]);
+
+  const index = Math.max(
+    0,
+    Math.min(active, results.length - 1),
+  );
+
+  useEffect(() => {
+    if (!open) {
+      return;
+    }
+
+    listRef.current
+      ?.querySelector('[data-active="true"]')
+      ?.scrollIntoView({ block: "nearest" });
+  }, [index, open, results]);
+
+  function go(item: PaletteItem | undefined) {
+    if (!item) {
+      return;
+    }
+
+    router.push(item.href);
+    close();
+  }
+
+  function onInputKey(
+    event: ReactKeyboardEvent<HTMLInputElement>,
+  ) {
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      setActive(Math.min(index + 1, results.length - 1));
+    } else if (event.key === "ArrowUp") {
+      event.preventDefault();
+      setActive(Math.max(index - 1, 0));
+    } else if (event.key === "Enter") {
+      event.preventDefault();
+      go(results[index]);
+    } else if (event.key === "Escape") {
+      event.preventDefault();
+      close();
+    }
+  }
+
+  return (
+    <>
+      <button
+        aria-label="Open command palette"
+        className={styles.trigger}
+        onClick={() => setOpen(true)}
+        type="button"
+      >
+        <span>Search</span>
+        <kbd>⌘K</kbd>
+      </button>
+
+      {open && (
+        <div
+          className={styles.overlay}
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) {
+              close();
+            }
+          }}
+          role="presentation"
+        >
+          <div
+            aria-label="Command palette"
+            aria-modal="true"
+            className={styles.panel}
+            role="dialog"
+          >
+            <input
+              aria-label="Search pages and projects"
+              className={styles.input}
+              onChange={(event) => {
+                setQuery(event.target.value);
+                setActive(0);
+              }}
+              onKeyDown={onInputKey}
+              placeholder="Jump to a page, project or section…"
+              ref={inputRef}
+              value={query}
+            />
+
+            <div
+              className={styles.list}
+              ref={listRef}
+              role="listbox"
+            >
+              {results.length === 0 && (
+                <div className={styles.empty}>
+                  {loaded ? "No matches" : "Loading projects…"}
+                </div>
+              )}
+
+              {results.map((item, position) => {
+                const showGroup =
+                  position === 0 ||
+                  results[position - 1].group !== item.group;
+
+                return (
+                  <div key={item.id}>
+                    {showGroup && (
+                      <div className={styles.group}>
+                        {item.group}
+                      </div>
+                    )}
+
+                    <button
+                      aria-selected={position === index}
+                      className={`${styles.item} ${
+                        position === index ? styles.active : ""
+                      }`}
+                      data-active={position === index}
+                      onClick={() => go(item)}
+                      onMouseEnter={() => setActive(position)}
+                      role="option"
+                      type="button"
+                    >
+                      <span>{item.label}</span>
+                      <small>{item.hint}</small>
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className={styles.footer}>
+              <span>↑↓ navigate</span>
+              <span>↵ open</span>
+              <span>esc close</span>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}

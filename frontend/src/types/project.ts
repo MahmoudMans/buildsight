@@ -3404,3 +3404,261 @@ export interface PortfolioRecovery {
 
   projects: PortfolioRecoveryProject[];
 }
+
+export type ControlBaselineStatus =
+  | "DRAFT"
+  | "APPROVED"
+  | "SUPERSEDED";
+
+export type ProgressPeriodStatus =
+  | "OPEN"
+  | "CLOSED";
+
+export type PeriodControlRiskLevel =
+  | "ON_TRACK"
+  | "WATCH"
+  | "AT_RISK";
+
+export interface ControlBaselineVersion {
+  id: string;
+  projectId: string;
+
+  versionCode: string;
+  title: string;
+
+  reason: string | null;
+  changeReference: string | null;
+
+  status: ControlBaselineStatus;
+
+  sourceDataDate: string;
+
+  budgetAtCompletion: number;
+
+  costTarget: number;
+
+  finishTarget: string;
+
+  capturedPredictiveScore: number;
+
+  approvedAt: string | null;
+  supersededAt: string | null;
+
+  version: number;
+
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ProgressPeriod {
+  id: string;
+  projectId: string;
+  baselineVersionId: string;
+
+  baselineVersionCode: string;
+
+  periodCode: string;
+  title: string;
+
+  startDate: string;
+  endDate: string;
+
+  status: ProgressPeriodStatus;
+
+  closedAt: string | null;
+
+  version: number;
+
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PeriodEndReadiness {
+  periodId: string;
+  periodCode: string;
+
+  periodEndDate: string;
+  currentDate: string;
+  forecastDataDate: string;
+
+  canClose: boolean;
+
+  blockers: string[];
+  warnings: string[];
+}
+
+export interface PeriodEndSnapshot {
+  id: string;
+  projectId: string;
+  periodId: string;
+  baselineVersionId: string;
+
+  periodCode: string;
+
+  periodStartDate: string;
+  periodEndDate: string;
+
+  sourceDataDate: string;
+
+  baselineCostTarget: number;
+  baselineFinishTarget: string;
+
+  budgetAtCompletion: number;
+  plannedValue: number;
+  earnedValue: number;
+  actualCost: number;
+
+  expectedForecastCost: number;
+  expectedForecastFinishDate: string;
+
+  plannedProgressPercentage: number;
+  earnedProgressPercentage: number;
+
+  costPerformanceIndex: number;
+  schedulePerformanceIndex: number;
+
+  costVarianceToBaseline: number;
+  finishVarianceDays: number;
+
+  predictiveScore: number;
+  predictiveRisk: string;
+
+  governanceScore: number;
+  governanceRisk: string;
+
+  recoveryScore: number;
+  recoveryRisk: string;
+
+  changeCostExposure: number;
+  recoveryResidualDelayDays: number;
+
+  openActions: number;
+  overdueActions: number;
+  criticalOpenActions: number;
+  blockedActions: number;
+
+  periodControlScore: number;
+  periodControlRisk: PeriodControlRiskLevel;
+
+  closedAt: string;
+  createdAt: string;
+}
+
+export interface PeriodControlIntelligence {
+  dataDate: string;
+
+  baselineVersionCount: number;
+
+  activeBaselineVersionCode: string | null;
+  baselineCostTarget: number | null;
+  baselineFinishTarget: string | null;
+
+  openPeriodCount: number;
+  openPeriodCode: string | null;
+  openPeriodEndDate: string | null;
+
+  closedPeriodCount: number;
+  latestClosedPeriodCode: string | null;
+
+  currentExpectedForecastCost: number;
+  currentExpectedForecastFinishDate: string;
+
+  costVarianceToBaseline: number;
+  finishVarianceDays: number;
+
+  plannedProgressPercentage: number;
+  earnedProgressPercentage: number;
+
+  costPerformanceIndex: number;
+  schedulePerformanceIndex: number;
+
+  predictiveScore: number;
+  predictiveRisk: string;
+
+  governanceScore: number;
+  governanceRisk: string;
+
+  recoveryScore: number;
+  recoveryRisk: string;
+
+  periodControlScore: number;
+  periodControlRisk: PeriodControlRiskLevel;
+
+  explanation: string;
+}
+
+export interface PeriodControl {
+  project: Project;
+
+  forecast: ForecastIntelligence;
+
+  intelligence: PeriodControlIntelligence;
+
+  baselines: ControlBaselineVersion[];
+
+  periods: ProgressPeriod[];
+
+  openPeriodReadiness: PeriodEndReadiness | null;
+
+  snapshots: PeriodEndSnapshot[];
+}
+
+export interface CaptureBaselineInput {
+  versionCode: string;
+  title: string;
+  reason: string;
+  changeReference: string;
+}
+
+export interface CreateProgressPeriodInput {
+  periodCode: string;
+  title: string;
+  startDate: string;
+  endDate: string;
+}
+
+export interface PortfolioPeriodControlProject {
+  projectId: string;
+  projectCode: string;
+  projectName: string;
+
+  activeBaselineVersionCode: string | null;
+
+  openPeriodCode: string | null;
+  latestClosedPeriodCode: string | null;
+
+  baselineCostTarget: number | null;
+  currentExpectedForecastCost: number;
+
+  costVarianceToBaseline: number;
+  finishVarianceDays: number;
+
+  plannedProgressPercentage: number;
+  earnedProgressPercentage: number;
+
+  costPerformanceIndex: number;
+  schedulePerformanceIndex: number;
+
+  periodControlScore: number;
+  periodControlRisk: PeriodControlRiskLevel;
+}
+
+export interface PortfolioPeriodControl {
+  dataDate: string;
+
+  projectCount: number;
+  projectsWithApprovedBaseline: number;
+  projectsWithOpenPeriod: number;
+
+  onTrackProjects: number;
+  watchProjects: number;
+  atRiskProjects: number;
+
+  totalCostVarianceToBaseline: number;
+
+  totalFinishVarianceDays: number;
+
+  averagePeriodControlScore: number;
+
+  projects: PortfolioPeriodControlProject[];
+}

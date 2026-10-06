@@ -1,0 +1,122 @@
+.wrap {
+  min-width: 0;
+}
+
+.legend {
+  color: #3c4642;
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 12px;
+  gap: 6px 16px;
+  list-style: none;
+  margin: 0 0 8px;
+  padding: 0;
+}
+
+.legend li {
+  align-items: center;
+  display: inline-flex;
+  gap: 7px;
+}
+
+.swatch {
+  border-radius: 2px;
+  display: inline-block;
+  height: 3px;
+  width: 18px;
+}
+
+.swatchDash {
+  border-top: 3px dashed;
+  display: inline-block;
+  height: 0;
+  width: 18px;
+}
+
+.plot {
+  position: relative;
+}
+
+.svg {
+  display: block;
+  height: auto;
+  width: 100%;
+}
+
+.grid {
+  stroke: #edf0ec;
+  stroke-width: 1;
+}
+
+.axis {
+  stroke: #d3d8d3;
+  stroke-width: 1;
+}
+
+.tick {
+  fill: #7a847f;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.refLabel {
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.crosshair {
+  stroke: #8a948f;
+  stroke-dasharray: 3 3;
+  stroke-width: 1;
+}
+
+.tip {
+  background: #121917;
+  border-radius: 9px;
+  box-shadow: 0 10px 30px rgba(10, 16, 14, 0.3);
+  color: #ffffff;
+  font-size: 12px;
+  min-width: 160px;
+  padding: 9px 12px;
+  pointer-events: none;
+  position: absolute;
+  top: 6px;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+.tip strong {
+  color: #d7ff45;
+  display: block;
+  font-size: 11px;
+  margin-bottom: 6px;
+}
+
+.tipRow {
+  align-items: center;
+  display: flex;
+  gap: 14px;
+  justify-content: space-between;
+  line-height: 1.7;
+}
+
+.tipRow span {
+  align-items: center;
+  color: #cfd8d4;
+  display: inline-flex;
+  gap: 7px;
+}
+
+.tipRow i {
+  border-radius: 50%;
+  display: inline-block;
+  height: 8px;
+  width: 8px;
+}
+
+.empty {
+  color: #7a847f;
+  font-size: 13px;
+  padding: 30px;
+  text-align: center;
+}

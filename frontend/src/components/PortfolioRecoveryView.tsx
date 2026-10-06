@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { codeLabel, netCost } from "@/lib/labels";
 
 import {
   useEffect,
@@ -160,10 +161,8 @@ export function PortfolioRecoveryView() {
         />
 
         <Kpi
-          label="RECOVERY COST"
-          value={currency(
-            data.totalRecoveryCost,
-          )}
+          label="NET RECOVERY COST"
+          value={netCost(data.totalRecoveryCost, currency)}
           detail={`${data.totalResidualDelayDays}d residual`}
         />
 
@@ -202,7 +201,7 @@ export function PortfolioRecoveryView() {
                 <th>COST EXPOSURE</th>
                 <th>IMPACT</th>
                 <th>RECOVERY OPTION</th>
-                <th>RECOVERY COST</th>
+                <th title="Cost of the recovery option minus the time-related savings from the days recovered. A negative figure is a net saving.">NET RECOVERY COST</th>
                 <th>RECOVERABLE</th>
                 <th>RESIDUAL</th>
                 <th>SCORE</th>
@@ -263,9 +262,7 @@ export function PortfolioRecoveryView() {
                     </td>
 
                     <td>
-                      {currency(
-                        project.recoveryCost,
-                      )}
+                      {netCost(project.recoveryCost, currency)}
                     </td>
 
                     <td>
@@ -292,7 +289,7 @@ export function PortfolioRecoveryView() {
 
                     <td>
                       {
-                        project.recoveryRisk
+                        codeLabel(project.recoveryRisk)
                       }
                     </td>
                   </tr>
