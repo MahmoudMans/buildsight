@@ -19,3 +19,5 @@ tmp/
 
 *.swp
 *.swo
+tools/audit/node_modules/
+docs/portfolio/all-screenshots/
